@@ -1,0 +1,53 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "title": "Hello-world Deploy Stage",
+    "description": "GitHub Schema hello-world",
+    "longDescription": "The GitHub Service allows you to create or use an existing GitHub repository to store your source code.",
+    "type": "object",
+    "properties": {
+        "hello-world-repo_name": {
+            "type": "string"
+        },
+        "hello-world-repo_url": {
+            "type": "string"
+        }
+    },
+    "required": ["hello-world-repo_name", "hello-world-repo_url"],
+    "form": [
+      {
+        "type": "validator",
+        "url": "/develop/setup/bm-helper/custom_github_helper.html"
+      },
+      {
+        "type": "table",
+        "columnCount": 3,
+        "widths": ["47%", "6%", "47%"],
+        "items": [
+            {
+              "type": "label",
+              "title": "Source Repository"
+            },
+            {
+              "type": "label",
+              "title": ""
+            },
+            {
+              "type": "label",
+              "title": "Target Repository"
+            },
+            {
+              "type": "text",
+              "key": "hello-world-repo_url"
+            },
+            {
+              "type": "icon",
+              "iconType": "right_arrow"
+            },
+            {
+              "type": "text",
+              "key": "hello-world-repo_name"
+            }
+        ]
+      }
+    ] 
+}
