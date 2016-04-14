@@ -16,7 +16,7 @@
     "form": [
       {
         "type": "validator",
-        "url": "/develop/setup/bm-helper/custom_github_helper.html"
+        "url": "/devops/setup/bm-helper/custom_github_helper.html"
       },
       {
         "type": "table",

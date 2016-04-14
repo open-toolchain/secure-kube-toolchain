@@ -26,7 +26,7 @@
     "form": [
        {
           "type": "validator",
-          "url": "/develop/setup/bm-helper/helper.html"
+          "url": "/devops/setup/bm-helper/helper.html"
        },        
         {
           "type": "text",
