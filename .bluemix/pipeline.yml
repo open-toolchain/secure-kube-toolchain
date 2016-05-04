@@ -1,9 +1,10 @@
 ---
 stages:
-- name: Build
+- name: BUILD
   inputs:
   - type: git
     branch: master
+    service: ${HELLO_WORLD_REPO}    
   triggers:
   - type: commit
   jobs:
@@ -11,9 +12,9 @@ stages:
     type: builder
     extension_id: ibm.devops.services.pipeline.container.builder
     target:
-      url: ${CF_TARGET_URL}
-      organization: ${CF_ORGANIZATION}
-      space: ${CF_SPACE}
+      region_id: ${PROD_REGION_ID}
+      organization: ${PROD_ORG_NAME}
+      space: ${PROD_SPACE_NAME}
     IMAGE_NAME: ${CF_APP}
     USE_CACHED_LAYERS: 'true'
     COMMAND: "#!/bin/bash\n# The following colors have been defined to help with presentation\
@@ -48,10 +49,10 @@ stages:
       # Copy any artifacts that will be needed for deployment and testing to $WORKSPACE\
       \    #\n######################################################################################\n\
       echo \"IMAGE_NAME=${FULL_REPOSITORY_NAME}\" >> $ARCHIVE_DIR/build.properties"
-- name: Deploy
+- name: DEPLOY
   inputs:
   - type: job
-    stage: Build
+    stage: BUILD
     job: Container build
   properties:
   - name: ROUTE_HOSTNAME
@@ -62,9 +63,9 @@ stages:
     type: deployer
     extension_id: ibm.devops.services.pipeline.docker.deploy.ice
     target:
-      url: ${CF_TARGET_URL}
-      organization: ${CF_ORGANIZATION}
-      space: ${CF_SPACE}
+      region_id: ${PROD_REGION_ID}
+      organization: ${PROD_ORG_NAME}
+      space: ${PROD_SPACE_NAME}
     PORT: '80'
     CONTAINER_NAME: ${CF_APP}
     DEPLOY_TYPE: red_black
