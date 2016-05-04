@@ -12,8 +12,8 @@ required:
 hello-world-repo:
   service_id: githubpublic
   parameters:
-    repo_name: "hello-world-{{name}}"
-    repo_url: https://github.com/open-toolchain/node-hello-world
+    repo_name: "hello-containers-{{name}}"
+    repo_url: https://github.com/Puquios/hello-containers
     type: clone
     has_issues: true
 
