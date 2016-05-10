@@ -1,9 +1,9 @@
 ---
-name: "Simple Toolchain"
-description: "This Hello World application uses Node.js and includes a toolchain that is preconfigured for continuous delivery, source control, issue tracking, and online editing.\n\nTo get started, click **Create**."
+name: "Simple Container Toolchain"
+description: "This Hello World application demonstates Docker with Node.js and includes a toolchain that is preconfigured for continuous delivery, source control, issue tracking, and online editing. \n\nTo get started, click **Create**."
 version: 0.1
 # Generate base64 representation of image at http://www.askapache.com/online-tools/base64-image-converter/
-image: image: data:image/png;base64,$file(toolchain.png,base64)
+image: image: data:image/png;base64,$file(simple-toolchain-cont.png,base64)
 required: 
  - deploy
  - hello-world-repo
