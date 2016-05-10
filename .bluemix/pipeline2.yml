@@ -15,7 +15,7 @@ stages:
       region_id: ${PROD_REGION_ID}
       organization: ${PROD_ORG_NAME}
       space: ${PROD_SPACE_NAME}
-    IMAGE_NAME: ${CF_APP}
+    IMAGE_NAME: ${CF_APP_NAME}
     USE_CACHED_LAYERS: 'true'
     COMMAND: |
       #!/bin/bash
@@ -82,7 +82,7 @@ stages:
     job: Container build
   properties:
   - name: ROUTE_HOSTNAME
-    value: ${CF_APP}
+    value: ${CF_APP_NAME}
     type: text
   jobs:
   - name: Group deploy
@@ -93,7 +93,7 @@ stages:
       organization: ${PROD_ORG_NAME}
       space: ${PROD_SPACE_NAME}
     PORT: '80'
-    CONTAINER_NAME: ${CF_APP}
+    CONTAINER_NAME: ${CF_APP_NAME}
     DEPLOY_TYPE: red_black
     COMMAND: |
       #!/bin/bash
