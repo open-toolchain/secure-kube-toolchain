@@ -1,6 +1,7 @@
 ---
 name: "Simple Container Toolchain"
-description: "This Hello World application demonstates Docker with Node.js and includes a toolchain that is preconfigured for continuous delivery, source control, issue tracking, and online editing. \n\nTo get started, click **Create**."
+description: "This Hello World application demonstates Docker with Node.js and includes a toolchain that is preconfigured for continuous delivery, source control, issue tracking, and online editing. \n\n **First-time container service user** - Please ensure your Container Service is correctly set up, by [identifying the image repository for your organization](https://new-console.ng.bluemix.net/docs/containers/container_creating_ov.html#container_namespace). 
+Also learn more about [IBM Containers Services](https://new-console.ng.bluemix.net/docs/containers/container_gettingstarted.html#container_planning__namespace)\n\nTo get started, click **Create**."
 version: 0.1
 # Generate base64 representation of image at http://www.askapache.com/online-tools/base64-image-converter/
 image: data:image/png;base64,$file(simple-toolchain-cont.png,base64)
