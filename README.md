@@ -1,6 +1,6 @@
 #Simple toolchain for Docker Container
 
-This Hello World application uses Docker with Node.js and includes a DevOps toolchain that is preconfigured for continuous delivery, source control, issue tracking, and online editing, deploying IBM Bluemix Containers Service.
+This Hello World application uses Docker with Node.js and includes a DevOps toolchain that is preconfigured for continuous delivery with vulnerability advisor, source control, issue tracking, and online editing, deploying to the IBM Bluemix Containers Service.
 
 To get started, click **Deploy to Bluemix**.
 
