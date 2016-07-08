@@ -9,3 +9,4 @@ To get started, click **Create toolchain**.
 **First-time container service user** - Please ensure your Container Service is correctly set up, by [identifying the image repository for your organization](https://new-console.ng.bluemix.net/docs/containers/container_creating_ov.html#container_namespace). 
 Also learn more about [getting started with IBM Container Service](https://new-console.ng.bluemix.net/docs/containers/container_gettingstarted_tutorial_lesson1.html#container_gettingstarted_tutorial_lesson_1)
 
+For more information about IBM Bluemix toolchains, please read this article on [Custom toolchains in one click with IBM Bluemix DevOps Services](https://developer.ibm.com/devops-services/2016/06/16/open-toolchain-with-ibm-bluemix-devops-services/)
