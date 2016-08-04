@@ -1,0 +1,12 @@
+---
+name: "[G'Ｓｅｃｕｒｅ ｃｏｎtainer toolchainฏูİı｜]"
+description: "[G'Ｗｉｔｈ ｔｈｉｓ ｔｏｏｌｃｈａｉｎ, ｙｏｕ ｃａｎ ｄｅｖｅｌｏｐ ａｎｄ ｄｅｐｌｏｙ ａ ｓｅｃｕｒｅ Ｄｏｃｋｅｒ ｃｏｎｔａｉｎｅｒ ａｐｐｌｉｃａｔｉｏｎ. Ｂｙ ｄｅｆａｕｌｔ, ｔｈｅ ｔｏｏｌｃｈａｉｎ ｕｓｅｓ ａ ｓａｍｐｌｅ Ｎｏｄｅ.ｊｓ Ｈｅｌｌｏ Ｗｏｒｌｄ ａｐｐ, ｂｕｔ ｙｏｕ ｃａｎ ｌｉｎｋ ｔｏ ｙｏｕｒ ｏｗｎ ＧｉｔＨｕｂ ｒｅｐｏｓｉｔｏｒｙ ｉｎｓｔｅａｄ. Ｔｈｉｓ ｔｏｏｌｃｈａｉｎ ｉｓ ｐｒｅｃｏｎｆｉｇｕｒｅｄ ｆｏｒ ｃｏｎｔｉｎｕｏｕｓ ｄｅｌｉｖｅｒｙ ｗｉｔｈ Ｖｕｌｎｅｒａｂｉｌｉｔｙ Ａｄｖｉｓｏｒ, ｓｏｕｒｃｅ ｃｏｎｔｒｏｌ, ｉｓｓｕｅ ｔｒａｃｋｉｎｇ, ａｎｄ ｏｎｌｉｎｅ ｅｄｉｔｉｎｇ.\n\n **Ｆｉｒｓｔ-ｔｉｍｅ ｃｏｎｔainers service users**: Make sure that your containers service is correctly set up by [identifying the image repository for your organization](https://new-console.ng.bluemix.net/docs/containers/container_creating_ov.html#container_namespace). Also, check your org container quotas by clicking **Manage Organizations**, selecting your org, and clicking **Edit Org > Quota > Containers > Edit**. For more information about getting started with IBM Containers, see [this tutorial](https://new-console.ng.bluemix.net/docs/containers/container_gettingstarted_tutorial_lesson1.html#container_gettingstarted_tutorial_lesson_1).\n\nTo get started, click **Create**.ฏูİı｜]"
+$deploy.title: "[G'Ｈｅｌｌｏ Ｗｏｒld Deploy Stageฏูİı｜]"
+$deploy.description: "[G'ｈｅｌｌｏ-ｗｏｒｌd simple toolchainฏูİı｜]"
+$deploy.longDescription: "[G'Ｔｈｅ Ｄｅｌｉｖｅｒｙ Ｐｉｐｅｌｉｎｅ ｆｏｒ Ｄｅvops Services allows you to automate your continuous deployment setup hello-world.ฏูİı｜]"
+$deploy.appDescription: "[G'ｈｅｌｌｏ ｗｏrld app nameฏูİı｜]"
+$deploy.appName: "[G'Ｈｅｌｌｏ Ｗｏrld App Nameฏูİı｜]"
+$region: "[G'Regionฏูİı｜]"
+$organization: "[G'Ｏｒganizationฏูİı｜]"
+$space: "[G'Spaceฏูİı｜]"
+$prodStage: "[G'Ｐrod Stageฏูİı｜]"

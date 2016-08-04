@@ -1,0 +1,12 @@
+---
+name: "Chaîne d'outils de conteneur sécurisé"
+description: "Cette chaîne d'outils vous permet de développeur et de déployer une application de conteneur Docker sécurisée. Par défaut, la chaîne d'outils utilise une application exemple Node.js Hello World, mais vous pouvez vous lier à votre propre référentiel GitHub à la place. Cette chaîne d'outils est préconfigurée pour la distribution continue avec Vulnerability Advisor, le contrôle des sources, le suivi des problèmes et l'édition en ligne.\n\n **A l'attention des nouveaux utilisateurs du service de conteneurs** : Vérifiez que vous service de conteneur est correctement configuré en [identifiant le référentiel d'images de votre organisation](https://new-console.ng.bluemix.net/docs/containers/container_creating_ov.html#container_namespace). Vérifiez également le quota de conteneur de votre organisation en cliquant sur **Gérer les organisations**, en sélectionnant votre organisation, puis en cliquant sur **Editer l'organisation > Quota > Conteneurs > Editer**. Pour plus d'informations sur l'initiation à IBM Containers, voir [ce tutoriel](https://new-console.ng.bluemix.net/docs/containers/container_gettingstarted_tutorial_lesson1.html#container_gettingstarted_tutorial_lesson_1).\n\nPour commencer, cliquez sur **Créer**."
+$deploy.title: "Etape de déploiement Hello World"
+$deploy.description: "Chaîne d'outils hello-world simple"
+$deploy.longDescription: "Les services Delivery Pipeline for Devops vous permettent d'automatiser votre configuration de déploiement continu hello-world."
+$deploy.appDescription: "Nom de l'appli hello world"
+$deploy.appName: "Nom de l'appli Hello World"
+$region: "Région"
+$organization: "Organisation"
+$space: "Espace"
+$prodStage: "Etape de production" 

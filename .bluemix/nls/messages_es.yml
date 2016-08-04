@@ -1,0 +1,12 @@
+---
+name: "Cadena de herramientas del contenedor seguro"
+description: "Con esta cadena de herramientas, puede desarrollar y desplegar una aplicación de contenedor de Docker segura. De forma predeterminada, la cadena de herramientas utiliza una aplicación de muestra Node.js Hello World, pero puede enlazar a su propio repositorio GitHub en su lugar. Esta cadena de herramientas está preconfigurada para la entrega continua con Vulnerability Advisor, control de origen, seguimiento de problemas y edición en línea.\n\n **Nuevos usuarios del servicio de contenedores**: Asegúrese de que el servicio de contenedores lo haya configurado correctamente [identificación del repositorio de imágenes para la organización](https://new-console.ng.bluemix.net/docs/containers/container_creating_ov.html#container_namespace). También, compruebe las cuotas del contenedor de la organización pulsando **Gestionar organizaciones**, seleccionando su organización y pulsando **Editar organización > Cuota > Contenedores > Editar**. Para obtener más información sobre cómo empezar a utilizar IBM Containers, consulte [esta guía de aprendizaje](https://new-console.ng.bluemix.net/docs/containers/container_gettingstarted_tutorial_lesson1.html#container_gettingstarted_tutorial_lesson_1).\n\nPara comenzar, pulse **Crear**."
+$deploy.title: "Hello World Deploy Stage"
+$deploy.description: "cadena de herramientas simple hello-world"
+$deploy.longDescription: "El Delivery Pipeline for Devops Services le permite automatizar el hello-world de la configuración de despliegue continua."
+$deploy.appDescription: "nombre de app hello world"
+$deploy.appName: "Nombre de app Hello World"
+$region: "Región"
+$organization: "Organización"
+$space: "Espacio"
+$prodStage: "Etapa de producción" 
