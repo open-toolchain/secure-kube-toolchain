@@ -1,6 +1,9 @@
 {
     "$schema": "http://json-schema.org/draft-04/schema#",
     "title": "Hello World Deploy Stage",
+    "localized-struct":{
+        "$ref": "deploy-localized-struct.json"
+    },
     "description": "hello-world simple toolchain",
     "longDescription": "The Delivery Pipeline for Devops Services allows you to automate your continuous deployment setup hello-world.",
     "type": "object",
