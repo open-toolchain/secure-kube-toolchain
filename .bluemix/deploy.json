@@ -5,7 +5,7 @@
         "$ref": "deploy-localized-struct.json"
     },
     "description": "hello-world simple toolchain",
-    "longDescription": "The Delivery Pipeline for Devops Services allows you to automate your continuous deployment setup hello-world.",
+    "longDescription": "The Delivery Pipeline automates continuous deployment.",
     "type": "object",
     "properties": {
         "prod-region": {
@@ -21,7 +21,7 @@
             "type": "string"
         },
        "hello-world-name": {
-            "description": "hello world app name",
+            "description": "The name of your Hello World app",
             "type": "string"
         }
     },
@@ -34,7 +34,7 @@
         {
           "type": "text",
           "readonly": false,
-          "title": "Hello World App Name",
+          "title": "App name",
           "key": "hello-world-name"
         },
         {
@@ -60,7 +60,7 @@
                 },
                 {
                   "type": "label",
-                  "title": "Prod Stage"
+                  "title": "Production stage"
                 },
                 {
                   "type": "select",
