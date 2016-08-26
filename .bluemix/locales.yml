@@ -1,11 +1,11 @@
 ---
 de:
   $ref: ./nls/messages_de.yml
-en_AA:
+en-AA:
   $ref: ./nls/messages_en_AA.yml
-en_RR:
+en-RR:
   $ref: ./nls/messages_en_RR.yml
-en_ZZ:
+en-ZZ:
   $ref: ./nls/messages_en_ZZ.yml
 es:
   $ref: ./nls/messages_es.yml
@@ -17,11 +17,11 @@ ja:
   $ref: ./nls/messages_ja.yml
 ko:
   $ref: ./nls/messages_ko.yml
-pt_BR:
+pt-BR:
   $ref: ./nls/messages_pt_BR.yml
 zh:
   $ref: ./nls/messages_zh.yml
-zh_HK:
+zh-HK:
   $ref: ./nls/messages_zh_HK.yml
-zh_TW:
+zh-TW:
   $ref: ./nls/messages_zh_TW.yml
