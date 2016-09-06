@@ -9,5 +9,5 @@ $deploy.appName: "Nome app"
 $region: "Regione"
 $organization: "Organizzazione"
 $space: "Spazio"
-$prodStage: "Fase di produzione"
+$prodStage: "Stage di produzione"
  
