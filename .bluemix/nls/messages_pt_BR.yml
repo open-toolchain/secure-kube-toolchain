@@ -1,13 +1,13 @@
 ---
+#The format for creating a link with a URL and text is [link text](link url) with no spaces or characters between the two sets of brackets- []()
 name: "Cadeia de ferramentas do contêiner seguro"
-description: "Com esta cadeia de ferramentas, é possível desenvolver e implementar um aplicativo do contêiner do Docker seguro. Por padrão, a cadeia de ferramentas usa um aplicativo Node.js Hello World de amostra, mas é possível vincular com seu próprio repositório GitHub em vez disso. Esta cadeia de ferramentas é pré-configurada para entrega contínua com Vulnerability Advisor, controle de fonte, rastreamento de problemas e edição on-line.\n\n **Usuários do serviço de contêiner pela primeira vez**: Certifique-se de que o seu serviço de contêineres esteja corretamente configurado ao [](). Além disso, verifique suas cotas do contêiner da organização ao clicar em **Gerenciar organizações**, selecionar sua organização e clicar em **Editar organização > Cota > Contêineres > Editar**. Para obter mais informações sobre como iniciar o uso dos Contêineres IBM, veja []().\n\nPara iniciar, clique em **Criar**."
+description: "Com esta cadeia de ferramentas, é possível desenvolver e implementar um aplicativo do contêiner do Docker seguro. Por padrão, a cadeia de ferramentas usa um aplicativo Node.js Hello World de amostra, mas é possível vincular com seu próprio repositório GitHub em vez disso. Esta cadeia de ferramentas é pré-configurada para entrega contínua com Vulnerability Advisor, controle de fonte, rastreamento de problemas e edição on-line.\n\n **Usuários do serviço de contêiner pela primeira vez**: Certifique-se de que o seu serviço de contêineres esteja corretamente configurado, [identificando o repositório de imagem para sua organização](https://new-console.ng.bluemix.net/docs/containers/container_creating_ov.html#container_namespace). Além disso, verifique suas cotas do contêiner da organização ao clicar em **Gerenciar organizações**, selecionar sua organização e clicar em **Editar organização > Cota > Contêineres > Editar**. Para obter mais informações sobre como iniciar o uso dos Contêineres IBM, veja [este tutorial](https://new-console.ng.bluemix.net/docs/containers/container_gettingstarted_tutorial_lesson1.html#container_gettingstarted_tutorial_lesson_1).\n\nPara iniciar, clique em **Criar**."
 $deploy.title: "Estágio de Implementação Hello World"
 $deploy.description: "cadeia de ferramentas simples hello-world"
 $deploy.longDescription: "O Delivery Pipeline automatiza a implementação contínua."
 $deploy.appDescription: "O nome do seu app Hello World"
-$deploy.appName: "App name"
+$deploy.appName: "Nome do app"
 $region: "Região"
 $organization: "Organização"
 $space: "Espaço"
 $prodStage: "Estágio de produção"
- 
