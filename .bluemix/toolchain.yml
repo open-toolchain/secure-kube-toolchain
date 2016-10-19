@@ -49,7 +49,4 @@ deploy:
     $ref: deploy.json
   service-category: pipeline
   parameters:
-    prod-region: "{{region}}"
-    prod-organization: "{{organization}}"
-    prod-space: "{{space}}"
     hello-world-name: "{{hello-world-repo.parameters.repo_name}}"
