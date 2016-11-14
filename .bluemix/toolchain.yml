@@ -7,6 +7,7 @@ description: "With this toolchain, you can develop and deploy a secure Docker co
 version: 0.1
 # Generate base64 representation of image at http://www.askapache.com/online-tools/base64-image-converter/
 image: data:image/svg+xml;base64,$file(simple-toolchain-cont.svg,base64)
+icon: data:image/svg+xml;base64,$file(icon.svg,base64)
 required: 
  - deploy
  - hello-world-repo
