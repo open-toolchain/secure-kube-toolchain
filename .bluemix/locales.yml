@@ -1,6 +1,8 @@
 ---
 de:
   $ref: ./nls/messages_de.yml
+en:
+  $ref: ./nls/messages.yml
 en-AA:
   $ref: ./nls/messages_en_AA.yml
 en-RR:
