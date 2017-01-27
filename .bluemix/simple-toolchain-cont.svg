@@ -303,18 +303,18 @@
 	<line id="svg_232" class="st0" x1="134.8" y1="103.9" x2="134.7" y2="103.9"/>
 	<line id="svg_233" class="st0" x1="136.7" y1="103.6" x2="136.7" y2="103.6"/>
 </g>
-<text id="svg_234" transform="matrix(0.9271 0 0 1 1.9893 130.2944)" class="st22 st23">ISSUE TRACKER</text>
-<text id="svg_235" transform="matrix(0.9271 0 0 1 23.0991 143.4946)" class="st22 st23">GitHub</text>
-<text id="svg_236" transform="matrix(1 0 0 1 -0.3569 17.7954)" class="st22 st23">THINK</text>
-<text id="svg_237" transform="matrix(1 0 0 1 89.3677 17.7954)" class="st22 st23">CODE</text>
-<text id="svg_238" transform="matrix(1 0 0 1 179.1318 17.7954)" class="st22 st23">DELIVER</text>
-<text id="svg_239" transform="matrix(1 0 0 1 267.8564 17.7954)" class="st22 st23">RUN</text>
-<text id="svg_240" transform="matrix(0.9271 0 0 1 100.6055 130.2944)" class="st22 st23">REPOSITORY</text>
-<text id="svg_241" transform="matrix(0.9271 0 0 1 115.9028 143.4946)" class="st22 st23">GitHub</text>
-<text id="svg_242" transform="matrix(0.9271 0 0 1 199.5088 130.2944)" class="st22 st23">PIPELINE</text>
-<text id="svg_243" transform="matrix(0.9271 0 0 1 287.293 130.2944)" class="st22 st23">BLUEMIX</text>
-<text id="svg_243_1_" transform="matrix(0.9271 0 0 1 284.293 143.4946)" class="st22 st23">Containers</text>
-<text id="svg_244" transform="matrix(0.9271 0 0 1 108.7646 242.2744)" class="st22 st23">WEB IDE</text>
+<text id="issueTracker" transform="matrix(0.9271 0 0 1 1.9893 130.2944)" class="st22 st23">ISSUE TRACKER</text>
+<text id="gitHub1" transform="matrix(0.9271 0 0 1 23.0991 143.4946)" class="st22 st23">GitHub</text>
+<text id="think" transform="matrix(1 0 0 1 -0.3569 17.7954)" class="st22 st23">THINK</text>
+<text id="code" transform="matrix(1 0 0 1 89.3677 17.7954)" class="st22 st23">CODE</text>
+<text id="deliver" transform="matrix(1 0 0 1 179.1318 17.7954)" class="st22 st23">DELIVER</text>
+<text id="run" transform="matrix(1 0 0 1 267.8564 17.7954)" class="st22 st23">RUN</text>
+<text id="repository" transform="matrix(0.9271 0 0 1 100.6055 130.2944)" class="st22 st23">REPOSITORY</text>
+<text id="gitHub2" transform="matrix(0.9271 0 0 1 115.9028 143.4946)" class="st22 st23">GitHub</text>
+<text id="pipeline" transform="matrix(0.9271 0 0 1 199.5088 130.2944)" class="st22 st23">PIPELINE</text>
+<text id="bluemix" transform="matrix(0.9271 0 0 1 287.293 130.2944)" class="st22 st23">BLUEMIX</text>
+<text id="containers" transform="matrix(0.9271 0 0 1 284.293 143.4946)" class="st22 st23">Containers</text>
+<text id="webIde" transform="matrix(0.9271 0 0 1 108.7646 242.2744)" class="st22 st23">WEB IDE</text>
 <circle class="st1" cx="308.6" cy="87.6" r="26.5"/>
 <g>
 	<path class="st24" d="M297.1,74.9v10.5H308V74.9H297.1z M299.4,84h-0.7v-7.8h0.7V84z M301.7,84H301v-7.8h0.7V84z M304,84h-0.7v-7.8
