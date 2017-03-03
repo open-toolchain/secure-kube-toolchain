@@ -34,6 +34,11 @@ template:
       [master](https://github.com/open-toolchain/secure-container-toolchain/tree/master)
 toolchain:
   name: 'secure-container-toolchain-{{timestamp}}'
+  template:
+    getting_started: |-
+      **Your toolchain is ready!**
+      
+      **Quick start:** Commit a change to the Git repo to trigger a new build and deployment and check for container security vulnerabilities.
 services:
   hello-world-repo:
     service_id: githubpublic
