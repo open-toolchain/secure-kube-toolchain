@@ -22,7 +22,7 @@ template:
 
 
     To get started, click **Create**.
-  header: '![](simple-toolchain-cont.svg?localize "header image")'
+  header: '![](simple-toolchain-cont.svg?localize)'
   icon: icon.svg
   required:
     - hello-world-build
