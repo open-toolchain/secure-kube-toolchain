@@ -39,7 +39,7 @@ toolchain:
       **Your toolchain is ready!**
       
       **Quick start:** Commit a change to the Git repo to trigger a new build and deployment and check for container security vulnerabilities.
-      For step-by-step instructions, see the [tutorial](https://www.ibm.com/devops/method/category/tools) for this toolchain.      
+      For step-by-step instructions, see the [tutorial](https://www.ibm.com/devops/method/tutorials/tutorial_toolchain_secure_container) for this toolchain.      
 services:
   hello-world-repo:
     service_id: githubpublic
