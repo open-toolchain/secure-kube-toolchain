@@ -57,8 +57,7 @@ services:
       ui-pipeline: true
       configuration:
         content:
-          $ref: pipeline.yml
-          $refType: text
+          $text: pipeline.yml
         env:
           HELLO_WORLD_REPO: hello-world-repo
           CF_APP_NAME: '{{form.pipeline.parameters.hello-world-name}}'
