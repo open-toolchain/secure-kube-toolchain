@@ -1,11 +1,17 @@
 {
     "$schema": "http://json-schema.org/draft-04/schema#",
-    "title": "Hello World Deploy Stage",
-    "localized-struct":{
-        "$ref": "deploy-localized-struct.json"
+    "messages": {
+       "$i18n": "locales.yml"
     },
-    "description": "hello-world simple toolchain",
-    "longDescription": "The Delivery Pipeline automates continuous deployment.",
+     "title": {
+      "$ref": "#/messages/deploy.title"
+    },
+    "description": {
+      "$ref": "#/messages/deploy.description"
+    },
+    "longDescription": {
+      "$ref": "#/messages/deploy.longDescription"
+    },
     "type": "object",
     "properties": {
         "prod-region": {
@@ -21,7 +27,9 @@
             "type": "string"
         },
        "hello-world-name": {
-            "description": "The name of your Hello World app",
+            "description": {
+              "$ref": "#/messages/deploy.appDescription"
+            },
             "type": "string"
         }
     },
@@ -34,7 +42,9 @@
         {
           "type": "text",
           "readonly": false,
-          "title": "App name",
+          "title": {
+            "$ref": "#/messages/deploy.appName"
+          },
           "key": "hello-world-name"
         },
         {
@@ -48,19 +58,27 @@
                 },
                 {
                   "type": "label",
-                  "title": "Region"
+                  "title": {
+                    "$ref": "#/messages/region"
+                  }
                 },
                 {
                   "type": "label",
-                  "title": "Organization"
+                  "title": {
+                    "$ref": "#/messages/organization"
+                  }
                 },
                 {
                   "type": "label",
-                  "title": "Space"
+                  "title": {
+                    "$ref": "#/messages/space"
+                  }
                 },
                 {
                   "type": "label",
-                  "title": "Production stage"
+                  "title": {
+                    "$ref": "#/messages/prodStage"
+                  }
                 },
                 {
                   "type": "select",
