@@ -1,0 +1,21 @@
+language: ruby
+before_install:
+  - sudo apt-get -qq update
+  - sudo apt-get install -y jq
+install:
+ - gem install yaml-lint
+script:
+ - yaml-lint $(find . -name '*.yml')
+ - |
+    (
+      JSON=$(find . -name '*.json')
+      RC=0
+      for FILE in $JSON; do
+        echo "Checking content of $FILE"
+        if ! jq . $FILE >/dev/null ; then
+          echo "Invalid JSON: $FILE"
+          RC=1
+        fi
+      done
+      exit $RC
+    )
