@@ -29,6 +29,7 @@ services:
       repo_url: 'https://github.com/open-toolchain/hello-containers'
       type: clone
       has_issues: true
+      enable_traceability: true
   hello-world-build:
     service_id: pipeline
     parameters:
