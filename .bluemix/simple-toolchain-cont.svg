@@ -303,11 +303,11 @@
 	<line id="svg_232" class="st0" x1="134.8" y1="103.9" x2="134.7" y2="103.9"/>
 	<line id="svg_233" class="st0" x1="136.7" y1="103.6" x2="136.7" y2="103.6"/>
 </g>
-<text id="headerSVG.issueTracker" transform="matrix(0.9271 0 0 1 1.9893 130.2944)" textLength="89.7" lengthAdjust="spacingAndGlyphs" class="st22 st23">ISSUE TRACKER</text>
+<text id="headerSVG.issueTracker" transform="matrix(0.9271 0 0 1 1.9893 130.2944)" class="st22 st23">ISSUE TRACKER</text>
 <text id="headerSVG.gitHub1" transform="matrix(0.9271 0 0 1 23.0991 143.4946)" class="st22 st23">GitHub</text>
 <text id="headerSVG.think" transform="matrix(1 0 0 1 -0.3569 17.7954)" class="st22 st23">THINK</text>
 <text id="headerSVG.code" transform="matrix(1 0 0 1 89.3677 17.7954)" class="st22 st23">CODE</text>
-<text id="headerSVG.deliver" transform="matrix(1 0 0 1 179.1318 17.7954)" textLength="55" lengthAdjust="spacingAndGlyphs" class="st22 st23">DELIVER</text>
+<text id="headerSVG.deliver" transform="matrix(1 0 0 1 179.1318 17.7954)" class="st22 st23">DELIVER</text>
 <text id="headerSVG.run" transform="matrix(1 0 0 1 267.8564 17.7954)" class="st22 st23">RUN</text>
 <text id="headerSVG.repository" transform="matrix(0.9271 0 0 1 100.6055 130.2944)" class="st22 st23">REPOSITORY</text>
 <text id="headerSVG.gitHub2" transform="matrix(0.9271 0 0 1 115.9028 143.4946)" class="st22 st23">GitHub</text>
