@@ -73,7 +73,12 @@ stages:
       # Copy any artifacts that will be needed for deployment and testing to $WORKSPACE    #
       ######################################################################################
       echo "IMAGE_NAME=${FULL_REPOSITORY_NAME}" >> $ARCHIVE_DIR/build.properties
-      cp pod.yaml $ARCHIVE_DIR/
+      if [ -f Dockerfile ]; then      
+          cp pods.yaml $ARCHIVE_DIR/
+      else 
+          echo -e "${red}Kubernetes deployment file 'pods.yaml""' not found in project${no_color}"
+          exit 1
+      fi  
 - name: VALIDATE
   inputs:
   - type: job
@@ -100,7 +105,7 @@ stages:
     stage: BUILD
     job: Container build
   jobs:
-  - name: Deploy k8
+  - name: Deploy Pods
     type: deployer
     target:
       region_id: ${PROD_REGION_ID}
@@ -111,12 +116,11 @@ stages:
     script: |
       #!/bin/bash
 
-      #cat build.properties
       line=$(head -n 1 build.properties)
       image_name=${line#"IMAGE_NAME="}
-      cat pod.yaml
-      sed -i "s~$CF_APP:latest~$image_name~" pod.yaml
-      cat pod.yaml
+      cat pods.yaml
+      sed -i "s~$CF_APP:latest~$image_name~" pods.yaml
+      cat pods.yaml
 
       #Connect to a different container-service api by uncommenting and specifying an api endpoint
       #bx cs init --host https://us-south.containers.bluemix.net
