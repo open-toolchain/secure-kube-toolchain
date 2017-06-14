@@ -4,7 +4,7 @@ stages:
   inputs:
   - type: git
     branch: master
-    service: ${HELLO_WORLD_REPO}    
+    service: ${GIT_REPO}    
   triggers:
   - type: commit
   jobs:
@@ -34,9 +34,7 @@ stages:
       ######################################
       
       # REGISTRY_URL=${CCS_REGISTRY_HOST}/${NAMESPACE}
-      # FULL_REPOSITORY_NAME=${REGISTRY_URL}/${IMAGE_NAME}:${APPLICATION_VERSION}
-      # If you wish to receive slack notifications, set SLACK_WEBHOOK_PATH as a property on the stage.
-      
+      # FULL_REPOSITORY_NAME=${REGISTRY_URL}/${IMAGE_NAME}:${APPLICATION_VERSION}   
       
       # Possible adding retries to build the image
       if [ -f Dockerfile ]; then 
@@ -75,6 +73,7 @@ stages:
       # Copy any artifacts that will be needed for deployment and testing to $WORKSPACE    #
       ######################################################################################
       echo "IMAGE_NAME=${FULL_REPOSITORY_NAME}" >> $ARCHIVE_DIR/build.properties
+      cp pod.yaml $ARCHIVE_DIR/
 - name: VALIDATE
   inputs:
   - type: job
@@ -100,82 +99,25 @@ stages:
   - type: job
     stage: BUILD
     job: Container build
-  properties:
-  - name: ROUTE_HOSTNAME
-    value: ${CF_APP_NAME}
-    type: text
   jobs:
-  - name: Group deploy
+  - name: Deploy k8
     type: deployer
-    extension_id: ibm.devops.services.pipeline.docker.deploy.ice
     target:
       region_id: ${PROD_REGION_ID}
       organization: ${PROD_ORG_NAME}
       space: ${PROD_SPACE_NAME}
-    PORT: '80'
-    CONTAINER_NAME: ${CF_APP_NAME}
-    DEPLOY_TYPE: red_black
-    COMMAND: |
+      api_key_id: ${API_KEY}
+      kubernetes_cluster_name: ${PROD_CLUSTER_NAME}
+    script: |
       #!/bin/bash
-      # The following are some example deployment scripts.  Use these as is or fork them and include your updates here:
-      echo -e "${label_color}Starting deployment script${no_color}"
-      
-      
-      # To view/fork this script goto: https://github.com/Osthanes/deployscripts
-      # git_retry will retry git calls to prevent pipeline failure on temporary github problems
-      # the code can be found in git_util.sh at https://github.com/Osthanes/container_deployer
-      git_retry clone https://github.com/Osthanes/deployscripts.git deployscripts
-      
-      
-      # You can deploy your Image as either a single Container or as a Container 
-      # Group.  A Container Group deploys a number of containers to enhance
-      # scalability or reliability.  By default we will deploy as a single 
-      # container.  To switch to a group deploy, comment out the line below
-      # containing deploycontainer.sh and uncomment the line for deploygroup.sh
-      
-      # Deploy with containers:
-      # Optional environment properties (can be set directly in this script, or defined as environment properties):
-      #      NAME              Value         Description
-      #   =============      =========     ==============
-      #   BIND_TO             String       Specify a Bluemix application name that whose bound services you wish to make available to the container.  By default this is not set.
-      #   CONTAINER_SIZE      String       Specify container size: m1.tiny (256), m1.small (512), m1.medium (1024), m1.large (2048).
-      #                                    Default is m1.tiny (256).
-      #   CONCURRENT_VERSIONS Number       Number of versions of this container to leave active.  
-      #                                    Default is 1
-      #
-      #/bin/bash deployscripts/deploycontainer.sh
-      
-      # Deploy Container Group:
-      # Optional environment properties (can be set directly in this script, or defined as environment properties):
-      #      NAME              Value         Description
-      #   =============      =========     ==============
-      #   ROUTE_HOSTNAME      String       Specify the Hostname for the Cloud Foundry Route you wish to assign to this container group.  By default this is not set.
-      #   ROUTE_DOMAIN        String       Specify domain name for the Cloud Foundry Route you wish to assign to this container group.  By default this is not set.
-      #   BIND_TO             String       Specify a Bluemix application name that whose bound services you wish to make available to the container.  By default this is not set.
-      #   DESIRED_INSTANCES:  Number       Specify the number of instances in the group.  Default value is 1.
-      #   AUTO_RECOVERY:      Boolean      Set auto-recovery to true/false.  Default value is false.
-      
-      #                                    Default is false.
-      #   CONTAINER_SIZE      String       Specify container size: m1.tiny (256), m1.small (512), m1.medium (1024), m1.large (2048).
-      #                                    Default is m1.tiny (256).
-      #   CONCURRENT_VERSIONS Number       Number of versions of this group to leave active.
-      #                                    Default is 1
-      # IF YOU WANT CONTAINER GROUPS .. uncomment the next line, and comment out the previous deployment line (/bin/bash deployscripts/deploygroup.sh)
-      /bin/bash deployscripts/deploygroup.sh
-      
-      RESULT=$?
-      
-      #########################
-      # Environment DETAILS   #
-      #########################
-      # The environment has been setup.
-      # The Cloud Foundry CLI (cf), IBM Container Service CLI (ice), Git client (git), IDS Inventory CLI (ids-inv) and Python 2.7.3 (python) have been installed.
-      # Based on the organization and space selected in the Job credentials are in place for both IBM Container Service and IBM Bluemix
-      
-      # The following colors have been defined to help with presentation of logs: green, red, label_color, no_color.
-      if [ $RESULT -ne 0 ]; then
-          echo -e "${red}Executed failed or had warnings ${no_color}"
-          ${EXT_DIR}/print_help.sh
-          exit $RESULT
-      fi
-      echo -e "${green}Execution complete${no_label}"
+
+      #cat build.properties
+      line=$(head -n 1 build.properties)
+      image_name=${line#"IMAGE_NAME="}
+      cat pod.yaml
+      sed -i "s~$CF_APP:latest~$image_name~" pod.yaml
+      cat pod.yaml
+
+      #Connect to a different container-service api by uncommenting and specifying an api endpoint
+      #bx cs init --host https://us-south.containers.bluemix.net
+      kubectl create -f pods.yml  
