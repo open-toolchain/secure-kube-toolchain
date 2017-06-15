@@ -56,7 +56,7 @@
         },{
           "type": "password",
           "readonly": false,
-          "title": "API Key",
+          "title": "Bluemix API Key",
           "key": "api-key"
         },{
           "type": "text",
