@@ -111,8 +111,8 @@ stages:
       region_id: ${PROD_REGION_ID}
       organization: ${PROD_ORG_NAME}
       space: ${PROD_SPACE_NAME}
-      api_key_id: ${API_KEY}
-      kubernetes_cluster_name: ${PROD_CLUSTER_NAME}
+      api_key: ${API_KEY}
+      kubernetes_cluster: ${PROD_CLUSTER_NAME}
     script: |
       #!/bin/bash
 
