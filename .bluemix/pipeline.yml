@@ -73,10 +73,16 @@ stages:
       # Copy any artifacts that will be needed for deployment and testing to $WORKSPACE    #
       ######################################################################################
       echo "IMAGE_NAME=${FULL_REPOSITORY_NAME}" >> $ARCHIVE_DIR/build.properties
-      if [ -f pod.yaml ]; then      
-          cp pod.yaml $ARCHIVE_DIR/
+      if [ -f deployment.yaml ]; then
+          #Update deployment.yaml with image name
+          echo "Updating deployment.yaml script:"
+          line=$(head -n 1 build.properties)
+          image_name=${line#"IMAGE_NAME="}
+          sed -i "s~$CF_APP:latest~$image_name~" deployment.yaml
+          cat deployment.yaml
+          cp deployment.yaml $ARCHIVE_DIR/
       else 
-          echo -e "${red}Kubernetes deployment file 'pod.yaml' not found in project${no_color}"
+          echo -e "${red}Kubernetes deployment file 'deployment.yaml' not found at the repository root${no_color}"
           exit 1
       fi  
 - name: VALIDATE
@@ -122,13 +128,6 @@ stages:
         echo "$PROD_CLUSTER_NAME not created or workers not ready"
         exit 1
       fi
-
-      #Update pod.yaml with image name
-      echo "Updating deployment yaml script:"
-      line=$(head -n 1 build.properties)
-      image_name=${line#"IMAGE_NAME="}
-      sed -i "s~$CF_APP:latest~$image_name~" pod.yaml
-      cat pod.yaml
 
       #Connect to a different container-service api by uncommenting and specifying an api endpoint
       #bx cs init --host https://us-south.containers.bluemix.net

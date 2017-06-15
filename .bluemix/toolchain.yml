@@ -26,7 +26,7 @@ services:
     service_id: githubpublic
     parameters:
       repo_name: 'hello-containers-{{timestamp}}'
-      repo_url: 'https://github.com/open-toolchain/hello-containers'
+      repo_url: 'https://github.com/hmagph/hello-containers'
       type: clone
       has_issues: true
       enable_traceability: true
