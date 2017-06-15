@@ -42,7 +42,7 @@ services:
           $text: pipeline.yml
         env:
           GIT_REPO: hello-world-repo
-          CF_APP_NAME: '{{form.pipeline.parameters.hello-world-name}}'
+          CF_APP_NAME: '{{form.pipeline.parameters.app-name}}'
           PROD_SPACE_NAME: '{{form.pipeline.parameters.prod-space}}'
           PROD_ORG_NAME: '{{form.pipeline.parameters.prod-organization}}'
           PROD_REGION_ID: '{{form.pipeline.parameters.prod-region}}'

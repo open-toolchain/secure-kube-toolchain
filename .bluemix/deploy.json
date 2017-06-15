@@ -34,14 +34,14 @@
             "description": "Your cluster name. Retrieve it with [bx cs clusters] or via the console at https://console.ng.bluemix.net/containers-kubernetes/home/clusters .",
             "type": "string"
         },
-       "hello-world-name": {
+       "app-name": {
             "description": {
               "$ref": "#/messages/deploy.appDescription"
             },
             "type": "string"
         }
     },
-    "required": ["prod-region", "prod-organization", "prod-space", "bluemix-api-key", "cluster-name", hello-world-name"],
+    "required": ["prod-region", "prod-organization", "prod-space", "api-key", "cluster-name", "app-name"],
     "form": [
        {
           "type": "validator",
@@ -52,7 +52,7 @@
           "title": {
             "$ref": "#/messages/deploy.appName"
           },
-          "key": "hello-world-name"
+          "key": "app-name"
         },{
           "type": "password",
           "readonly": false,
