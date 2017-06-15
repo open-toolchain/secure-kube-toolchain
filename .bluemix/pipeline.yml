@@ -116,12 +116,24 @@ stages:
     script: |
       #!/bin/bash
 
+      #Check cluster availability
+      ip_addr=$(bx cs workers $PROD_CLUSTER_NAME | grep normal | awk '{ print $2 }')
+      if [ -z $ip_addr ]; then
+        echo "$PROD_CLUSTER_NAME not created or workers not ready"
+        exit 1
+      fi
+
+      #Update pod.yaml with image name
+      echo "Updating deployment yaml script:"
       line=$(head -n 1 build.properties)
       image_name=${line#"IMAGE_NAME="}
-      cat pod.yaml
       sed -i "s~$CF_APP:latest~$image_name~" pod.yaml
       cat pod.yaml
 
       #Connect to a different container-service api by uncommenting and specifying an api endpoint
       #bx cs init --host https://us-south.containers.bluemix.net
       kubectl create -f pod.yml  
+
+      port=$(kubectl get services | grep frontend | sed 's/.*:\([0-9]*\).*/\1/g')
+      echo ""
+      echo "View the application at http://$ip_addr:$port"
