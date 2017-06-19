@@ -133,9 +133,17 @@ stages:
       cat deployment.yml
       kubectl apply -f deployment.yml  
 
+      echo ""
+      echo "DEPLOYED SERVICE:"
       kubectl describe services hello-service
+      kubectl get pods --selector app=hello-app -o json | json items[0].status.podIP
 
-      kubectl describe pods --selector app=hello
-      #port=$(kubectl get services | grep frontend | sed 's/.*:\([0-9]*\).*/\1/g')
-      #echo ""
-      #echo "View the application at http://$ip_addr:$port"
+      echo ""
+      echo "DEPLOYED PODS:"
+      kubectl describe pods --selector app=hello-app
+
+      npm install -g json
+      podIP=$(  kubectl get pods --selector app=hello-app -o json | json items[0].status.podIP )
+      port=$(  kubectl get services hello-service -o json | json spec.ports[0].nodePort )
+      echo ""
+      echo "View the application at http://$podIP:$port"
