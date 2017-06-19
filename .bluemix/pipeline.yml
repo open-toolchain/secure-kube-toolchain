@@ -73,16 +73,14 @@ stages:
       # Copy any artifacts that will be needed for deployment and testing to $WORKSPACE    #
       ######################################################################################
       echo "IMAGE_NAME=${FULL_REPOSITORY_NAME}" >> $ARCHIVE_DIR/build.properties
-      if [ -f deployment.yaml ]; then
-          #Update deployment.yaml with image name
-          echo "Updating deployment.yaml script:"
-          line=$(head -n 1 build.properties)
-          image_name=${line#"IMAGE_NAME="}
-          sed -i "s~$CF_APP:latest~$image_name~" deployment.yaml
-          cat deployment.yaml
-          cp deployment.yaml $ARCHIVE_DIR/
+      if [ -f deployment.yml ]; then
+          #Update deployment.yml with image name
+          echo "Updating deployment.yml script:"
+          sed 's/^\([[:blank:]]*\)image:.*$/\1image: $FULL_REPOSITORY_NAME/' deployment.yml
+          cat deployment.yml
+          cp deployment.yml $ARCHIVE_DIR/
       else 
-          echo -e "${red}Kubernetes deployment file 'deployment.yaml' not found at the repository root${no_color}"
+          echo -e "${red}Kubernetes deployment file 'deployment.yml' not found at the repository root${no_color}"
           exit 1
       fi  
 - name: VALIDATE
@@ -123,16 +121,21 @@ stages:
       #!/bin/bash
 
       #Check cluster availability
-      ip_addr=$(bx cs workers $PROD_CLUSTER_NAME | grep normal | awk '{ print $2 }')
+      ip_addr=$(bx cs workers $KUBERNETES_CLUSTER_NAME | grep normal | awk '{ print $2 }')
       if [ -z $ip_addr ]; then
-        echo "$PROD_CLUSTER_NAME not created or workers not ready"
+        echo "$KUBERNETES_CLUSTER_NAME not created or workers not ready"
         exit 1
       fi
 
       #Connect to a different container-service api by uncommenting and specifying an api endpoint
       #bx cs init --host https://us-south.containers.bluemix.net
-      kubectl create -f pod.yml  
+      echo "Deploying using script:"
+      cat deployment.yml
+      kubectl apply -f deployment.yml  
 
-      port=$(kubectl get services | grep frontend | sed 's/.*:\([0-9]*\).*/\1/g')
-      echo ""
-      echo "View the application at http://$ip_addr:$port"
+      kubectl describe services hello-service
+      
+      kubectl describe pods --selector app=hello
+      #port=$(kubectl get services | grep frontend | sed 's/.*:\([0-9]*\).*/\1/g')
+      #echo ""
+      #echo "View the application at http://$ip_addr:$port"
