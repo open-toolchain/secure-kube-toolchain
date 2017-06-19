@@ -76,13 +76,13 @@ stages:
       if [ -f deployment.yml ]; then
           #Update deployment.yml with image name
           echo "Updating deployment.yml script:"
-          sed 's/^\([[:blank:]]*\)image:.*$/\1image: $FULL_REPOSITORY_NAME/' deployment.yml
+          sed -i "s~^\([[:blank:]]*\)image:.*$~\1image: ${FULL_REPOSITORY_NAME}~" deployment.yml
           cat deployment.yml
           cp deployment.yml $ARCHIVE_DIR/
       else 
           echo -e "${red}Kubernetes deployment file 'deployment.yml' not found at the repository root${no_color}"
           exit 1
-      fi  
+      fi      
 - name: VALIDATE
   inputs:
   - type: job
@@ -134,7 +134,7 @@ stages:
       kubectl apply -f deployment.yml  
 
       kubectl describe services hello-service
-      
+
       kubectl describe pods --selector app=hello
       #port=$(kubectl get services | grep frontend | sed 's/.*:\([0-9]*\).*/\1/g')
       #echo ""
