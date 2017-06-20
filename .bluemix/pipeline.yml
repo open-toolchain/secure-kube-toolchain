@@ -38,7 +38,7 @@ stages:
       
       # Possible adding retries to build the image
       if [ -f Dockerfile ]; then 
-          echo -e "${label_color}Building ${FULL_REPOSITORY_NAME} ${no_color}"
+          echo -e "${label_color}BUILDING ${FULL_REPOSITORY_NAME} ${no_color}"
           ${EXT_DIR}/utilities/sendMessage.sh -l info -m "New container build requested for ${FULL_REPOSITORY_NAME}"
           # build image
           BUILD_COMMAND=""
@@ -65,7 +65,7 @@ stages:
               echo -e "${green}Container build of ${FULL_REPOSITORY_NAME} was successful ${no_color}"
           fi  
       else 
-          echo -e "${red}Dockerfile not found in project${no_color}"
+          echo -e "${red}Dockerfile not found at the repository root${no_color}"
           exit 1
       fi  
       
@@ -75,7 +75,7 @@ stages:
       echo "IMAGE_NAME=${FULL_REPOSITORY_NAME}" >> $ARCHIVE_DIR/build.properties
       if [ -f deployment.yml ]; then
           #Update deployment.yml with image name
-          echo "Updating deployment.yml script:"
+          echo "UPDATING DEPLOYMENT MANIFEST:"
           sed -i "s~^\([[:blank:]]*\)image:.*$~\1image: ${FULL_REPOSITORY_NAME}~" deployment.yml
           cat deployment.yml
           cp deployment.yml $ARCHIVE_DIR/
@@ -119,6 +119,7 @@ stages:
       kubernetes_cluster: ${PROD_CLUSTER_NAME}
     script: |
       #!/bin/bash
+      set -x
 
       #Check cluster availability
       ip_addr=$(bx cs workers $KUBERNETES_CLUSTER_NAME | grep normal | awk '{ print $2 }')
@@ -129,21 +130,19 @@ stages:
 
       #Connect to a different container-service api by uncommenting and specifying an api endpoint
       #bx cs init --host https://us-south.containers.bluemix.net
-      echo "Deploying using script:"
+      echo ""
+      echo "DEPLOYING USING MANIFEST:"
       cat deployment.yml
       kubectl apply -f deployment.yml  
 
       echo ""
       echo "DEPLOYED SERVICE:"
       kubectl describe services hello-service
-      kubectl get pods --selector app=hello-app -o json | json items[0].status.podIP
 
       echo ""
       echo "DEPLOYED PODS:"
       kubectl describe pods --selector app=hello-app
 
-      npm install -g json
-      podIP=$(  kubectl get pods --selector app=hello-app -o json | json items[0].status.podIP )
-      port=$(  kubectl get services hello-service -o json | json spec.ports[0].nodePort )
+      port=$(kubectl get services | grep hello-service | sed 's/.*:\([0-9]*\).*/\1/g')
       echo ""
-      echo "View the application at http://$podIP:$port"
+      echo "VIEW THE APPLICATION AT: http://$ip_addr:$port"
