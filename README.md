@@ -4,13 +4,14 @@ This Hello World application uses Docker with Node.js and includes a DevOps tool
 
 To get started, click **Create toolchain**.
 
-[![Deploy To Bluemix](https://console.ng.bluemix.net/devops/graphics/create_toolchain_button.png)](https://console.ng.bluemix.net/devops/setup/deploy/?repository=https%3A//github.com/hmagph/secure-kube-toolchain) console.ng (hmagph)
-[![Deploy To Bluemix](https://console.ng.bluemix.net/devops/graphics/create_toolchain_button.png)](https://dev-console.stage1.ng.bluemix.net/devops/setup/deploy/?repository=https%3A//github.com/hmagph/secure-kube-toolchain) dev-console.stage1 (hmagph)
+[![Deploy To Bluemix](https://console.bluemix.net/devops/graphics/create_toolchain_button.png)](https://console.bluemix.net/devops/setup/deploy/?repository=https%3A//github.com/hmagph/secure-kube-toolchain) YP (hmagph)
 
-[![Deploy To Bluemix](https://console.ng.bluemix.net/devops/graphics/create_toolchain_button.png)](https://console.ng.bluemix.net/devops/setup/deploy/?repository=https%3A//github.com/open-toolchain/secure-container-toolchain)
+[![Deploy To Bluemix](https://console.bluemix.net/devops/graphics/create_toolchain_button.png)](https://dev-console.stage1.bluemix.net/devops/setup/deploy/?repository=https%3A//github.com/hmagph/secure-kube-toolchain) YS1 (hmagph)
 
-**First-time containers service users**: Make sure that your containers service is correctly set up by [identifying the image repository for your organization](https://console.ng.bluemix.net/docs/containers/container_creating_ov.html#container_namespace). 
+[![Deploy To Bluemix](https://console.bluemix.net/devops/graphics/create_toolchain_button.png)](https://console.bluemix.net/devops/setup/deploy/?repository=https%3A//github.com/open-toolchain/secure-kube-toolchain)
 
-For more information about getting started with IBM Containers, see [this tutorial](https://console.ng.bluemix.net/docs/containers/container_gettingstarted_tutorial_lesson1.html#container_gettingstarted_tutorial_lesson_1).
+**First-time containers service users**: Make sure that your containers service is correctly set up by [identifying the image repository for your organization](https://console.bluemix.net/docs/containers/container_creating_ov.html#container_namespace). 
+
+For more information about getting started with IBM Containers, see [this tutorial](https://console.bluemix.net/docs/containers/container_gettingstarted_tutorial_lesson1.html#container_gettingstarted_tutorial_lesson_1).
 
 For more information about toolchains, see [Custom toolchains in one click with IBM Bluemix DevOps Services](https://developer.ibm.com/devops-services/2016/06/16/open-toolchain-with-ibm-bluemix-devops-services/).
