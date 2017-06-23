@@ -23,7 +23,7 @@ toolchain:
       $ref: "#/messages/template.gettingStarted" 
 services:
   hello-world-repo:
-    service_id: githubpublic
+    service_id: hostedgit
     parameters:
       repo_name: 'hello-containers-{{timestamp}}'
       repo_url: 'https://github.com/hmagph/hello-containers'
