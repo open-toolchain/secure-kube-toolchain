@@ -6,7 +6,7 @@ template:
     $ref: "#/messages/template.name"
   description:
     $ref: "#/messages/template.description"
-  header: '![](simple-toolchain-cont.svg?localize)'
+  header: '![](toolchain.svg?localize)'
   icon: icon.svg
   required:
     - hello-world-build
