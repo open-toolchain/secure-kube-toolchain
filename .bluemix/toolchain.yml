@@ -7,7 +7,7 @@ template:
   description:
     $ref: "#/messages/template.description"
   header: '![](toolchain.svg?localize)'
-  icon: icon.svg
+  icon: secure-lock-kubernetes.svg
   required:
     - hello-world-build
     - hello-world-repo
