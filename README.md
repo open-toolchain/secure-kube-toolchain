@@ -1,5 +1,5 @@
-# Secure Kubernetes toolchain
-![Icon](./.bluemix/secure-lock-kubernetes.png)
+# ![Icon](./.bluemix/secure-lock-kubernetes.png) Secure Kubernetes toolchain
+
 
 This Hello World application uses Docker with Node.js and includes a DevOps toolchain that is preconfigured for continuous delivery with Vulnerability Advisor, source control, issue tracking, and online editing, and deployment to the IBM Bluemix Containers service.
 
