@@ -13,9 +13,9 @@ template:
     - hello-world-repo
   info:
     git url: >-
-      [https://github.com/hmagph/secure-kube-toolchain](https://github.com/hmagph/secure-kube-toolchain)
+      [https://github.com/open-toolchain/secure-kube-toolchain](https://github.com/open-toolchain/secure-kube-toolchain)
     git branch: >-
-      [master](https://github.com/hmagph/secure-kube-toolchain/tree/master)
+      [master](https://github.com/open-toolchain/secure-kube-toolchain/tree/master)
 toolchain:
   name: 'secure-kubernetes-toolchain-{{timestamp}}'
   template:
@@ -26,7 +26,7 @@ services:
     service_id: hostedgit
     parameters:
       repo_name: 'hello-containers-{{timestamp}}'
-      repo_url: 'https://github.com/hmagph/hello-containers'
+      repo_url: 'https://github.com/open-toolchain/hello-containers'
       type: clone
       has_issues: true
       enable_traceability: true
