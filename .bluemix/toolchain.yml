@@ -13,7 +13,7 @@ template:
     - hello-world-repo
   info:
     git url: >-
-      [https://github.com/hmagph/secure-kube-toolchain](https://github.com/open-toolchain/secure-kube-toolchain)
+      [https://github.com/hmagph/secure-kube-toolchain](https://github.com/hmagph/secure-kube-toolchain)
     git branch: >-
       [master](https://github.com/hmagph/secure-kube-toolchain/tree/master)
 toolchain:
