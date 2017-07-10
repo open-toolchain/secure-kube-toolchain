@@ -27,18 +27,21 @@
             "type": "string"
         },
        "api-key": {
-            "description": "Required for **Federated ID** since Federated ID can't login with Bluemix user and password via Bluemix CLI. You can obtain your API_KEY with [bx iam api-key-create) or via the console at https://console.ng.bluemix.net/iam/#/apikeys by clicking **Create API key** (Each API key only can be viewed once).",
-            "type": "string"
+            "description": "The Bluemix API key is used to access the IBM Container Service API and interact with the cluster. You can obtain your API key with 'bx iam api-key-create' or via the console at https://console.ng.bluemix.net/iam/#/apikeys by clicking **Create API key** (Each API key only can be viewed once).",
+            "type": "string",
+            "pattern": "\\S"
         },
        "prod-cluster-name": {
             "description": "Your cluster name. Retrieve it with [bx cs clusters] or via the console at https://console.ng.bluemix.net/containers-kubernetes/home/clusters .",
-            "type": "string"
+            "type": "string",
+            "pattern": "\\S"
         },
        "app-name": {
             "description": {
               "$ref": "#/messages/deploy.appDescription"
             },
-            "type": "string"
+            "type": "string",
+            "pattern": "\\S"
         }
     },
     "required": ["prod-region", "prod-organization", "prod-space", "api-key", "cluster-name", "app-name"],
@@ -59,14 +62,9 @@
           "title": "Bluemix API Key",
           "key": "api-key"
         },{
-          "type": "text",
-          "readonly": false,
-          "title": "Kubernetes Cluster Name",
-          "key": "prod-cluster-name"
-        },{
             "type": "table",
-            "columnCount": 4,
-            "widths": ["15%", "28%", "28%", "28%"],
+            "columnCount": 5,
+            "widths": ["15%", "20%", "20%", "20%", "20%"],
             "items": [
                 {
                   "type": "label",
@@ -76,6 +74,9 @@
                   "title": {
                     "$ref": "#/messages/region"
                   }
+                },{
+                  "type": "label",
+                  "title": "Cluster Name"
                 },{
                   "type": "label",
                   "title": {
@@ -95,12 +96,29 @@
                   "type": "select",
                   "key": "prod-region"
                 },{
+                  "type": "text",
+                  "key": "prod-cluster-name",
+                  "readonly": false
+                },{
                   "type": "select",
                   "key": "prod-organization"
                 },{
                   "type": "select",
                   "key": "prod-space",
                   "readonly": false
+                }
+            ]
+        },{
+		  "type": "table",
+          "columnCount": 2,
+            "widths": ["15%", "80%"],
+            "items": [
+                {
+                  "type": "label",
+                  "title": ""
+                },{
+                  "type": "label",
+                  "title": "Retrieve the Kubernetes cluster name with the CLI command 'bx cs clusters' or via the [console](https://console.bluemix.net/containers-kubernetes/home/clusters)."
                 }
             ]
         }
