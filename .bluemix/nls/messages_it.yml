@@ -1,0 +1,14 @@
+---
+#The format for creating a link with a URL and text is [link text](link url) with no spaces or characters between the two sets of brackets- []()
+template.name: "Toolchain Kubernetes sicura"
+template.description: "Utilizzando questa toolchain, è possibile sviluppare e distribuire in modo sicuro un'applicazione in un cluster Kubernetes gestito da IBM Bluemix Container Service. Per impostazione predefinita, la toolchain utilizza un'app \"Hello World\" Node.js di esempio, ma è possibile effettuare il collegamento al proprio repository GitHub. Questa toolchain è preconfigurata per la distribuzione continua con [Vulnerability Advisor](https://www.ibm.com/blogs/bluemix/2016/06/docker-container-security-with-vulnerability-advisor/), il controllo origine, la traccia dei problemi e la modifica online.\n\n **Utenti che utilizzano per la prima volta IBM Bluemix Containers Service**: accertarsi che il registro immagine contenitore sia correttamente configurato con un [namespace](https://console.bluemix.net/docs/services/Registry/index.html). NOTA IMPORTANTE: affinché la pipeline crei i contenitori correttamente, utilizzare queste procedure per definire lo spazio nome:\n- bx login\n- bx target --cf\n- bx cr namespace-add <my_namespace>\n\nÈ possibile gestire i cluster Bluemix Container in [console](https://console.ng.bluemix.net/docs/containers/cs_cluster.html#cs_cluster).\n\nQuesta toolchain utilizza strumenti del servizio Continuous Delivery.Se un'istanza di tale servizio non è già presente nell'organizzazione, quando si fa clic su **Crea**, viene automaticamente aggiunta al piano gratuito [Lite](/catalog/services/continuous-delivery/) selezionato.\n\nPer iniziare, fare clic su **Crea**."
+template.gettingStarted: " **La toolchain è pronta!**\n**Avvio rapido:** Eseguire il commit di una modifica al repository Git per attivare una nuova build dell'immagine Docker che verrà sottoposta a scansione per individuare le vulnerabilità e distribuita nel cluster Kubernetes. Per le istruzioni passo dopo passo, consultare [tutorial](https://www.ibm.com/devops/method/tutorials/tc_secure_kube?task=2) per questa toolchain."
+deploy.title: "Stage di distribuzione Hello World"
+deploy.description: "Toolchain hello-world semplice"
+deploy.longDescription: "Delivery Pipeline automatizza la distribuzione continua."
+deploy.appDescription: "Il nome dell'app Hello World dell'utente"
+deploy.appName: "Nome app"
+region: "Regione"
+organization: "Organizzazione"
+space: "Spazio"
+prodStage: "Stage di produzione"

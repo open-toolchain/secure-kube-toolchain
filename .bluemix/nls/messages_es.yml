@@ -1,0 +1,14 @@
+---
+#The format for creating a link with a URL and text is [link text](link url) with no spaces or characters between the two sets of brackets- []()
+template.name: "Cadena de herramientas de Kubernetes segura"
+template.description: "Con esta cadena de herramientas, puede desarrollar y desplegar de forma segura una aplicación de clúster de Kubernetes gestionado por IBM Bluemix Container Service. De forma predeterminada, la cadena de herramientas utiliza una aplicación de muestra Node.js \"Hello World\", pero puede enlazar a su propio repositorio GitHub en su lugar. Esta cadena de herramientas está preconfigurada para la entrega continua con [Vulnerability Advisor](https://www.ibm.com/blogs/bluemix/2016/06/docker-container-security-with-vulnerability-advisor/), control de origen, seguimiento de problemas y edición en línea.\n\n **Nuevos usuarios de IBM Bluemix Containers Service**: Asegúrese de que el registro de su imagen de contenedor está configurado correctamentecon un [espacio de nombres](https://console.bluemix.net/docs/services/Registry/index.html). NOTA IMPORTANTE: Para que el conducto pueda construir satisfactoriamente los contenedores, siga estos pasos para definir el espacio de nombres:\n- bx login\n- bx target --cf\n- bx cr namespace-add <mi_espacio_de_nombres>\n\nPuede gestionar sus clústers de Bluemix Container en la [consola](https://console.ng.bluemix.net/docs/containers/cs_cluster.html#cs_cluster).\n\nEsta cadena de herramientas utiliza herramientas que forman parte del servicio de Continuous Delivery. Si aún no hay una instancia de dicho servicio en la organización, cuando pulse **Crear**, se añadirá automáticamente con el plan sin coste [Lite](/catalog/services/continuous-delivery/) seleccionado.\n\nPara comenzar, pulse **Crear**."
+template.gettingStarted: " **¡Su cadena de herramientas está lista!**\n**Inicio rápido:** Confirme un cambio en el repositorio Git para desencadenar una nueva compilación de imagen Docker que se rastreará en busca de vulnerabilidades y se desplegará en su clúster de Kubernetes. Para obtener instrucciones detalladas paso a paso, consulte la [guía de aprendizaje](https://www.ibm.com/devops/method/tutorials/tc_secure_kube?task=2) para esta cadena de herramientas. "
+deploy.title: "Hello World Deploy Stage"
+deploy.description: "cadena de herramientas simple hello-world"
+deploy.longDescription: "Delivery Pipeline automatiza el despliegue continuo."
+deploy.appDescription: "El nombre de la aplicación Hello World"
+deploy.appName: "Nombre de aplicación"
+region: "Región"
+organization: "Organización"
+space: "Espacio"
+prodStage: "Fase de producción"
