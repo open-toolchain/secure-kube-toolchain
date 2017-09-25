@@ -1,0 +1,14 @@
+---
+#The format for creating a link with a URL and text is [link text](link url) with no spaces or characters between the two sets of brackets- []()
+template.name: "安全的 Kubernetes 工具鏈"
+template.description: "使用此工具鏈，您可以安全地開發應用程式，並將它部署至由「IBM Bluemix Container 服務」所管理的 Kubernetes 叢集。依預設，工具鏈使用範例 Node.js \"Hello World\" 應用程式，但是您可以改為鏈結至自己的 GitHub 儲存庫。此工具鏈已針對使用[漏洞顧問](https://www.ibm.com/blogs/bluemix/2016/06/docker-container-security-with-vulnerability-advisor/)的 Continuous Delivery、來源控制、問題追蹤及線上編輯進行預先配置。\n\n **第一次使用 IBM Bluemix Containers 服務的使用者**：請確定已使用[名稱空間](https://console.bluemix.net/docs/services/Registry/index.html) 來正確設定容器映像檔登錄。重要注意事項：若要使管線順利建置容器，請使用下列步驟來定義您的名稱空間：\n- bx login\n- bx target --cf\n- bx cr namespace-add <my_namespace>\n\n您可以在[主控台](https://console.ng.bluemix.net/docs/containers/cs_cluster.html#cs_cluster) 中管理 Bluemix Container 叢集。\n\n此工具鏈使用 Continuous Delivery 服務的部分工具。當您按一下**建立**時如果組織中尚未具有該服務的實例，則將自動新增已搭配選取免費 [Lite](/catalog/services/continuous-delivery/) 方案的實例。\n\n若要開始，請按一下**建立**。"
+template.gettingStarted: " **您的工具鏈已備妥！**\n**快速入門：** 確定 Git 儲存庫的變更，以觸發新的 Docker 映像檔建置，且將會掃描該建置的漏洞並部署於您的 Kubernetes 叢集中。如需逐步指示，請參閱此工具鏈的[指導教學](https://www.ibm.com/devops/method/tutorials/tc_secure_kube?task=2)。"
+deploy.title: "Hello World 部署階段"
+deploy.description: "hello-world 簡式工具鏈"
+deploy.longDescription: "Delivery Pipeline 會自動執行連續部署。"
+deploy.appDescription: "Hello World 應用程式的名稱"
+deploy.appName: "應用程式名稱"
+region: "區域"
+organization: "組織"
+space: "空間"
+prodStage: "正式作業階段"
