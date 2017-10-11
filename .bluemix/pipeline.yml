@@ -81,12 +81,12 @@ stages:
       mkdir -p $ARCHIVE_DIR
 
       # IMAGE_NAME from build.properties is used by Vulnerability Advisor job to reference the image qualified location in registry
-      echo "IMAGE_NAME=${FULL_REPOSITORY_NAME}" >> $ARCHIVE_DIR/build.properties
+      echo "IMAGE_NAME=${IMAGE_LOCATION}:${BUILD_NUMBER}" >> $ARCHIVE_DIR/build.properties
 
       #Update deployment.yml with image name
       if [ -f deployment.yml ]; then
           echo "UPDATING DEPLOYMENT MANIFEST:"
-          sed -i "s~^\([[:blank:]]*\)image:.*$~\1image: ${FULL_REPOSITORY_NAME}~" deployment.yml
+          sed -i "s~^\([[:blank:]]*\)image:.*$~\1image: ${IMAGE_LOCATION}:${BUILD_NUMBER}~" deployment.yml
           cat deployment.yml
           if [ ! -f $ARCHIVE_DIR/deployment.yml ]; then # no need to copy if working in ./ already    
               cp deployment.yml $ARCHIVE_DIR/
