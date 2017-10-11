@@ -31,6 +31,11 @@
             "type": "string",
             "pattern": "\\S"
         },
+       "registry-namespace": {
+            "description": "The image registry namespace. You can create a new namespace with 'bx cr namespace-add'.",
+            "type": "string",
+            "pattern": "\\S"
+       },	    
        "prod-cluster-name": {
             "description": "Your cluster name. Retrieve it with [bx cs clusters] or via the console at https://console.ng.bluemix.net/containers-kubernetes/home/clusters .",
             "type": "string",
@@ -44,7 +49,7 @@
             "pattern": "\\S"
         }
     },
-    "required": ["prod-region", "prod-organization", "prod-space", "api-key", "cluster-name", "app-name"],
+    "required": ["registry-namespace", "prod-region", "prod-organization", "prod-space", "api-key", "prod-cluster-name", "app-name"],
     "form": [
        {
           "type": "validator",
@@ -57,7 +62,12 @@
           },
           "key": "app-name"
         },{
-          "type": "password",
+          "type": "text",
+          "readonly": false,
+          "title": "Image Registry Namespace",
+          "key": "registry-namespace"
+        },{
+	  "type": "password",
           "readonly": false,
           "title": "Bluemix API Key",
           "key": "api-key"
