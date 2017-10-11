@@ -4,6 +4,10 @@
 ### Continuously deliver a secure Docker app to a Kubernetes Cluster
 This Hello World application uses Docker with Node.js and includes a DevOps toolchain that is preconfigured for continuous delivery with Vulnerability Advisor, source control, issue tracking, and online editing, and deployment to the IBM Bluemix Containers service.
 
+Application code is stored in source control, along with its Dockerfile and its Kubernetes deployment script.
+The target cluster is configured during toolchain setup (using a Bluemix API key and cluster name). You can later change these by altering the Delivery Pipeline configuration.
+Any code change to the Git repo will automatically be built, validated and deployed into the Kubernetes cluster.
+
 ![Icon](./.bluemix/toolchain.png)
 
 ### To get started, click this button:
