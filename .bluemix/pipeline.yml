@@ -80,11 +80,6 @@ stages:
       echo -e "Checking archive dir presence"
       mkdir -p $ARCHIVE_DIR
 
-      # Copy scripts (incl. deploy scripts)
-      if [ ! -d $ARCHIVE_DIR/scripts/ ]; then # no need to copy if working in ./ already
-        cp -r ./scripts/ $ARCHIVE_DIR/
-      fi
-
       # IMAGE_NAME from build.properties is used by Vulnerability Advisor job to reference the image qualified location in registry
       echo "IMAGE_NAME=${FULL_REPOSITORY_NAME}" >> $ARCHIVE_DIR/build.properties
 
