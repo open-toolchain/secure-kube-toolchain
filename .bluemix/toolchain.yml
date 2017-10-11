@@ -47,6 +47,7 @@ services:
           PROD_ORG_NAME: '{{form.pipeline.parameters.prod-organization}}'
           PROD_REGION_ID: '{{form.pipeline.parameters.prod-region}}'
           REGISTRY_REGION_ID: '{{form.pipeline.parameters.prod-region}}'
+          REGISTRY_NAMESPACE: '{{form.pipeline.parameters.registry-namespace}}'
           PROD_CLUSTER_NAME: '{{form.pipeline.parameters.prod-cluster-name}}'
           API_KEY: '{{form.pipeline.parameters.api-key}}'
         execute: true
