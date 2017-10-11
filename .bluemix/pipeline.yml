@@ -119,7 +119,7 @@ stages:
   inputs:
   - type: job
     stage: BUILD
-    job: Container build
+    job: Build image
   jobs:
   - name: Deploy Kubernetes Pod
     type: deployer
