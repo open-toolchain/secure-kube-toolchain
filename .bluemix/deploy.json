@@ -44,7 +44,7 @@
             "pattern": "\\S"
         }
     },
-    "required": ["prod-region", "prod-organization", "prod-space", "api-key", "cluster-name", "app-name"],
+    "required": ["prod-region", "prod-organization", "prod-space", "api-key", "prod-cluster-name", "app-name"],
     "form": [
        {
           "type": "validator",
