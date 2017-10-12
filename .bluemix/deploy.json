@@ -70,12 +70,16 @@
         },{
           "type": "text",
           "readonly": false,
-          "title": "Image Registry Namespace",
+          "title": {
+            "$ref": "#/messages/deploy.imageRegistryNamespace"
+          },
           "key": "registry-namespace"
         },{
 	  "type": "password",
           "readonly": false,
-          "title": "Bluemix API Key",
+          "title": {
+            "$ref": "#/messages/deploy.apiKey"
+          },
           "key": "api-key"
         },{
             "type": "table",
