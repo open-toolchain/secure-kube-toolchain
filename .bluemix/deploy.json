@@ -27,17 +27,23 @@
             "type": "string"
         },
        "api-key": {
-            "description": "The Bluemix API key is used to access the IBM Container Service API and interact with the cluster. You can obtain your API key with 'bx iam api-key-create' or via the console at https://console.ng.bluemix.net/iam/#/apikeys by clicking **Create API key** (Each API key only can be viewed once).",
+            "description": {
+              "$ref": "#/messages/deploy.apiKeyDescription"
+            },
             "type": "string",
             "pattern": "\\S"
         },
        "registry-namespace": {
-            "description": "The image registry namespace. You can create a new namespace with 'bx cr namespace-add'.",
+            "description": {
+              "$ref": "#/messages/deploy.registryDescription"
+            },
             "type": "string",
             "pattern": "\\S"
        },	    
        "prod-cluster-name": {
-            "description": "Your cluster name. Retrieve it with [bx cs clusters] or via the console at https://console.ng.bluemix.net/containers-kubernetes/home/clusters .",
+            "description": {
+              "$ref": "#/messages/deploy.clusterDescription"
+            },
             "type": "string",
             "pattern": "\\S"
         },
@@ -86,7 +92,9 @@
                   }
                 },{
                   "type": "label",
-                  "title": "Cluster Name"
+                  "title": {
+                    "$ref": "#/messages/deploy.clusterName"
+                  }
                 },{
                   "type": "label",
                   "title": {
@@ -128,7 +136,9 @@
                   "title": ""
                 },{
                   "type": "label",
-                  "title": "Retrieve the Kubernetes cluster name with the CLI command 'bx cs clusters' or via the [console](https://console.bluemix.net/containers-kubernetes/home/clusters)."
+                  "title": {
+                    "$ref": "#/messages/deploy.clusterNote"
+                  }
                 }
             ]
         }
