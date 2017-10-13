@@ -7,10 +7,6 @@ stages:
     service: ${GIT_REPO}    
   triggers:
   - type: commit
-  properties:
-  - name: CHART_NAME
-    value: ${CHART_NAME}
-    type: text  
   jobs:
   - name: Build image
     type: builder
