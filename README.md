@@ -19,10 +19,6 @@ Any code change to the Git repo will automatically be built, validated and deplo
 * Blog [Continuously deliver your app to Kubernetes with Bluemix](https://www.ibm.com/blogs/bluemix/2017/07/continuously-deliver-your-app-to-kubernetes-with-bluemix/)
 * Step by step [tutorial](https://www.ibm.com/devops/method/tutorials/tc_secure_kube)
 * **First-time IBM Container Service users**: Make sure that your container image registry is correctly set up with a [namespace](https://console.bluemix.net/docs/services/Registry/index.html).
-    * IMPORTANT NOTE: For the pipeline to build containers successfully, please use these steps to define your namespace:
-        * bx login
-        * bx target --cf
-        * bx cr namespace-add <my_namespace>
 * [Getting started with Bluemix clusters](https://console.bluemix.net/docs/containers/container_index.html?pos=2)
 * [Getting started with toolchains](https://bluemix.net/devops/getting-started)
 * [Documentation](https://console.ng.bluemix.net/docs/services/ContinuousDelivery/index.html?pos=2)
