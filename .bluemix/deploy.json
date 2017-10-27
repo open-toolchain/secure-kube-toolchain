@@ -18,14 +18,6 @@
             "description": "The bluemix region",
             "type": "string"
         },
-        "prod-organization": {
-            "description": "The bluemix org",
-            "type": "string"
-        },
-       "prod-space": {
-            "description": "The bluemix space",
-            "type": "string"
-        },
        "api-key": {
             "description": {
               "$ref": "#/messages/deploy.apiKeyDescription"
@@ -55,7 +47,7 @@
             "pattern": "\\S"
         }
     },
-    "required": ["registry-namespace", "prod-region", "prod-organization", "prod-space", "api-key", "prod-cluster-name", "app-name"],
+    "required": ["registry-namespace", "prod-region", "api-key", "prod-cluster-name", "app-name"],
     "form": [
        {
           "type": "validator",
@@ -98,16 +90,6 @@
                   "type": "label",
                   "title": {
                     "$ref": "#/messages/deploy.clusterName"
-                  }
-                },{
-                  "type": "label",
-                  "title": {
-                    "$ref": "#/messages/organization"
-                  }
-                },{
-                  "type": "label",
-                  "title": {
-                    "$ref": "#/messages/space"
                   }
                 },{
                   "type": "label",
