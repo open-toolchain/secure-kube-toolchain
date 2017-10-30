@@ -18,14 +18,6 @@
             "description": "The bluemix region",
             "type": "string"
         },
-        "prod-organization": {
-            "description": "The bluemix org",
-            "type": "string"
-        },
-       "prod-space": {
-            "description": "The bluemix space",
-            "type": "string"
-        },
        "api-key": {
             "description": {
               "$ref": "#/messages/deploy.apiKeyDescription"
@@ -55,7 +47,7 @@
             "pattern": "\\S"
         }
     },
-    "required": ["registry-namespace", "prod-region", "prod-organization", "prod-space", "api-key", "prod-cluster-name", "app-name"],
+    "required": ["registry-namespace", "prod-region", "api-key", "prod-cluster-name", "app-name"],
     "form": [
        {
           "type": "validator",
@@ -83,8 +75,8 @@
           "key": "api-key"
         },{
             "type": "table",
-            "columnCount": 5,
-            "widths": ["15%", "20%", "25%", "20%", "20%"],
+            "columnCount": 3,
+            "widths": ["15%", "40%", "45%"],
             "items": [
                 {
                   "type": "label",
@@ -102,16 +94,6 @@
                 },{
                   "type": "label",
                   "title": {
-                    "$ref": "#/messages/organization"
-                  }
-                },{
-                  "type": "label",
-                  "title": {
-                    "$ref": "#/messages/space"
-                  }
-                },{
-                  "type": "label",
-                  "title": {
                     "$ref": "#/messages/prodStage"
                   }
                 },{
@@ -120,13 +102,6 @@
                 },{
                   "type": "text",
                   "key": "prod-cluster-name",
-                  "readonly": false
-                },{
-                  "type": "select",
-                  "key": "prod-organization"
-                },{
-                  "type": "select",
-                  "key": "prod-space",
                   "readonly": false
                 }
             ]

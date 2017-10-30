@@ -8,7 +8,7 @@ stages:
   triggers:
   - type: commit
   jobs:
-  - name: Build image
+  - name: Container build
     type: builder
     build_type: cr
     artifact_dir: output
@@ -64,11 +64,15 @@ stages:
 
       echo "=========================================================="
       echo -e "Building container image: ${IMAGE_NAME}:${BUILD_NUMBER}"
-      IMAGE_LOCATION=${REGISTRY_URL}/${REGISTRY_NAMESPACE}/${IMAGE_NAME}
       set -x
-      bx cr build -t ${IMAGE_LOCATION}:${BUILD_NUMBER} .
+      bx cr build -t ${REGISTRY_URL}/${REGISTRY_NAMESPACE}/${IMAGE_NAME}:${BUILD_NUMBER} .
       set +x
-      bx cr image-inspect ${IMAGE_LOCATION}:${BUILD_NUMBER}
+      bx cr image-inspect ${REGISTRY_URL}/${REGISTRY_NAMESPACE}/${IMAGE_NAME}:${BUILD_NUMBER}
+
+      # The image URL will automatically be passed along with the build result as env variable PIPELINE_IMAGE_URL to
+      # any subsequent job consuming this build result. 
+      # Uncomment and modify the environment variable $PIPELINE_IMAGE_URL to pass along a different image URL than the one inferred by the pipeline:
+      # export PIPELINE_IMAGE_URL="$REGISTRY_URL/$REGISTRY_NAMESPACE/$IMAGE_NAME:$BUILD_NUMBER"
 
       ######################################################################################
       # Copy any artifacts that will be needed for deployment and testing to $WORKSPACE    #
@@ -76,13 +80,10 @@ stages:
       echo -e "Checking archive dir presence"
       mkdir -p $ARCHIVE_DIR
 
-      # IMAGE_NAME from build.properties is used by Vulnerability Advisor job to reference the image qualified location in registry
-      echo "IMAGE_NAME=${IMAGE_LOCATION}:${BUILD_NUMBER}" >> $ARCHIVE_DIR/build.properties
-
       #Update deployment.yml with image name
       if [ -f deployment.yml ]; then
           echo "UPDATING DEPLOYMENT MANIFEST:"
-          sed -i "s~^\([[:blank:]]*\)image:.*$~\1image: ${IMAGE_LOCATION}:${BUILD_NUMBER}~" deployment.yml
+          sed -i "s~^\([[:blank:]]*\)image:.*$~\1image: ${REGISTRY_URL}/${REGISTRY_NAMESPACE}/${IMAGE_NAME}:${BUILD_NUMBER}~" deployment.yml
           cat deployment.yml
           if [ ! -f $ARCHIVE_DIR/deployment.yml ]; then # no need to copy if working in ./ already    
               cp deployment.yml $ARCHIVE_DIR/
@@ -95,34 +96,43 @@ stages:
   inputs:
   - type: job
     stage: BUILD
-    job: Build image
+    job: Container build
   triggers:
   - type: stage
-  properties:
-  - name: FULL_REPOSITORY_NAME
-    value: ''
-    type: text  
   jobs:
   - name: Vulnerability Advisor
     type: tester
-    extension_id: ibm.devops.services.pipeline.crawler.tester
+    test_type: vulnerabilityadvisor
+    use_image_from_build_input: true
+    fail_stage: false
     target:
       region_id: ${PROD_REGION_ID}
-      organization: ${PROD_ORG_NAME}
-      space: ${PROD_SPACE_NAME}
-    WAIT_TIME: '5'
+      api_key: ${API_KEY}
+    script: |
+      #!/bin/bash
+      echo -e "Checking vulnerabilities in image: ${IMAGE_URL}"
+      for iteration in {1..30}
+      do
+        [[ $(bx cr va $IMAGE_URL) == *No\ vulnerability\ scan* ]] || break
+        echo -e "${iteration} : A vulnerability report was not found for the specified image."
+        echo "Either the image doesn't exist or the scan hasn't completed yet. "
+        echo "Waiting for scan to complete.."
+        sleep 10
+      done
+      set +e
+      bx cr va $IMAGE_URL
+      set -e
+      [[ $(bx cr va $IMAGE_URL) == *SAFE\ to\ deploy* ]] || { echo "ERROR: The vulnerability scan was not successful, check the output of the command and try again."; exit 1; }
 - name: DEPLOY
   inputs:
   - type: job
     stage: BUILD
-    job: Build image
+    job: Container build
   jobs:
   - name: Deploy Kubernetes Pod
     type: deployer
     target:
       region_id: ${PROD_REGION_ID}
-      organization: ${PROD_ORG_NAME}
-      space: ${PROD_SPACE_NAME}
       api_key: ${API_KEY}
       kubernetes_cluster: ${PROD_CLUSTER_NAME}
     script: |
