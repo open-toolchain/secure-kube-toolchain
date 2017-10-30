@@ -122,7 +122,6 @@ stages:
       bx cr va $IMAGE_URL
       set -e
       [[ $(bx cr va $IMAGE_URL) == *SAFE\ to\ deploy* ]] || { echo "ERROR: The vulnerability scan was not successful, check the output of the command and try again."; exit 1; }
-
 - name: DEPLOY
   inputs:
   - type: job
