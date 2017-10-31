@@ -77,6 +77,8 @@ stages:
       ######################################################################################
       # Copy any artifacts that will be needed for deployment and testing to $WORKSPACE    #
       ######################################################################################
+      # Keep track of image_url for vulnerability advisor job
+      echo "IMAGE_URL=${REGISTRY_URL}/${REGISTRY_NAMESPACE}/${IMAGE_NAME}:${BUILD_NUMBER}"  >> $ARCHIVE_DIR/build.properties
       echo -e "Checking archive dir presence"
       mkdir -p $ARCHIVE_DIR
 
@@ -99,6 +101,10 @@ stages:
     job: Container build
   triggers:
   - type: stage
+  properties:
+  - name: buildprops
+    value: build.properties
+    type: file  
   jobs:
   - name: Vulnerability Advisor
     type: tester
