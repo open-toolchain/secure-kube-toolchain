@@ -80,6 +80,9 @@ stages:
       echo -e "Checking archive dir presence"
       mkdir -p $ARCHIVE_DIR
 
+      # Keep track of image_url for vulnerability advisor job
+      echo "IMAGE_URL=${REGISTRY_URL}/${REGISTRY_NAMESPACE}/${IMAGE_NAME}:${BUILD_NUMBER}"  >> $ARCHIVE_DIR/build.properties
+
       #Update deployment.yml with image name
       if [ -f deployment.yml ]; then
           echo "UPDATING DEPLOYMENT MANIFEST:"
@@ -99,6 +102,10 @@ stages:
     job: Container build
   triggers:
   - type: stage
+  properties:
+  - name: buildprops
+    value: build.properties
+    type: file  
   jobs:
   - name: Vulnerability Advisor
     type: tester
