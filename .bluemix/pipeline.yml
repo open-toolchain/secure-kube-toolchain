@@ -69,9 +69,10 @@ stages:
       set +x
       bx cr image-inspect ${REGISTRY_URL}/${REGISTRY_NAMESPACE}/${IMAGE_NAME}:${BUILD_NUMBER}
 
-      # The image URL will automatically be passed along with the build result as env variable PIPELINE_IMAGE_URL to
-      # any subsequent job consuming this build result. 
-      # Uncomment and modify the environment variable $PIPELINE_IMAGE_URL to pass along a different image URL than the one inferred by the pipeline:
+      # When 'bx' commands are in the pipeline job config directly, the image URL will automatically be passed 
+      # along with the build result as env variable PIPELINE_IMAGE_URL to any subsequent job consuming this build result. 
+      # When the job is sourc'ing an external shell script, or to pass a different image URL than the one inferred by the pipeline,
+      # please uncomment and modify the environment variable the following line.
       # export PIPELINE_IMAGE_URL="$REGISTRY_URL/$REGISTRY_NAMESPACE/$IMAGE_NAME:$BUILD_NUMBER"
 
       ######################################################################################
@@ -79,9 +80,6 @@ stages:
       ######################################################################################
       echo -e "Checking archive dir presence"
       mkdir -p $ARCHIVE_DIR
-
-      # Keep track of image_url for vulnerability advisor job
-      echo "IMAGE_URL=${REGISTRY_URL}/${REGISTRY_NAMESPACE}/${IMAGE_NAME}:${BUILD_NUMBER}"  >> $ARCHIVE_DIR/build.properties
 
       #Update deployment.yml with image name
       if [ -f deployment.yml ]; then
@@ -102,10 +100,6 @@ stages:
     job: Container build
   triggers:
   - type: stage
-  properties:
-  - name: buildprops
-    value: build.properties
-    type: file  
   jobs:
   - name: Vulnerability Advisor
     type: tester
@@ -117,19 +111,19 @@ stages:
       api_key: ${API_KEY}
     script: |
       #!/bin/bash
-      echo -e "Checking vulnerabilities in image: ${IMAGE_URL}"
+      echo -e "Checking vulnerabilities in image: ${PIPELINE_IMAGE_URL}"
       for iteration in {1..30}
       do
-        [[ $(bx cr va $IMAGE_URL) == *No\ vulnerability\ scan* ]] || break
+        [[ $(bx cr va ${PIPELINE_IMAGE_URL}) == *No\ vulnerability\ scan* ]] || break
         echo -e "${iteration} : A vulnerability report was not found for the specified image."
         echo "Either the image doesn't exist or the scan hasn't completed yet. "
         echo "Waiting for scan to complete.."
         sleep 10
       done
       set +e
-      bx cr va $IMAGE_URL
+      bx cr va ${PIPELINE_IMAGE_URL}
       set -e
-      [[ $(bx cr va $IMAGE_URL) == *SAFE\ to\ deploy* ]] || { echo "ERROR: The vulnerability scan was not successful, check the output of the command and try again."; exit 1; }
+      [[ $(bx cr va ${PIPELINE_IMAGE_URL}) == *SAFE\ to\ deploy* ]] || { echo "ERROR: The vulnerability scan was not successful, check the output of the command and try again."; exit 1; }
 - name: DEPLOY
   inputs:
   - type: job
