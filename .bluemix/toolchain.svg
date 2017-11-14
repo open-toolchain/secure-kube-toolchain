@@ -133,8 +133,8 @@
 <svg id="headerSVG.pipeline" x="60.43" y="390" width="65" height="20">
 	<text x="50%" y="50%" text-anchor="middle" alignment-baseline="central" class="st14 st15">PIPELINE</text>
 </svg>
-<svg id="headerSVG.bluemix" x="150" y="390" width="65" height="20">
-	<text x="50%" y="50%" text-anchor="middle" alignment-baseline="central" class="st14 st15">BLUEMIX</text>
+<svg id="headerSVG.ibmCloud" x="150" y="390" width="65" height="20">
+	<text x="50%" y="50%" text-anchor="middle" alignment-baseline="central" class="st14 st15">IBM Cloud</text>
 </svg>
 <svg id="headerSVG.webIde" x="-29" y="502" width="65" height="20">
 	<text x="50%" y="58%" text-anchor="middle" alignment-baseline="central" class="st14 st15">WEB IDE</text>
