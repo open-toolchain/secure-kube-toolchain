@@ -1,4 +1,4 @@
-# ![Icon](./.bluemix/secure-lock-kubernetes.png) Secure Kubernetes toolchain
+# ![Icon](./.bluemix/secure-lock-kubernetes.png) Develop a Kubernetes app
 
 
 ### Continuously deliver a secure Docker app to a Kubernetes Cluster
