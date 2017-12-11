@@ -51,7 +51,7 @@ stages:
 
       echo "Checking registry namespace: ${REGISTRY_NAMESPACE}"
       NS=$( bx cr namespaces | grep ${REGISTRY_NAMESPACE} ||: )
-      if [ -z ${NS} ]; then
+      if [ -z "${NS}" ]; then
           echo "Registry namespace ${REGISTRY_NAMESPACE} not found, creating it."
           bx cr namespace-add ${REGISTRY_NAMESPACE}
           echo "Registry namespace ${REGISTRY_NAMESPACE} created."
@@ -111,11 +111,17 @@ stages:
       api_key: ${API_KEY}
     script: |
       #!/bin/bash
+      PIPELINE_IMAGE_URL=$REGISTRY_URL/$REGISTRY_NAMESPACE/$IMAGE_NAME:$BUILD_NUMBER #<<<<<<< COMING FROM WHERE????????
       echo -e "Checking vulnerabilities in image: ${PIPELINE_IMAGE_URL}"
-      for iteration in {1..30}
+      for ITERATION in {1..30}
       do
-        [[ $(bx cr va ${PIPELINE_IMAGE_URL}) == *No\ vulnerability\ scan* ]] || break
-        echo -e "${iteration} : A vulnerability report was not found for the specified image."
+        set +e
+        OUTPUT=$( bx cr va ${PIPELINE_IMAGE_URL} )
+        set -e
+        if ! [[ ${OUTPUT} == *No\ vulnerability\ scan* || ${OUTPUT} == *not\ yet\ completed* ]]; then
+          break
+        fi
+        echo -e "${ITERATION} : A vulnerability report was not found for the specified image."
         echo "Either the image doesn't exist or the scan hasn't completed yet. "
         echo "Waiting for scan to complete.."
         sleep 10
@@ -123,7 +129,7 @@ stages:
       set +e
       bx cr va ${PIPELINE_IMAGE_URL}
       set -e
-      [[ $(bx cr va ${PIPELINE_IMAGE_URL}) == *SAFE\ to\ deploy* ]] || { echo "ERROR: The vulnerability scan was not successful, check the output of the command and try again."; exit 1; }
+      [[ $(bx cr va ${PIPELINE_IMAGE_URL}) == *SAFE\ to\ deploy* ]] || { echo "ERROR: The vulnerability scan was not successful, check the OUTPUT of the command and try again."; exit 1; }
 - name: DEPLOY
   inputs:
   - type: job
@@ -140,8 +146,8 @@ stages:
       #!/bin/bash
       #set -x
       #Check cluster availability
-      ip_addr=$(bx cs workers $PIPELINE_KUBERNETES_CLUSTER_NAME | grep normal | awk '{ print $2 }')
-      if [ -z $ip_addr ]; then
+      IP_ADDR=$( bx cs workers $PIPELINE_KUBERNETES_CLUSTER_NAME | grep normal | awk '{ print $2 }' )
+      if [ -z "$IP_ADDR" ]; then
         echo "$PIPELINE_KUBERNETES_CLUSTER_NAME not created or workers not ready"
         exit 1
       fi
@@ -157,6 +163,6 @@ stages:
       echo ""
       echo "DEPLOYED PODS:"
       kubectl describe pods --selector app=hello-app
-      port=$(kubectl get services | grep hello-service | sed 's/.*:\([0-9]*\).*/\1/g')
+      PORT=$( kubectl get services | grep hello-service | sed 's/.*:\([0-9]*\).*/\1/g' )
       echo ""
-      echo "VIEW THE APPLICATION AT: http://$ip_addr:$port"
+      echo "VIEW THE APPLICATION AT: http://$IP_ADDR:$PORT"
