@@ -146,7 +146,7 @@ stages:
       #!/bin/bash
       #set -x
       #Check cluster availability
-      IP_ADDR=$( bx cs workers $PIPELINE_KUBERNETES_CLUSTER_NAME | grep normal | awk '{ print $2 }' )
+      IP_ADDR=$( bx cs workers $PIPELINE_KUBERNETES_CLUSTER_NAME | grep normal | head -n 1 | awk '{ print $2 }' )
       if [ -z "$IP_ADDR" ]; then
         echo "$PIPELINE_KUBERNETES_CLUSTER_NAME not created or workers not ready"
         exit 1
