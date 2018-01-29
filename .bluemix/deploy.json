@@ -30,7 +30,7 @@
               "$ref": "#/messages/deploy.registryDescription"
             },
             "type": "string",
-            "pattern": "\\S"
+            "pattern": "^[a-z0-9][a-z0-9_]{3,29}$"
        },	    
        "prod-cluster-name": {
             "description": {
