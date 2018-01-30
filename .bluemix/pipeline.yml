@@ -81,6 +81,14 @@ stages:
       echo -e "Checking archive dir presence"
       mkdir -p $ARCHIVE_DIR
 
+      # pass image information along via build.properties for Vulnerability Advisor scan
+      echo "IMAGE_NAME=${IMAGE_NAME}" >> $ARCHIVE_DIR/build.properties
+      echo "BUILD_NUMBER=${BUILD_NUMBER}" >> $ARCHIVE_DIR/build.properties
+      echo "REGISTRY_URL=${REGISTRY_URL}" >> $ARCHIVE_DIR/build.properties
+      echo "REGISTRY_NAMESPACE=${REGISTRY_NAMESPACE}" >> $ARCHIVE_DIR/build.properties
+      echo "File 'build.properties' created for passing env variables to subsequent pipeline jobs:"
+      cat $ARCHIVE_DIR/build.properties      
+
       #Update deployment.yml with image name
       if [ -f deployment.yml ]; then
           echo "UPDATING DEPLOYMENT MANIFEST:"
@@ -100,6 +108,10 @@ stages:
     job: Container build
   triggers:
   - type: stage
+  properties:
+  - name: buildprops
+    value: build.properties
+    type: file  
   jobs:
   - name: Vulnerability Advisor
     type: tester
@@ -111,9 +123,20 @@ stages:
       api_key: ${API_KEY}
     script: |
       #!/bin/bash
-      PIPELINE_IMAGE_URL=$REGISTRY_URL/$REGISTRY_NAMESPACE/$IMAGE_NAME:$BUILD_NUMBER #<<<<<<< COMING FROM WHERE????????
+      echo "IMAGE_NAME=${IMAGE_NAME}"
+      echo "BUILD_NUMBER=${BUILD_NUMBER}"
+      echo "REGISTRY_URL=${REGISTRY_URL}"
+      echo "REGISTRY_NAMESPACE=${REGISTRY_NAMESPACE}"
+      #View build properties
+      # cat build.properties
+      # also run 'env' command to find all available env variables
+      # or learn more about the available environment variables at:
+      # https://console.bluemix.net/docs/services/ContinuousDelivery/pipeline_deploy_var.html#deliverypipeline_environment
+
+      bx cr images
+      PIPELINE_IMAGE_URL=$REGISTRY_URL/$REGISTRY_NAMESPACE/$IMAGE_NAME:$BUILD_NUMBER
       echo -e "Checking vulnerabilities in image: ${PIPELINE_IMAGE_URL}"
-      for ITERATION in {1..30}
+      for ITER in {1..30}
       do
         set +e
         OUTPUT=$( bx cr va ${PIPELINE_IMAGE_URL} )
@@ -121,7 +144,7 @@ stages:
         if ! [[ ${OUTPUT} == *No\ vulnerability\ scan* || ${OUTPUT} == *not\ yet\ completed* ]]; then
           break
         fi
-        echo -e "${ITERATION} : A vulnerability report was not found for the specified image."
+        echo -e "${ITER} : A vulnerability report was not found for the specified image."
         echo "Either the image doesn't exist or the scan hasn't completed yet. "
         echo "Waiting for scan to complete.."
         sleep 10
