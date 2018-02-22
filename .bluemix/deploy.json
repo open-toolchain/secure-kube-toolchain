@@ -15,7 +15,7 @@
     "type": "object",
     "properties": {
         "prod-region": {
-            "description": "The bluemix region",
+            "description": "The IBM Cloud region",
             "type": "string"
         },
        "api-key": {
@@ -37,7 +37,9 @@
               "$ref": "#/messages/deploy.clusterDescription"
             },
             "type": "string",
-            "pattern": "\\S"
+            "pattern": "\\S",
+	    "enum": [],
+	    "disabled": false
         },
        "app-name": {
             "description": {
@@ -51,7 +53,7 @@
     "form": [
        {
           "type": "validator",
-          "url": "/devops/setup/bm-helper/helper.html"
+          "url": "/devops/setup/bm-helper/custom_helper.html"
        },{
           "type": "text",
           "readonly": false,
@@ -60,12 +62,11 @@
           },
           "key": "app-name"
         },{
-          "type": "text",
-          "readonly": false,
-          "title": {
-            "$ref": "#/messages/deploy.imageRegistryNamespace"
-          },
-          "key": "registry-namespace"
+          "type": "select",
+          "key": "prod-region",
+           "title": {
+            "$ref": "#/messages/region"
+          }
         },{
 	  "type": "password",
           "readonly": false,
@@ -74,52 +75,17 @@
           },
           "key": "api-key"
         },{
-            "type": "table",
-            "columnCount": 3,
-            "widths": ["15%", "40%", "45%"],
-            "items": [
-                {
-                  "type": "label",
-                  "title": ""
-                },{
-                  "type": "label",
-                  "title": {
-                    "$ref": "#/messages/region"
-                  }
-                },{
-                  "type": "label",
-                  "title": {
-                    "$ref": "#/messages/deploy.clusterName"
-                  }
-                },{
-                  "type": "label",
-                  "title": {
-                    "$ref": "#/messages/prodStage"
-                  }
-                },{
-                  "type": "select",
-                  "key": "prod-region"
-                },{
-                  "type": "text",
-                  "key": "prod-cluster-name",
-                  "readonly": false
-                }
-            ]
+          "key": "prod-cluster-name",
+          "title": {
+              "$ref": "#/messages/deploy.clusterName"
+          }
         },{
-		  "type": "table",
-          "columnCount": 2,
-            "widths": ["15%", "80%"],
-            "items": [
-                {
-                  "type": "label",
-                  "title": ""
-                },{
-                  "type": "label",
-                  "title": {
-                    "$ref": "#/messages/deploy.clusterNote"
-                  }
-                }
-            ]
+          "type": "text",
+          "readonly": false,
+          "title": {
+            "$ref": "#/messages/deploy.imageRegistryNamespace"
+          },
+          "key": "registry-namespace"
         }
     ]
 }
