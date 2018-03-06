@@ -16,7 +16,8 @@
     "properties": {
         "prod-region": {
             "description": "The IBM Cloud region",
-            "type": "string"
+            "type": "string",
+	    "disabled": false
         },
        "api-key": {
             "description": {
@@ -62,18 +63,19 @@
           },
           "key": "app-name"
         },{
-          "type": "select",
-          "key": "prod-region",
-           "title": {
-            "$ref": "#/messages/region"
-          }
-        },{
 	  "type": "password",
           "readonly": false,
           "title": {
             "$ref": "#/messages/deploy.apiKey"
           },
           "key": "api-key"
+        },
+	{
+          "type": "select",
+          "key": "prod-region",
+           "title": {
+            "$ref": "#/messages/region"
+          }
         },{
           "key": "prod-cluster-name",
           "title": {
