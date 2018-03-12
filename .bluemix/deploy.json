@@ -74,6 +74,7 @@
 	{
           "type": "select",
           "key": "prod-region",
+	  "readonly": true,
            "title": {
             "$ref": "#/messages/region"
           }
