@@ -39,9 +39,7 @@
               "$ref": "#/messages/deploy.clusterDescription"
             },
             "type": "string",
-            "pattern": "\\S",
-	    "enum": [],
-	    "disabled": false
+            "pattern": "\\S"
         },
        "app-name": {
             "description": {
@@ -80,6 +78,8 @@
           }
         },{
           "key": "prod-cluster-name",
+	  "readonly": false,
+          "type": "select",
           "title": {
               "$ref": "#/messages/deploy.clusterName"
           }
