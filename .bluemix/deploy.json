@@ -15,7 +15,9 @@
     "type": "object",
     "properties": {
         "prod-region": {
-            "description": "The IBM Cloud region",
+	    "description": {
+              "$ref": "#/messages/deploy.regionDescription"
+            },
             "type": "string",
 	    "disabled": false
         },
