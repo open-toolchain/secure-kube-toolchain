@@ -13,7 +13,7 @@ deploy.registryDescription: "Lo spazio dei nomi del registro immagine (almeno 4 
 deploy.apiKeyDescription: "La chiave API IBM Cloud viene utilizzata per accedere all'API IBM Container Service ed interagire con il cluster. È possibile ottenere la chiave API con 'bx iam api-key-create' o mediante la console all'indirizzo https://console.ng.bluemix.net/iam/#/apikeys facendo clic su **Crea chiave API** (ciascuna chiave API può essere visualizzata una sola volta)."
 deploy.clusterName: "Nome cluster"
 deploy.imageRegistryNamespace: "Spazio dei nomi registro immagine"
-deploy.apiKey: "Chiave API IBM Cloud "
+deploy.apiKey: "Chiave API IBM Cloud"
 deploy.clusterNote: "Richiamare il nome del cluster Kubernetes con il comando CLI 'bx cs clusters' oppure mediante la [console](https://console.bluemix.net/containers-kubernetes/home/clusters)."
 region: "Regione"
 prodStage: "Stage di produzione"
