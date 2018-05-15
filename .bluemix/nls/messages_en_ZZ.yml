@@ -14,6 +14,7 @@ deploy.apiKeyDescription: "[G'Ｔｈｅ ＩＢＭ Ｃｌｏｕｄ ＡＰＩ ｋ�
 deploy.clusterName: "[G'Ｃｌuster Nameฏูİı｜]"
 deploy.imageRegistryNamespace: "[G'Ｉｍａｇｅ Ｒｅｇistry Namespaceฏูİı｜]"
 deploy.apiKey: "[G'ＩＢＭ Ｃｌoud API Keyฏูİı｜]"
+deploy.regionDescription: "[G'Ｔｈｅ ＩＢＭ Ｃloud regionฏูİı｜]"
 deploy.clusterNote: "[G'Ｒｅｔｒｉｅｖｅ ｔｈｅ Ｋｕｂｅｒｎｅｔｅｓ ｃｌｕｓｔｅｒ ｎａｍｅ ｗｉｔｈ ｔｈｅ CLI command 'bx cs clusters' or via the [console](https://console.bluemix.net/containers-kubernetes/home/clusters).ฏูİı｜]"
 region: "[G'Regionฏูİı｜]"
 prodStage: "[G'Ｐｒｏｄｕction stageฏูİı｜]"
