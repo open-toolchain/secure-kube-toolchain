@@ -14,6 +14,7 @@ deploy.apiKeyDescription: "IBM Cloud API 키는 IBM Container Service API에 액
 deploy.clusterName: "클러스터 이름"
 deploy.imageRegistryNamespace: "이미지 레지스트리 네임스페이스"
 deploy.apiKey: "IBM Cloud API 키"
+deploy.regionDescription: "IBM Cloud 지역"
 deploy.clusterNote: "CLI 명령 'bx cs clusters'를 사용하거나 [콘솔](https://console.bluemix.net/containers-kubernetes/home/clusters)을 통해 Kubernetes 클러스터 이름을 검색하십시오."
 region: "지역"
 prodStage: "프로덕션 단계"

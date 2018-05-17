@@ -14,6 +14,7 @@ deploy.apiKeyDescription: "IBM Cloud API キーは、IBM Container Service API �
 deploy.clusterName: "クラスター名"
 deploy.imageRegistryNamespace: "イメージ・レジストリー名前空間"
 deploy.apiKey: "IBM Cloud API キー"
+deploy.regionDescription: "IBM Cloud リージョン"
 deploy.clusterNote: "CLI コマンド「bx cs clusters」を使用して、または[コンソール](https://console.bluemix.net/containers-kubernetes/home/clusters) で Kubernetes クラスター名を取得します。"
 region: "地域"
 prodStage: "実動ステージ"
