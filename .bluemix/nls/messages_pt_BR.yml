@@ -14,6 +14,7 @@ deploy.apiKeyDescription: "A chave API do IBM Cloud é usada para acessar a API 
 deploy.clusterName: "Nome do cluster"
 deploy.imageRegistryNamespace: "Namespace do registro de imagem"
 deploy.apiKey: "Chave API do IBM Cloud"
+deploy.regionDescription: "A região do IBM Cloud"
 deploy.clusterNote: "Recupere o nome do cluster do Kubernetes com o comando da CLI 'bx cs clusters' ou por meio do [console](https://console.bluemix.net/containers-kubernetes/home/clusters)."
 region: "Região"
 prodStage: "Estágio de produção"

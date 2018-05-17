@@ -14,6 +14,7 @@ deploy.apiKeyDescription: "可以使用 IBM Cloud API 金鑰來存取「IBM Cont
 deploy.clusterName: "叢集名稱"
 deploy.imageRegistryNamespace: "映像檔登錄名稱空間"
 deploy.apiKey: "IBM Cloud API 金鑰"
+deploy.regionDescription: "IBM Cloud 區域"
 deploy.clusterNote: "可以使用 CLI 指令 'bx cs clusters' 或透過主控台來擷取[主控台](https://console.bluemix.net/containers-kubernetes/home/clusters) 中的 Kubernetes 叢集名稱。"
 region: "區域"
 prodStage: "正式作業階段"
