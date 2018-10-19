@@ -425,13 +425,13 @@ stages:
       for ITERATION in {1..30}
       do
         DATA=$( kubectl get pods --namespace ${CLUSTER_NAMESPACE} -o json )
-        NOT_READY=$( echo $DATA | jq '.items[].status.containerStatuses[] | select(.image=="'"${IMAGE_REPOSITORY}:${IMAGE_TAG}"'") | select(.ready==false) ' )
+        NOT_READY=$( echo $DATA | jq '.items[].status | select(.containerStatuses!=null) | .containerStatuses[] | select(.image=="'"${IMAGE_REPOSITORY}:${IMAGE_TAG}"'") | select(.ready==false) ' )
         if [[ -z "$NOT_READY" ]]; then
           echo -e "All pods are ready:"
-          echo $DATA | jq '.items[].status.containerStatuses[] | select(.image=="'"${IMAGE_REPOSITORY}:${IMAGE_TAG}"'") | select(.ready==true) '
+          echo $DATA | jq '.items[].status | select(.containerStatuses!=null) | .containerStatuses[] | select(.image=="'"${IMAGE_REPOSITORY}:${IMAGE_TAG}"'") | select(.ready==true) '
           break # deployment succeeded
         fi
-        REASON=$(echo $DATA | jq '.items[].status.containerStatuses[] | select(.image=="'"${IMAGE_REPOSITORY}:${IMAGE_TAG}"'") | .state.waiting.reason')
+        REASON=$(echo $DATA | jq '.items[].status | select(.containerStatuses!=null) | .containerStatuses[] | select(.image=="'"${IMAGE_REPOSITORY}:${IMAGE_TAG}"'") | .state.waiting.reason')
         echo -e "${ITERATION} : Deployment still pending..."
         echo -e "NOT_READY:${NOT_READY}"
         echo -e "REASON: ${REASON}"
@@ -447,18 +447,18 @@ stages:
         sleep 5
       done
 
-      APP_NAME=$(kubectl get pods --namespace ${CLUSTER_NAMESPACE} -o json | jq -r '.items[].status.containerStatuses[] | select(.image=="'"${IMAGE_REPOSITORY}:${IMAGE_TAG}"'") | .name' | head -n 1)
+      APP_NAME=$(kubectl get pods --namespace ${CLUSTER_NAMESPACE} -o json | jq -r '.items[].status | select(.containerStatuses!=null) | .containerStatuses[] | select(.image=="'"${IMAGE_REPOSITORY}:${IMAGE_TAG}"'") | .name' | head -n 1)
       echo -e "APP: ${APP_NAME}"
       echo "DEPLOYED PODS:"
-      kubectl describe pods --selector app=${APP_NAME}
+      kubectl describe pods --selector app=${APP_NAME} --namespace ${CLUSTER_NAMESPACE}
       if [ ! -z "${APP_NAME}" ]; then
         APP_SERVICE=$(kubectl get services --namespace ${CLUSTER_NAMESPACE} -o json | jq -r ' .items[] | select (.spec.selector.app=="'"${APP_NAME}"'") | .metadata.name ')
         echo -e "SERVICE: ${APP_SERVICE}"
         echo "DEPLOYED SERVICES:"
         kubectl describe services ${APP_SERVICE} --namespace ${CLUSTER_NAMESPACE}
       fi
-      echo "Application Logs"
-      kubectl logs --selector app=${APP_NAME} --namespace ${CLUSTER_NAMESPACE}  
+      #echo "Application Logs"
+      #kubectl logs --selector app=${APP_NAME} --namespace ${CLUSTER_NAMESPACE}  
       echo ""
       if [[ ! -z "$NOT_READY" ]]; then
         echo ""
