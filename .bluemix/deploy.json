@@ -34,7 +34,7 @@
             },
             "type": "string",
             "enum": [],
-            "pattern": "^[a-z0-9][-_a-z0-9]{3,28}[a-z0-9]$"
+            "pattern": "^[a-z0-9][-_a-z0-9]{2,28}[a-z0-9]$"
        },	    
        "prod-cluster-name": {
             "description": {
