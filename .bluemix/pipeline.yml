@@ -38,6 +38,8 @@ stages:
       echo "REGISTRY_NAMESPACE=${REGISTRY_NAMESPACE}"
       echo "IMAGE_NAME=${IMAGE_NAME}"
       echo "ARCHIVE_DIR=${ARCHIVE_DIR}"
+      echo "DOCKER_ROOT=${DOCKER_ROOT}"
+      echo "DOCKER_FILE=${DOCKER_FILE}"
 
       # View build properties
       if [ -f build.properties ]; then 
@@ -50,12 +52,11 @@ stages:
       # or learn more about the available environment variables at:
       # https://console.bluemix.net/docs/services/ContinuousDelivery/pipeline_deploy_var.html#deliverypipeline_environment
 
-      if [ -z "${DOCKER_ROOT}" ]; then DOCKER_ROOT=. ; fi
-      if [ -z "${DOCKER_FILE}" ]; then DOCKER_FILE=${DOCKER_ROOT}/Dockerfile ; fi
-
       echo "=========================================================="
       echo "Checking for Dockerfile at the repository root"
-      if [ -f "${DOCKER_FILE}" ]; then 
+      if [ -z "${DOCKER_ROOT}" ]; then DOCKER_ROOT=. ; fi
+      if [ -z "${DOCKER_FILE}" ]; then DOCKER_FILE=Dockerfile ; fi
+      if [ -f ${DOCKER_ROOT}/${DOCKER_FILE} ]; then 
       echo -e "Dockerfile found at: ${DOCKER_FILE}"
       else
           echo "Dockerfile not found at: ${DOCKER_FILE}"
@@ -63,7 +64,7 @@ stages:
       fi
       echo "Linting Dockerfile"
       npm install -g dockerlint
-      dockerlint -f Dockerfile
+      dockerlint -f ${DOCKER_ROOT}/${DOCKER_FILE}
 
       echo "=========================================================="
       echo "Checking registry current plan and quota"
@@ -81,7 +82,6 @@ stages:
       fi
       echo -e "Existing images in registry"
       bx cr images --restrict ${REGISTRY_NAMESPACE}
-
       # echo "=========================================================="
       # KEEP=1
       # echo -e "PURGING REGISTRY, only keeping last ${KEEP} image(s) based on image digests"
@@ -126,7 +126,10 @@ stages:
       echo "IMAGE_NAME=${IMAGE_NAME}"
       echo "BUILD_NUMBER=${BUILD_NUMBER}"
       echo "ARCHIVE_DIR=${ARCHIVE_DIR}"
+      echo "GIT_BRANCH=${GIT_BRANCH}"
       echo "GIT_COMMIT=${GIT_COMMIT}"
+      echo "DOCKER_ROOT=${DOCKER_ROOT}"
+      echo "DOCKER_FILE=${DOCKER_FILE}"
 
       # View build properties
       if [ -f build.properties ]; then 
@@ -145,18 +148,27 @@ stages:
       echo -e "Existing images in registry"
       bx cr images
 
+      # Minting image tag using format: BRANCH-BUILD_NUMBER-COMMIT_ID-TIMESTAMP
+      # e.g. master-12-c123d456-20180615131912-
+
       TIMESTAMP=$( date -u "+%Y%m%d%H%M%SUTC")
-      IMAGE_TAG=${BUILD_NUMBER}-${TIMESTAMP}
+      IMAGE_TAG=${TIMESTAMP}
       if [ ! -z ${GIT_COMMIT} ]; then
         GIT_COMMIT_SHORT=$( echo ${GIT_COMMIT} | head -c 8 ) 
-        IMAGE_TAG=${IMAGE_TAG}-${GIT_COMMIT_SHORT}; 
+        IMAGE_TAG=${GIT_COMMIT_SHORT}-${IMAGE_TAG}
+      fi
+      IMAGE_TAG=${BUILD_NUMBER}-${IMAGE_TAG}
+      if [ ! -z ${GIT_BRANCH} ]; then
+        IMAGE_TAG=${GIT_BRANCH}-${IMAGE_TAG}
       fi
       echo "=========================================================="
       echo -e "BUILDING CONTAINER IMAGE: ${IMAGE_NAME}:${IMAGE_TAG}"
+      if [ -z "${DOCKER_ROOT}" ]; then DOCKER_ROOT=. ; fi
+      if [ -z "${DOCKER_FILE}" ]; then DOCKER_FILE=${DOCKER_ROOT}/Dockerfile ; fi
       set -x
       bx cr build -t ${REGISTRY_URL}/${REGISTRY_NAMESPACE}/${IMAGE_NAME}:${IMAGE_TAG} ${DOCKER_ROOT} -f ${DOCKER_FILE}
-
       set +x
+
       bx cr image-inspect ${REGISTRY_URL}/${REGISTRY_NAMESPACE}/${IMAGE_NAME}:${IMAGE_TAG}
 
       # Set PIPELINE_IMAGE_URL for subsequent jobs in stage (e.g. Vulnerability Advisor)
@@ -192,6 +204,7 @@ stages:
       # REGISTRY information from build.properties is used in Helm Chart deployment to generate cluster secret
       echo "REGISTRY_URL=${REGISTRY_URL}" >> $ARCHIVE_DIR/build.properties
       echo "REGISTRY_NAMESPACE=${REGISTRY_NAMESPACE}" >> $ARCHIVE_DIR/build.properties
+      echo "GIT_BRANCH=${GIT_BRANCH}" >> $ARCHIVE_DIR/build.properties
       echo "File 'build.properties' created for passing env variables to subsequent pipeline jobs:"
       cat $ARCHIVE_DIR/build.properties
 - name: VALIDATE
@@ -225,37 +238,56 @@ stages:
       # ------------------
       # source: https://raw.githubusercontent.com/open-toolchain/commons/master/scripts/check_vulnerabilities.sh
       # Input env variables (can be received via a pipeline environment properties.file.
+
+      # View build properties
+      if [ -f build.properties ]; then 
+        echo "build.properties:"
+        cat build.properties
+      else 
+        echo "build.properties : not found"
+      fi 
+
+      # If running after build_image.sh in same stage, reuse the exported variable PIPELINE_IMAGE_URL
+      if [[ -z PIPELINE_IMAGE_URL ]]; then
+        PIPELINE_IMAGE_URL=${REGISTRY_URL}/${REGISTRY_NAMESPACE}/${IMAGE_NAME}:${IMAGE_TAG}
+      else
+        # extract from img url
+        REGISTRY_URL=$(echo ${PIPELINE_IMAGE_URL} | cut -f1 -d/)
+        REGISTRY_NAMESPACE=$(echo ${PIPELINE_IMAGE_URL} | cut -f2 -d/)
+        IMAGE_NAME=$(echo ${PIPELINE_IMAGE_URL} | cut -f3 -d/ | cut -f1 -d:)
+        IMAGE_TAG=$(echo ${PIPELINE_IMAGE_URL} | cut -f3 -d/ | cut -f2 -d:)
+      fi
       echo "PIPELINE_IMAGE_URL=${PIPELINE_IMAGE_URL}"
       echo "REGISTRY_URL=${REGISTRY_URL}"
       echo "REGISTRY_NAMESPACE=${REGISTRY_NAMESPACE}"
       echo "IMAGE_NAME=${IMAGE_NAME}"
       echo "IMAGE_TAG=${IMAGE_TAG}"
-      #View build properties
-      # cat build.properties
+
       # also run 'env' command to find all available env variables
       # or learn more about the available environment variables at:
       # https://console.bluemix.net/docs/services/ContinuousDelivery/pipeline_deploy_var.html#deliverypipeline_environment
 
       bx cr images --restrict ${REGISTRY_NAMESPACE}/${IMAGE_NAME}
-      PIPELINE_IMAGE_URL=${REGISTRY_URL}/${REGISTRY_NAMESPACE}/${IMAGE_NAME}:${IMAGE_TAG}
       echo -e "Checking vulnerabilities in image: ${PIPELINE_IMAGE_URL}"
       for ITER in {1..30}
       do
         set +e
         STATUS=$( bx cr va -e -o json ${PIPELINE_IMAGE_URL} | jq -r '.[0].status' )
         set -e
-        if [[ ${STATUS} == "OK" || ${STATUS} == "FAIL" || ${STATUS} == "UNSUPPORTED" ]]; then
+        # Possible status from Vulnerability Advisor: OK, UNSUPPORTED, INCOMPLETE, UNSCANNED, FAIL, WARN
+        if [[ ${STATUS} != "INCOMPLETE" && ${STATUS} != "UNSCANNED" ]]; then
           break
         fi
         echo -e "${ITER} STATUS ${STATUS} : A vulnerability report was not found for the specified image."
         echo "Either the image doesn't exist or the scan hasn't completed yet. "
-        echo "Waiting for scan to complete.."
+        echo "Waiting for scan to complete..."
         sleep 10
       done
       set +e
       bx cr va -e ${PIPELINE_IMAGE_URL}
       set -e
-      [[ $(bx cr va -e -o json ${PIPELINE_IMAGE_URL} | jq -r '.[0].status') == "OK" ]] || { echo "ERROR: The vulnerability scan was not successful, check the OUTPUT of the command and try again."; exit 1; }
+      STATUS=$( bx cr va -e -o json ${PIPELINE_IMAGE_URL} | jq -r '.[0].status' )
+      [[ STATUS == "OK" ]] || [[ STATUS == "UNSUPPORTED" ]] || [[ STATUS == "WARN" ]] || { echo "ERROR: The vulnerability scan was not successful, check the OUTPUT of the command and try again."; exit 1; }
 - name: PROD
   inputs:
   - type: job
