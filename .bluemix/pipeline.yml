@@ -149,18 +149,16 @@ stages:
       bx cr images
 
       # Minting image tag using format: BRANCH-BUILD_NUMBER-COMMIT_ID-TIMESTAMP
-      # e.g. master-12-c123d456-20180615131912-
+      # e.g. master-3-50da6912-20181123114435
 
-      TIMESTAMP=$( date -u "+%Y%m%d%H%M%SUTC")
+      TIMESTAMP=$( date -u "+%Y%m%d%H%M%S")
       IMAGE_TAG=${TIMESTAMP}
-      if [ ! -z ${GIT_COMMIT} ]; then
+      if [ ! -z "${GIT_COMMIT}" ]; then
         GIT_COMMIT_SHORT=$( echo ${GIT_COMMIT} | head -c 8 ) 
         IMAGE_TAG=${GIT_COMMIT_SHORT}-${IMAGE_TAG}
       fi
       IMAGE_TAG=${BUILD_NUMBER}-${IMAGE_TAG}
-      if [ ! -z ${GIT_BRANCH} ]; then
-        IMAGE_TAG=${GIT_BRANCH}-${IMAGE_TAG}
-      fi
+      if [ ! -z "${GIT_BRANCH}" ]; then IMAGE_TAG=${GIT_BRANCH}-${IMAGE_TAG} ; fi
       echo "=========================================================="
       echo -e "BUILDING CONTAINER IMAGE: ${IMAGE_NAME}:${IMAGE_TAG}"
       if [ -z "${DOCKER_ROOT}" ]; then DOCKER_ROOT=. ; fi
@@ -183,7 +181,7 @@ stages:
       echo "COPYING ARTIFACTS needed for deployment and testing (in particular build.properties)"
 
       echo "Checking archive dir presence"
-      if [ -z "${ARCHIVE_DIR}"]; then
+      if [ -z "${ARCHIVE_DIR}" ]; then
         echo -e "Build archive directory contains entire working directory."
       else
         echo -e "Copying working dir into build archive directory: ${ARCHIVE_DIR} "
@@ -248,7 +246,7 @@ stages:
       fi 
 
       # If running after build_image.sh in same stage, reuse the exported variable PIPELINE_IMAGE_URL
-      if [[ -z PIPELINE_IMAGE_URL ]]; then
+      if [ -z "${PIPELINE_IMAGE_URL}" ]; then
         PIPELINE_IMAGE_URL=${REGISTRY_URL}/${REGISTRY_NAMESPACE}/${IMAGE_NAME}:${IMAGE_TAG}
       else
         # extract from img url
@@ -287,7 +285,7 @@ stages:
       bx cr va -e ${PIPELINE_IMAGE_URL}
       set -e
       STATUS=$( bx cr va -e -o json ${PIPELINE_IMAGE_URL} | jq -r '.[0].status' )
-      [[ STATUS == "OK" ]] || [[ STATUS == "UNSUPPORTED" ]] || [[ STATUS == "WARN" ]] || { echo "ERROR: The vulnerability scan was not successful, check the OUTPUT of the command and try again."; exit 1; }
+      [[ ${STATUS} == "OK" ]] || [[ ${STATUS} == "UNSUPPORTED" ]] || [[ ${STATUS} == "WARN" ]] || { echo "ERROR: The vulnerability scan was not successful, check the OUTPUT of the command and try again."; exit 1; }
 - name: PROD
   inputs:
   - type: job
