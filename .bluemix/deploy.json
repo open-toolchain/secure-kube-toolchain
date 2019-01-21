@@ -42,7 +42,13 @@
             "type": "string",
             "disabled": false
         },
-       "prod-cluster-name": {
+        "prod-resource-group": {
+            "description": {
+              "$ref" : "#/messages/deploy.rgDescription"
+            },
+            "type": "string"
+        },
+        "prod-cluster-name": {
             "description": {
               "$ref" : "#/messages/deploy.clusterNameDescription"
             },
@@ -64,7 +70,7 @@
             "pattern": "\\S"
         }
     },
-    "required": ["app-name", "api-key", "registry-region", "registry-namespace", "prod-region", "prod-cluster-name", "prod-cluster-namespace"],
+    "required": ["app-name", "api-key", "registry-region", "registry-namespace", "prod-region", "prod-resource-group", "prod-cluster-name", "prod-cluster-namespace"],
     "form": [
        {
           "type": "validator",
@@ -122,13 +128,22 @@
             ]
         },{
             "type": "table",
-            "columnCount": 5,
-            "widths": ["32%","2%","32%", "2%", "32%"],
+            "columnCount": 7,
+            "widths": ["24%","2%","24%", "3%", "23%","1%","23%"],
             "items": [
                 {
                   "type": "label",
                   "title": {
                     "$ref": "#/messages/region"
+                  }
+                },{
+                  "type": "label",
+                  "title": ""
+                },
+                  {
+                  "type": "label",
+                  "title": {
+                    "$ref": "#/messages/deploy.rg"
                   }
                 },{
                   "type": "label",
@@ -151,6 +166,14 @@
                 },{
                   "type": "select",
                   "key": "prod-region"
+                },{
+                  "type": "label",
+                  "title": ""
+                },
+                   {
+                  "type": "select",
+                  "key": "prod-resource-group",
+                   "readonly": false
                 },{
                   "type": "label",
                   "title": ""
