@@ -42,13 +42,13 @@
             "type": "string",
             "disabled": false
         },
-          "prod-resource-group": {
+        "prod-resource-group": {
             "description": {
               "$ref" : "#/messages/deploy.rgDescription"
             },
             "type": "string"
         },
-       "prod-cluster-name": {
+        "prod-cluster-name": {
             "description": {
               "$ref" : "#/messages/deploy.clusterNameDescription"
             },
