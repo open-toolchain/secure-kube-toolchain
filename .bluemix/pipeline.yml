@@ -148,8 +148,9 @@ stages:
       echo -e "Existing images in registry"
       bx cr images
 
-      # Minting image tag using format: BRANCH-BUILD_NUMBER-COMMIT_ID-TIMESTAMP
-      # e.g. master-3-50da6912-20181123114435
+      # Minting image tag using format: BUILD_NUMBER--BRANCH-COMMIT_ID-TIMESTAMP
+      # e.g. 3-master-50da6912-20181123114435
+      # (use build number as first segment to allow image tag as a patch release name according to semantic versioning)
 
       TIMESTAMP=$( date -u "+%Y%m%d%H%M%S")
       IMAGE_TAG=${TIMESTAMP}
@@ -157,8 +158,8 @@ stages:
         GIT_COMMIT_SHORT=$( echo ${GIT_COMMIT} | head -c 8 ) 
         IMAGE_TAG=${GIT_COMMIT_SHORT}-${IMAGE_TAG}
       fi
-      IMAGE_TAG=${BUILD_NUMBER}-${IMAGE_TAG}
       if [ ! -z "${GIT_BRANCH}" ]; then IMAGE_TAG=${GIT_BRANCH}-${IMAGE_TAG} ; fi
+      IMAGE_TAG=${BUILD_NUMBER}-${IMAGE_TAG}
       echo "=========================================================="
       echo -e "BUILDING CONTAINER IMAGE: ${IMAGE_NAME}:${IMAGE_TAG}"
       if [ -z "${DOCKER_ROOT}" ]; then DOCKER_ROOT=. ; fi
