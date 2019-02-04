@@ -119,7 +119,7 @@ stages:
       # ------------------
       # source: https://raw.githubusercontent.com/open-toolchain/commons/master/scripts/build_image.sh
 
-      # This script does build a Docker image into IBM Container Service private image registry, and copies information into
+      # This script does build a Docker image into IBM Cloud Kubernetes Service private image registry, and copies information into
       # a build.properties file, so they can be reused later on by other scripts (e.g. image url, chart name, ...)
       echo "REGISTRY_URL=${REGISTRY_URL}"
       echo "REGISTRY_NAMESPACE=${REGISTRY_NAMESPACE}"
@@ -321,7 +321,7 @@ stages:
       # ------------------
       # source: https://raw.githubusercontent.com/open-toolchain/commons/master/scripts/check_predeploy_kubectl.sh
 
-      # This script checks the IBM Container Service cluster is ready, has a namespace configured with access to the private
+      # This script checks the IBM Cloud Kubernetes Service cluster is ready, has a namespace configured with access to the private
       # image registry (using an IBM Cloud API Key). It also configures Helm Tiller service to later perform a deploy with Helm.
 
       # Input env variables (can be received via a pipeline environment properties.file.
