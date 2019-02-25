@@ -13,9 +13,9 @@ template:
     - repo
   info:
     git url: >-
-      [https://github.com/open-toolchain/simple-helm-toolchain](https://github.com/open-toolchain/simple-helm-toolchain)
+      [https://github.com/open-toolchain/secure-kube-toolchain](https://github.com/open-toolchain/secure-kube-toolchain)
     git branch: >-
-      [master](https://github.com/open-toolchain/simple-helm-toolchain/tree/master)
+      [master](https://github.com/open-toolchain/secure-kube-toolchain/tree/master)
 toolchain:
   name: 'kube-toolchain-{{timestamp}}'
   template:
