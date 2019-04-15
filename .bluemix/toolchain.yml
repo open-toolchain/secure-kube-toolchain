@@ -20,16 +20,35 @@ toolchain:
   name: 'kube-toolchain-{{timestamp}}'
   template:
     getting_started:
-      $ref: "#/messages/template.gettingStarted" 
+      $ref: "#/messages/template.gettingStarted"
 services:
   repo:
-    service_id: hostedgit
-    parameters:
-      repo_name: 'hello-containers-{{timestamp}}'
-      repo_url: 'https://github.com/open-toolchain/hello-containers'
-      type: clone
-      has_issues: true
-      enable_traceability: true
+    $parameter: 'source_provider'
+    $default: 'hostedgit'
+    $options:
+      - $ifdef: 'hostedgit'
+        service_id: hostedgit
+        parameters:
+          repo_name: 'BYOC MyApp'
+          repo_url: '{{app_repo}}'
+          type: 'link'
+          has_issues: true
+          enable_traceability: true
+      - $ifdef: 'githubpublic'
+        service_id: githubpublic
+        parameters:
+          repo_name: 'BYOC MyApp'
+          repo_url: '{{app_repo}}'
+          type: 'link'
+          visibility: public
+      - $ifdef: 'github_integrated'
+        service_id: github_integrated
+        parameters:
+          repo_name: 'BYOC MyApp'
+          repo_url: '{{app_repo}}'
+          type: 'link'
+          has_issues: true
+          enable_traceability: true
   build:
     service_id: pipeline
     parameters:
