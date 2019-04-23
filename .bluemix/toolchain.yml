@@ -23,30 +23,29 @@ toolchain:
       $ref: "#/messages/template.gettingStarted"
 services:
   repo:
-    $parameter: 'source_provider'
-    $default: 'hostedgit'
-    $options:
-      - $ifdef: 'hostedgit'
+    $switch:
+      - $expr: $env.source_provider
+      - $default: 'hostedgit'
         service_id: hostedgit
         parameters:
-          repo_name: 'BYOC MyApp'
-          repo_url: '{{app_repo}}'
-          type: 'link'
+          repo_name: '{{toolchain.name}}'
+          repo_url: $env.app_repo || 'https://github.com/open-toolchain/node-hello-world'
+          type: $env.type || 'clone'
           has_issues: true
           enable_traceability: true
-      - $ifdef: 'githubpublic'
-        service_id: githubpublic
+      - $case: 'githubconsolidated'
+        service_id: githubconsolidated
         parameters:
-          repo_name: 'BYOC MyApp'
-          repo_url: '{{app_repo}}'
-          type: 'link'
+          repo_name: '{{toolchain.name}}'
+          repo_url: $env.app_repo || 'https://github.com/open-toolchain/node-hello-world'
+          type: $env.type || 'clone'
           visibility: public
-      - $ifdef: 'github_integrated'
+      - $case: 'github_integrated'
         service_id: github_integrated
         parameters:
-          repo_name: 'BYOC MyApp'
-          repo_url: '{{app_repo}}'
-          type: 'link'
+          repo_name: '{{toolchain.name}}'
+          repo_url: $env.app_repo || 'https://github.com/open-toolchain/node-hello-world'
+          type: $env.type || 'clone'
           has_issues: true
           enable_traceability: true
   build:
