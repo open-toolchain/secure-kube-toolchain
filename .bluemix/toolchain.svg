@@ -125,15 +125,15 @@
 <text id="headerSVG.code" transform="matrix(1 0 0 1 89 19.4998)" class="st14 st15">CODE</text>
 <text id="headerSVG.deliver" transform="matrix(1 0 0 1 179 19.4998)" class="st14 st15">DELIVER</text>
 <text id="headerSVG.run" transform="matrix(1 0 0 1 267 19.4998)" class="st14 st15">RUN</text>
-<text transform="matrix(1 0 0 1 1.0801 124.4998)" class="st14 st15">ISSUE TRACKER</text>
+<text id="headerSVG.issueTracker" transform="matrix(1 0 0 1 1.0801 124.4998)" class="st14 st15">ISSUE TRACKER</text>
 
-<text transform="matrix(1 0 0 1 102.2417 124.4998)" class="st14 st15">REPOSITORY</text>
+<text id="headerSVG.repository" transform="matrix(1 0 0 1 102.2417 124.4998)" class="st14 st15">REPOSITORY</text>
 
-<text transform="matrix(1 0 0 1 196.8687 124.4998)" class="st14 st15">PIPELINE</text>
-<text transform="matrix(1 0 0 1 284.3115 124.4998)" class="st14 st15">IBM Cloud</text>
-<text transform="matrix(1 0 0 1 108.9717 238.0994)" class="st14 st15">WEB IDE</text>
-<text transform="matrix(1 0 0 1 281.2422 138.0994)" class="st14 st15">Kubernetes</text>
-<text transform="matrix(1 0 0 1 292.5508 150.0994)" class="st14 st15">Cluster</text>
+<text id="headerSVG.pipeline" transform="matrix(1 0 0 1 196.8687 124.4998)" class="st14 st15">PIPELINE</text>
+<text id="headerSVG.ibmCloud" transform="matrix(1 0 0 1 284.3115 124.4998)" class="st14 st15">IBM Cloud</text>
+<text id="headerSVG.webIde" transform="matrix(1 0 0 1 108.9717 238.0994)" class="st14 st15">WEB IDE</text>
+<text id="headerSVG.kubernetes" transform="matrix(1 0 0 1 281.2422 138.0994)" class="st14 st15">Kubernetes</text>
+<text id="headerSVG.cluster" transform="matrix(1 0 0 1 292.5508 150.0994)" class="st14 st15">Cluster</text>
 <circle id="svg_7_1_" class="st1" cx="309.1" cy="86.5" r="26.5"/>
 <g>
 	<polygon id="svg_131" class="st16" points="304.1,80.5 304.1,95 316.7,87.7 	"/>
