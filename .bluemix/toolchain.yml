@@ -73,7 +73,7 @@ services:
           PROD_CLUSTER_NAMESPACE: '{{form.pipeline.parameters.prod-cluster-namespace}}'
         execute: true
   pr_build:
-   $switch:
+    $switch:
       - $expr: $env.enablePrPipeline
       - $default: 'false'
       - $case: 'true'
