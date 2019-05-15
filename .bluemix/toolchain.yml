@@ -76,7 +76,6 @@ services:
    $switch:
       - $expr: $env.enablePrPipeline
       - $default: 'false'
-        service_id: pipeline
       - $case: 'true'
         service_id: pipeline
         name: 'PullRequest'
