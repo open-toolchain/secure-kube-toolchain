@@ -82,7 +82,7 @@ services:
         ui-pipeline: true
         configuration:
           content:
-            $text: pipeline-pr.yml
+            $text: pipelinePR.yml
           env:
             GIT_REPO: repo
           CF_APP_NAME: '{{form.pipeline.parameters.app-name}}'
