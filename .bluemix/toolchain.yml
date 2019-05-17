@@ -78,8 +78,8 @@ services:
   pr_build:
     $switch:
       - $expr: $env.enablePrPipeline
-      - $default: 'false'
-      - $case: 'true'
+      - $case: undefined
+      - $case: true
         service_id: pipeline
         name: 'PullRequest'
         ui-pipeline: true
