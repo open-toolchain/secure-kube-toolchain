@@ -12,10 +12,13 @@ template:
     - build
     - repo
   info:
-    git url: >-
-      [https://github.com/open-toolchain/secure-kube-toolchain](https://github.com/open-toolchain/secure-kube-toolchain)
-    git branch: >-
-      [master](https://github.com/open-toolchain/secure-kube-toolchain/tree/master)
+    git url: >
+      "[" + $env.repository + "]" +
+        "(" + $env.repository + ")"
+    git branch: >
+      "[" + $env.branch + "]" +
+        "(" + $env.repository +
+          "/tree/" + $env.branch + ")"
 toolchain:
   name: 'kube-toolchain-{{timestamp}}'
   template:
