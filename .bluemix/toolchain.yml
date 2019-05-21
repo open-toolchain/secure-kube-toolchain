@@ -74,7 +74,9 @@ services:
       - $case: true
         service_id: pipeline
         parameters:
-          name: 'PullRequest'
+          name: >
+            $env.services.repo.service_id === 'hostedgit' ? 
+            'MergeRequestTriggered':'PullRequestTriggered'
           ui-pipeline: true
           configuration:
             content:
