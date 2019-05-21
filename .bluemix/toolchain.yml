@@ -79,6 +79,7 @@ services:
     $switch:
       - $expr: $env.enablePrPipeline
       - $case: undefined
+        service_id: ' '
       - $case: true
         service_id: pipeline
         parameters:
