@@ -70,7 +70,6 @@ services:
   pr_build:
     $switch:
       - $expr: $env.enablePrPipeline
-      - $case: undefined
       - $case: true
         service_id: pipeline
         parameters:
