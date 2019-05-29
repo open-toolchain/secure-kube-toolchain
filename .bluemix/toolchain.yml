@@ -32,8 +32,12 @@ services:
         service_id: hostedgit
         parameters:
           repo_name: 'hello-containers-{{timestamp}}'
-          repo_url: "$env.type === 'link' ? $env.app_repo : 'https://github.com/open-toolchain/hello-containers'"
-          source_repo_url: "$env.type === 'fork' || $env.type === 'clone' ? $env.app_repo : ''"
+          repo_url: >
+            $env.type === 'link' ? 
+              $env.app_repo : 'https://github.com/open-toolchain/hello-containers'
+          source_repo_url: >
+            $env.type === 'fork' || $env.type === 'clone' ? 
+              $env.app_repo : ''
           type: $env.type || 'clone'
           has_issues: true
           enable_traceability: true
@@ -41,17 +45,42 @@ services:
         service_id: githubconsolidated
         parameters:
           repo_name: 'hello-containers-{{timestamp}}'
-          repo_url: "$env.type === 'link' ? $env.app_repo : 'https://github.com/open-toolchain/hello-containers'"
-          source_repo_url: "$env.type === 'fork' || $env.type === 'clone' ? $env.app_repo : ''"
+          repo_url: >
+            $env.type === 'link' ? 
+              $env.app_repo : 'https://github.com/open-toolchain/hello-containers'
+          source_repo_url: >
+            $env.type === 'fork' || $env.type === 'clone' ?
+              $env.app_repo : ''
           type: $env.type  || 'clone'
           visibility: public
       - $case: 'github_integrated'
         service_id: github_integrated
         parameters:
           repo_name: 'hello-containers-{{timestamp}}'
-          repo_url: "$env.type === 'link' ? $env.app_repo : 'https://github.com/open-toolchain/hello-containers'"
-          source_repo_url: "$env.type === 'fork' || $env.type === 'clone' ? $env.app_repo : ''"
-          type: "$env.type !== undefined ? $env.type : 'clone'"
+          repo_url: >
+            $env.type === 'link' ? 
+              $env.app_repo : 'https://github.com/open-toolchain/hello-containers'
+          source_repo_url: >
+            $env.type === 'fork' || $env.type === 'clone' ? 
+              $env.app_repo : ''
+          type: >
+            $env.type !== undefined ? 
+              $env.type : 'clone'
+          has_issues: true
+          enable_traceability: true
+      - $case: 'bitbucketgit'
+        service_id: bitbucketgit
+        parameters:
+          repo_name: 'hello-containers-{{timestamp}}'
+          repo_url: >
+            $env.type === 'link' ? 
+              $env.app_repo : 'https://github.com/open-toolchain/hello-containers'
+          source_repo_url: >
+            $env.type === 'fork' || $env.type === 'clone' ? 
+              $env.app_repo : ''
+          type: >
+            $env.type !== undefined ? 
+              $env.type : 'clone'
           has_issues: true
           enable_traceability: true
   build:
