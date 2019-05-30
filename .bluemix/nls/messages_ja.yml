@@ -1,7 +1,7 @@
 ---
 #The format for creating a link with a URL and text is [link text](link url) with no spaces or characters between the two sets of brackets- []()
 template.name: "Kubernetes アプリの開発"
-template.description: "このツールチェーンを使用して、アプリケーションを開発し、IBM Cloud Kubernetes Service で管理されている Kubernetes クラスターに安全にデプロイすることができます。デフォルトで、このツールチェーンはサンプル Node.js の「Hello World」アプリを使用しますが、代わりにユーザー独自の GitHub リポジトリーにリンクすることもできます。このツールチェーンは、[Vulnerability Advisor](https://www.ibm.com/blogs/bluemix/2016/06/docker-container-security-with-vulnerability-advisor/) を使用した継続的デリバリー、ソース管理、Issue のトラッキング、およびオンライン編集用に事前構成されています。\n\nIBM Cloud Container クラスターを[コンソール](https://cloud.ibm.com/docs/containers?topic=containers-getting-started#getting-started) で管理できます。\n\nこのツールチェーンは、Continuous Delivery サービスに含まれるツールを使用します。そのサービスのインスタンスが、選択したリソース・グループや組織にまだない場合は、**「作成」**をクリックすると、無料の[ライト](/catalog/services/continuous-delivery/) プランが選択されてインスタンスが自動的に追加されます。\n\n開始するには、**「作成」**をクリックしてください。\n\nステップバイステップの説明については、[チュートリアル](https://www.ibm.com/devops/method/tutorials/tc_secure_kube)を参照してください。"
+template.description: "このツールチェーンを使用して、アプリケーションを開発し、IBM Cloud Kubernetes Service で管理されている Kubernetes クラスターに安全にデプロイすることができます。デフォルトで、このツールチェーンはサンプル Node.js の「Hello World」アプリを使用しますが、代わりにユーザー独自の GitHub リポジトリーにリンクすることもできます。このツールチェーンは、[Vulnerability Advisor](https://www.ibm.com/blogs/bluemix/2016/06/docker-container-security-with-vulnerability-advisor/) を使用した継続的デリバリー、ソース管理、問題のトラッキング、およびオンライン編集用に事前構成されています。\n\nIBM Cloud Container クラスターを[コンソール](https://cloud.ibm.com/docs/containers?topic=containers-getting-started#getting-started) で管理できます。\n\nこのツールチェーンは、Continuous Delivery サービスに含まれるツールを使用します。そのサービスのインスタンスが、選択したリソース・グループや組織にまだない場合は、**「作成」**をクリックすると、無料の[ライト](/catalog/services/continuous-delivery/) プランが選択されてインスタンスが自動的に追加されます。\n\n開始するには、**「作成」**をクリックしてください。\n\nステップバイステップの説明については、[チュートリアル](https://www.ibm.com/devops/method/tutorials/tc_secure_kube)を参照してください。"
 template.gettingStarted: " **ツールチェーンの準備ができました**\n**クイック・スタート:** Git リポジトリーに対する変更をコミットして、新しい Docker イメージ・ビルドを起動してください。このビルドは脆弱性についてスキャンされ、Kubernetes クラスターにデプロイされます。段階的説明については、このツールチェーンの[チュートリアル](https://www.ibm.com/devops/method/tutorials/tc_secure_kube?task=2)を参照してください。"
 deploy.title: "Hello World のデプロイ・ステージ"
 deploy.description: "hello-world simple ツールチェーン"
@@ -34,7 +34,7 @@ headerSVG.think: "思考"
 headerSVG.code: "コード"
 headerSVG.deliver: "配信"
 headerSVG.run: "実行"
-headerSVG.issueTracker: "Issue トラッカー"
+headerSVG.issueTracker: "問題トラッカー"
 headerSVG.gitlab1: "GitLab"
 headerSVG.repository: "リポジトリー"
 headerSVG.gitlab2: "GitLab"

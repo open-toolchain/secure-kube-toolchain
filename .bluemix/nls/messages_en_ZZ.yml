@@ -15,7 +15,7 @@ deploy.regionDescription: "[G'Ｔｈｅ ＩＢＭ Ｃｌｏｕｄ region for pro
 deploy.rgDescription: "[G'Ｔｈｅ ＩＢＭ Ｃｌｏｕｄ ｒesource group for production deploymentฏูİı｜]"
 deploy.clusterNameDescription: "[G'Ｔｈｅ ｎａｍｅ ｏｆ ｔｈｅ ｐｒｏｄｕｃｔｉｏｎ ｃｌｕｓｔｅｒ. Ｒｅｔｒieve it with [ibmcloud cs clusters] or via the console at https://cloud.ibm.com/kubernetes/clusters.ฏูİı｜]"
 deploy.namespaceDescription: "[G'Ｐｒｏｄｕｃｔion namespaceฏูİı｜]"
-deploy.apikey: "[G'ＩＢＭ Ｃｌoud API Keyฏูİı｜]"
+deploy.apikey: "[G'ＩＢＭ Ｃｌoud API keyฏูİı｜]"
 deploy.containerregRegion: "[G'Ｃｏｎｔａｉｎｅｒ registry regionฏูİı｜]"
 deploy.containerregns: "[G'Ｃｏｎｔａｉｎｅｒ registry namespaceฏูİı｜]"
 deploy.imgregRegion: "[G'Ｃｏｎｔａｉｎｅｒ image registry regionฏูİı｜]"
