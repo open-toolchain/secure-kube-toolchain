@@ -12,10 +12,13 @@ template:
     - build
     - repo
   info:
-    git url: >-
-      [https://github.com/open-toolchain/secure-kube-toolchain](https://github.com/open-toolchain/secure-kube-toolchain)
-    git branch: >-
-      [master](https://github.com/open-toolchain/secure-kube-toolchain/tree/master)
+    git url: >
+      "[" + $env.repository + "]" +
+        "(" + $env.repository + ")"
+    git branch: >
+      "[" + $env.branch + "]" +
+        "(" + $env.repository +
+          "/tree/" + $env.branch + ")"
 toolchain:
   name: 'kube-toolchain-{{timestamp}}'
   template:
@@ -23,34 +26,19 @@ toolchain:
       $ref: "#/messages/template.gettingStarted"
 services:
   repo:
-    $switch:
-      - $expr: $env.source_provider
-      - $default: 'hostedgit'
-        service_id: hostedgit
-        parameters:
-          repo_name: 'hello-containers-{{timestamp}}'
-          repo_url: "$env.type === 'link' ? $env.app_repo : 'https://github.com/open-toolchain/hello-containers'"
-          source_repo_url: "$env.type === 'fork' || $env.type === 'clone' ? $env.app_repo : ''"
-          type: $env.type || 'clone'
-          has_issues: true
-          enable_traceability: true
-      - $case: 'githubconsolidated'
-        service_id: githubconsolidated
-        parameters:
-          repo_name: 'hello-containers-{{timestamp}}'
-          repo_url: "$env.type === 'link' ? $env.app_repo : 'https://github.com/open-toolchain/hello-containers'"
-          source_repo_url: "$env.type === 'fork' || $env.type === 'clone' ? $env.app_repo : ''"
-          type: $env.type  || 'clone'
-          visibility: public
-      - $case: 'github_integrated'
-        service_id: github_integrated
-        parameters:
-          repo_name: 'hello-containers-{{timestamp}}'
-          repo_url: "$env.type === 'link' ? $env.app_repo : 'https://github.com/open-toolchain/hello-containers'"
-          source_repo_url: "$env.type === 'fork' || $env.type === 'clone' ? $env.app_repo : ''"
-          type: "$env.type !== undefined ? $env.type : 'clone'"
-          has_issues: true
-          enable_traceability: true
+    service_id: $env.source_provider ? $env.source_provider:'hostedgit'
+    parameters:
+      repo_name: 'hello-containers-{{timestamp}}'
+      repo_url: >
+        $env.type === 'link' ? 
+          $env.app_repo : 'https://github.com/open-toolchain/hello-containers'
+      source_repo_url: >
+        $env.type === 'fork' || $env.type === 'clone' ? 
+          $env.app_repo : 'https://github.com/open-toolchain/hello-containers'
+      type: $env.type || 'clone'
+      has_issues: true
+      enable_traceability: true
+      private_repo: false
   build:
     service_id: pipeline
     parameters:
