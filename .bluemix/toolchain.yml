@@ -26,63 +26,19 @@ toolchain:
       $ref: "#/messages/template.gettingStarted"
 services:
   repo:
-    $switch:
-      - $expr: $env.source_provider
-      - $default: 'hostedgit'
-        service_id: hostedgit
-        parameters:
-          repo_name: 'hello-containers-{{timestamp}}'
-          repo_url: >
-            $env.type === 'link' ? 
-              $env.app_repo : 'https://github.com/open-toolchain/hello-containers'
-          source_repo_url: >
-            $env.type === 'fork' || $env.type === 'clone' ? 
-              $env.app_repo : ''
-          type: $env.type || 'clone'
-          has_issues: true
-          enable_traceability: true
-      - $case: 'githubconsolidated'
-        service_id: githubconsolidated
-        parameters:
-          repo_name: 'hello-containers-{{timestamp}}'
-          repo_url: >
-            $env.type === 'link' ? 
-              $env.app_repo : 'https://github.com/open-toolchain/hello-containers'
-          source_repo_url: >
-            $env.type === 'fork' || $env.type === 'clone' ?
-              $env.app_repo : ''
-          type: $env.type  || 'clone'
-          visibility: public
-      - $case: 'github_integrated'
-        service_id: github_integrated
-        parameters:
-          repo_name: 'hello-containers-{{timestamp}}'
-          repo_url: >
-            $env.type === 'link' ? 
-              $env.app_repo : 'https://github.com/open-toolchain/hello-containers'
-          source_repo_url: >
-            $env.type === 'fork' || $env.type === 'clone' ? 
-              $env.app_repo : ''
-          type: >
-            $env.type !== undefined ? 
-              $env.type : 'clone'
-          has_issues: true
-          enable_traceability: true
-      - $case: 'bitbucketgit'
-        service_id: bitbucketgit
-        parameters:
-          repo_name: 'hello-containers-{{timestamp}}'
-          repo_url: >
-            $env.type === 'link' ? 
-              $env.app_repo : 'https://github.com/open-toolchain/hello-containers'
-          source_repo_url: >
-            $env.type === 'fork' || $env.type === 'clone' ? 
-              $env.app_repo : ''
-          type: >
-            $env.type !== undefined ? 
-              $env.type : 'clone'
-          has_issues: true
-          enable_traceability: true
+    service_id: $env.source_provider ? $env.source_provider:'hostedgit'
+    parameters:
+      repo_name: $env.toolchain.name
+      repo_url: >
+        $env.type === 'link' ? 
+          $env.app_repo : 'https://github.com/open-toolchain/hello-containers'
+      source_repo_url: >
+        $env.type === 'fork' || $env.type === 'clone' ? 
+          $env.app_repo : 'https://github.com/open-toolchain/hello-containers'
+      type: $env.type || 'clone'
+      has_issues: true
+      enable_traceability: true
+      private_repo: false
   build:
     service_id: pipeline
     parameters:
@@ -94,24 +50,16 @@ services:
         content:
           $text: pipeline.yml
         env:
-          $ref: env_props.yml
+          GIT_REPO: repo
+          CF_APP_NAME: '{{form.pipeline.parameters.app-name}}'
+          REGISTRY_REGION_ID: '{{form.pipeline.parameters.registry-region}}'
+          REGISTRY_NAMESPACE: '{{form.pipeline.parameters.registry-namespace}}'
+          API_KEY: '{{form.pipeline.parameters.api-key}}'
+          PROD_REGION_ID: '{{form.pipeline.parameters.prod-region}}'
+          PROD_RESOURCE_GROUP: '{{form.pipeline.parameters.prod-resource-group}}'
+          PROD_CLUSTER_NAME: '{{form.pipeline.parameters.prod-cluster-name}}'
+          PROD_CLUSTER_NAMESPACE: '{{form.pipeline.parameters.prod-cluster-namespace}}'
         execute: true
-  pr_build:
-    $switch:
-      - $expr: $env.enablePrPipeline
-      - $case: true
-        service_id: pipeline
-        parameters:
-          name: >
-            $env.services.repo.service_id === 'hostedgit' ? 
-            'MergeRequestTriggered':'PullRequestTriggered'
-          ui-pipeline: true
-          configuration:
-            content:
-              $text: pipelinePR.yml
-            env:
-              $ref: env_props.yml
-            execute: true
   webide:
     service_id: orion
 form:
