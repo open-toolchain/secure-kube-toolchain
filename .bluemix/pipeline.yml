@@ -1,4 +1,5 @@
 ---
+defaultBaseImageVersion: latest
 stages:
 - name: BUILD
   inputs:
