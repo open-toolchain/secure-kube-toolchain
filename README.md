@@ -1,7 +1,7 @@
 # ![Icon](./.bluemix/secure-lock-kubernetes.png) Develop a Kubernetes app
 
 
-### Continuously deliver a secure Docker app to a Kubernetes Cluster
+### Continuously deliver a secure container app to a Kubernetes Cluster
 This Hello World application uses Docker with Node.js and includes a DevOps toolchain that is preconfigured for continuous delivery with Vulnerability Advisor, source control, issue tracking, and online editing, and deployment to the IBM Bluemix Containers service.
 
 Application code is stored in source control, along with its Dockerfile and its Kubernetes deployment script.
