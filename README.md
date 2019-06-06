@@ -12,6 +12,15 @@ Any code change to the Git repo will automatically be built, validated and deplo
 
 ### To get started, click this button:
 [![Create toolchain](https://cloud.ibm.com/devops/graphics/create_toolchain_button.png)](https://cloud.ibm.com/devops/setup/deploy?repository=https%3A%2F%2Fgithub.com%2Fopen-toolchain%2Fsecure-kube-toolchain&env_id=ibm:yp:us-south)
+
+It implements the following best practices:
+- sanity check the Dockerfile prior to attempting creating the image,
+- build container image on every Git commit, setting a tag based on build number, timestamp and commit id for traceability
+- use a private image registry to store the built image, automatically configure access permissions for target cluster deployment using API tokens than can be revoked,
+- check container image for security vulnerabilities,
+- insert the built image tag into the deployment manifest automatically,
+- use an explicit namespace in cluster to insulate each deployment (and make it easy to clear, by "kubectl delete namespace"),
+
 ---
 ### Learn more 
 
