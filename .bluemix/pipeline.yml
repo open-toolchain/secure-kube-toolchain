@@ -25,6 +25,7 @@ stages:
       cp -R -n ./ $ARCHIVE_DIR/ || true
 
       # Record build information
+      ibmcloud login --apikey $API_KEY --no-region
       ibmcloud doi publishbuildrecord --branch ${GIT_BRANCH} --repositoryurl ${GIT_URL} --commitid ${GIT_COMMIT} \
         --buildnumber ${BUILD_NUMBER} --logicalappname ${IMAGE_NAME} --status pass
 
@@ -45,6 +46,7 @@ stages:
         RESULT=$?
         if [ ! -z "${FILE_LOCATION}"]; then
           if [ ${RESULT} -ne 0 ]; then STATUS=fail; else STATUS=pass; fi
+          ibmcloud login --apikey $API_KEY --no-region
           ibmcloud doi publishtestrecord --type unittest --buildnumber ${BUILD_NUMBER} --filelocation ${FILE_LOCATION} \
             --buildnumber ${BUILD_NUMBER} --logicalappname ${IMAGE_NAME} --status ${STATUS}
           exit $exit_result
@@ -62,6 +64,9 @@ stages:
     type: text
   - name: DOCKER_FILE
     value: Dockerfile
+    type: text
+  - name: PIPELINE_IMAGE_URL
+    value: undefined
     type: text
   inputs:
   - type: job
@@ -286,18 +291,6 @@ stages:
       echo "GIT_BRANCH=${GIT_BRANCH}" >> $ARCHIVE_DIR/build.properties
       echo "File 'build.properties' created for passing env variables to subsequent pipeline jobs:"
       cat $ARCHIVE_DIR/build.properties
-- name: VALIDATE
-  inputs:
-  - type: job
-    stage: CONTAINERIZE
-    job: Build container image
-  triggers:
-  - type: stage
-  properties:
-  - name: buildprops
-    value: build.properties
-    type: file
-  jobs:
   - name: Check vulnerabilities
     type: tester
     test_type: vulnerabilityadvisor
