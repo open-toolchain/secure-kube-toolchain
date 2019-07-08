@@ -618,7 +618,7 @@ stages:
       set +x
 
       # Record deploy information
-      ibmcloud doi publishdeployrecord --env ${PIPELINE_KUBERNETES_CLUSTER_NAME}:${CLUSTER_NAMESPACE}
+      ibmcloud doi publishdeployrecord --env ${PIPELINE_KUBERNETES_CLUSTER_NAME}:${CLUSTER_NAMESPACE} \
         --buildnumber ${SOURCE_BUILD_NUMBER} --logicalappname ${IMAGE_NAME} --status pass
 
       # Extract name from actual Kube deployment resource owning the deployed container image 
