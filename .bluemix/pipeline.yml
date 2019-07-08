@@ -510,7 +510,7 @@ stages:
       echo "default serviceAccount:"
       kubectl get serviceaccount default --namespace ${CLUSTER_NAMESPACE} -o yaml
       echo -e "Namespace ${CLUSTER_NAMESPACE} authorizing with private image registry using patched default serviceAccount"
-  - name: Check deployment
+  - name: Check deploy config
     type: deployer
     target:
       region_id: ${PROD_REGION_ID}
