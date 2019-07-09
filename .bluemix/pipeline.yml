@@ -362,7 +362,9 @@ stages:
       set +e
       ibmcloud cr va -e ${PIPELINE_IMAGE_URL}
       set -e
-      STATUS=$( ibmcloud cr va -e -o json ${PIPELINE_IMAGE_URL} | jq -r '.[0].status' )
+      ibmcloud cr va -e -o json ${PIPELINE_IMAGE_URL} > vulnerability_advisor.json
+      ibmcloud doi publishtestrecord --logicalappname "${IMAGE_NAME}" --buildnumber "${SOURCE_BUILD_NUMBER}" --filelocation "vulnerability_advisor.json" --type vulnerabilityadvisor
+      STATUS=$( cat vulnerability_advisor.json | jq -r '.[0].status' )
       [[ ${STATUS} == "OK" ]] || [[ ${STATUS} == "UNSUPPORTED" ]] || [[ ${STATUS} == "WARN" ]] || { echo "ERROR: The vulnerability scan was not successful, check the OUTPUT of the command and try again."; exit 1; }
 - name: DEPLOY
   inputs:
