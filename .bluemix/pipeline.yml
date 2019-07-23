@@ -28,17 +28,13 @@ stages:
       # Git repo cloned at $WORKING_DIR, copy into $ARCHIVE_DIR
       cp -R -n ./ $ARCHIVE_DIR/ || true
 
+      # Record build properties
+      source <(curl -sSL "https://raw.githubusercontent.com/open-toolchain/commons/master/scripts/fetch_git_creds.sh")
+
       # Record build information
       ibmcloud login --apikey ${IBM_CLOUD_API_KEY} --no-region
       ibmcloud doi publishbuildrecord --branch ${GIT_BRANCH} --repositoryurl ${GIT_URL} --commitid ${GIT_COMMIT} \
         --buildnumber ${BUILD_NUMBER} --logicalappname ${IMAGE_NAME} --status pass
-
-      # Record build propeerties
-      echo "GIT_URL=${GIT_URL}" >> $ARCHIVE_DIR/build.properties
-      echo "GIT_BRANCH=${GIT_BRANCH}" >> $ARCHIVE_DIR/build.properties
-      echo "GIT_COMMIT=${GIT_COMMIT}" >> $ARCHIVE_DIR/build.properties
-      echo "SOURCE_BUILD_NUMBER=${BUILD_NUMBER}" >> $ARCHIVE_DIR/build.properties
-      cat $ARCHIVE_DIR/build.properties | grep -v -i password
   - name: Unit Tests
     type: tester
     script: |-
@@ -85,41 +81,15 @@ stages:
       #!/bin/bash
       # uncomment to debug the script
       # set -x
-      # copy the script below into your app code repo (e.g. ./scripts/check_prebuild.sh) and 'source' it from your pipeline job
+      # copy the script below into your app code repo (e.g. ./scripts/check_dockerfile.sh) and 'source' it from your pipeline job
       #    source ./scripts/check_prebuild.sh
       # alternatively, you can source it from online script:
-      #    source <(curl -sSL "https://raw.githubusercontent.com/open-toolchain/commons/master/scripts/check_prebuild.sh")
+      #    source <(curl -sSL "https://raw.githubusercontent.com/open-toolchain/commons/master/scripts/check_dockerfile.sh")
       # ------------------
-      # source: https://raw.githubusercontent.com/open-toolchain/commons/master/scripts/check_prebuild.sh
-      echo "IMAGE_NAME=${IMAGE_NAME}"
-      echo "ARCHIVE_DIR=${ARCHIVE_DIR}"
-      echo "DOCKER_ROOT=${DOCKER_ROOT}"
-      echo "DOCKER_FILE=${DOCKER_FILE}"
+      # source: https://raw.githubusercontent.com/open-toolchain/commons/master/scripts/check_dockerfile.sh
 
-      # View build properties
-      if [ -f build.properties ]; then 
-        echo "build.properties:"
-        cat build.properties
-      else 
-        echo "build.properties : not found"
-      fi 
-      # also run 'env' command to find all available env variables
-      # or learn more about the available environment variables at:
-      # https://cloud.ibm.com/docs/services/ContinuousDelivery/pipeline_deploy_var.html#deliverypipeline_environment
-
-      echo "=========================================================="
-      echo "Checking for Dockerfile at the repository root"
-      if [ -z "${DOCKER_ROOT}" ]; then DOCKER_ROOT=. ; fi
-      if [ -z "${DOCKER_FILE}" ]; then DOCKER_FILE=Dockerfile ; fi
-      if [ -f ${DOCKER_ROOT}/${DOCKER_FILE} ]; then 
-      echo -e "Dockerfile found at: ${DOCKER_FILE}"
-      else
-          echo "Dockerfile not found at: ${DOCKER_FILE}"
-          exit 1
-      fi
-      echo "Linting Dockerfile"
-      npm install -g dockerlint
-      dockerlint -f ${DOCKER_ROOT}/${DOCKER_FILE}
+      # This script lints Dockerfile.
+      source <(curl -sSL "https://raw.githubusercontent.com/open-toolchain/commons/roadmap-9921/scripts/check_dockerfile.sh")
   - name: Check registry
     type: builder
     build_type: cr
@@ -133,61 +103,15 @@ stages:
       #!/bin/bash
       # uncomment to debug the script
       # set -x
-      # copy the script below into your app code repo (e.g. ./scripts/check_prebuild.sh) and 'source' it from your pipeline job
-      #    source ./scripts/check_prebuild.sh
+      # copy the script below into your app code repo (e.g. ./scripts/check_registry.sh) and 'source' it from your pipeline job
+      #    source ./scripts/check_registry.sh
       # alternatively, you can source it from online script:
-      #    source <(curl -sSL "https://raw.githubusercontent.com/open-toolchain/commons/master/scripts/check_prebuild.sh")
+      #    source <(curl -sSL "https://raw.githubusercontent.com/open-toolchain/commons/master/scripts/check_registry.sh")
       # ------------------
-      # source: https://raw.githubusercontent.com/open-toolchain/commons/master/scripts/check_prebuild.sh
-      echo "REGISTRY_URL=${REGISTRY_URL}"
-      echo "REGISTRY_NAMESPACE=${REGISTRY_NAMESPACE}"
-      echo "IMAGE_NAME=${IMAGE_NAME}"
-      echo "ARCHIVE_DIR=${ARCHIVE_DIR}"
+      # source: https://raw.githubusercontent.com/open-toolchain/commons/master/scripts/check_registry.sh
 
-      # View build properties
-      if [ -f build.properties ]; then 
-        echo "build.properties:"
-        cat build.properties
-      else 
-        echo "build.properties : not found"
-      fi 
-      # also run 'env' command to find all available env variables
-      # or learn more about the available environment variables at:
-      # https://cloud.ibm.com/docs/services/ContinuousDelivery/pipeline_deploy_var.html#deliverypipeline_environment
-
-      echo "=========================================================="
-      echo "Checking registry current plan and quota"
-      ibmcloud cr plan
-      ibmcloud cr quota
-      echo "If needed, discard older images using: ibmcloud cr image-rm"
-      echo "Checking registry namespace: ${REGISTRY_NAMESPACE}"
-      NS=$( ibmcloud cr namespaces | grep ${REGISTRY_NAMESPACE} ||: )
-      if [ -z "${NS}" ]; then
-          echo "Registry namespace ${REGISTRY_NAMESPACE} not found, creating it."
-          ibmcloud cr namespace-add ${REGISTRY_NAMESPACE}
-          echo "Registry namespace ${REGISTRY_NAMESPACE} created."
-      else 
-          echo "Registry namespace ${REGISTRY_NAMESPACE} found."
-      fi
-      echo -e "Existing images in registry"
-      ibmcloud cr images --restrict ${REGISTRY_NAMESPACE}
-      # echo "=========================================================="
-      # KEEP=1
-      # echo -e "PURGING REGISTRY, only keeping last ${KEEP} image(s) based on image digests"
-      # COUNT=0
-      # LIST=$( ibmcloud cr images --restrict ${REGISTRY_NAMESPACE}/${IMAGE_NAME} --no-trunc --format '{{ .Created }} {{ .Repository }}@{{ .Digest }}' | sort -r -u | awk '{print $2}' | sed '$ d' )
-      # while read -r IMAGE_URL ; do
-      #   if [[ "$COUNT" -lt "$KEEP" ]]; then
-      #     echo "Keeping image digest: ${IMAGE_URL}"
-      #   else
-      #     ibmcloud cr image-rm "${IMAGE_URL}"
-      #   fi
-      #   COUNT=$((COUNT+1)) 
-      # done <<< "$LIST"
-      # if [[ "$COUNT" -gt 1 ]]; then
-      #   echo "Content of image registry"
-      #   ibmcloud cr images
-      # fi
+      # This script checks presence of registry namespace.
+      source <(curl -sSL "https://raw.githubusercontent.com/open-toolchain/commons/roadmap-9921/scripts/check_registry.sh")
   - name: Build container image
     type: builder
     build_type: cr
@@ -200,7 +124,7 @@ stages:
     script: |
       #!/bin/bash
       # uncomment to debug the script
-      #set -x
+      # set -x
       # copy the script below into your app code repo (e.g. ./scripts/build_image.sh) and 'source' it from your pipeline job
       #    source ./scripts/build_image.sh
       # alternatively, you can source it from online script:
@@ -208,93 +132,10 @@ stages:
       # ------------------
       # source: https://raw.githubusercontent.com/open-toolchain/commons/master/scripts/build_image.sh
 
-      # This script does build a Docker image into IBM Cloud Kubernetes Service private image registry, and copies information into
-      # a build.properties file, so they can be reused later on by other scripts (e.g. image url, chart name, ...)
-      echo "REGISTRY_URL=${REGISTRY_URL}"
-      echo "REGISTRY_NAMESPACE=${REGISTRY_NAMESPACE}"
-      echo "IMAGE_NAME=${IMAGE_NAME}"
-      echo "BUILD_NUMBER=${BUILD_NUMBER}"
-      echo "ARCHIVE_DIR=${ARCHIVE_DIR}"
-      echo "GIT_BRANCH=${GIT_BRANCH}"
-      echo "GIT_COMMIT=${GIT_COMMIT}"
-      echo "DOCKER_ROOT=${DOCKER_ROOT}"
-      echo "DOCKER_FILE=${DOCKER_FILE}"
-
-      # View build properties
-      if [ -f build.properties ]; then 
-        echo "build.properties:"
-        cat build.properties
-      else 
-        echo "build.properties : not found"
-      fi 
-      # also run 'env' command to find all available env variables
-      # or learn more about the available environment variables at:
-      # https://cloud.ibm.com/docs/services/ContinuousDelivery/pipeline_deploy_var.html#deliverypipeline_environment
-
-      # To review or change build options use:
-      # ibmcloud cr build --help
-
-      echo -e "Existing images in registry"
-      ibmcloud cr images
-
-      # Minting image tag using format: BUILD_NUMBER--BRANCH-COMMIT_ID-TIMESTAMP
-      # e.g. 3-master-50da6912-20181123114435
-      # (use build number as first segment to allow image tag as a patch release name according to semantic versioning)
-      TIMESTAMP=$( date -u "+%Y%m%d%H%M%S")
-      IMAGE_TAG=${TIMESTAMP}
-      if [ ! -z "${GIT_COMMIT}" ]; then
-        GIT_COMMIT_SHORT=$( echo ${GIT_COMMIT} | head -c 8 ) 
-        IMAGE_TAG=${GIT_COMMIT_SHORT}-${IMAGE_TAG}
-      fi
-      if [ ! -z "${GIT_BRANCH}" ]; then IMAGE_TAG=${GIT_BRANCH}-${IMAGE_TAG} ; fi
-      IMAGE_TAG=${BUILD_NUMBER}-${IMAGE_TAG}
-
-      echo "=========================================================="
-      echo -e "BUILDING CONTAINER IMAGE: ${IMAGE_NAME}:${IMAGE_TAG}"
-      if [ -z "${DOCKER_ROOT}" ]; then DOCKER_ROOT=. ; fi
-      if [ -z "${DOCKER_FILE}" ]; then DOCKER_FILE=${DOCKER_ROOT}/Dockerfile ; fi
-      set -x
-      ibmcloud cr build -t ${REGISTRY_URL}/${REGISTRY_NAMESPACE}/${IMAGE_NAME}:${IMAGE_TAG} ${DOCKER_ROOT} -f ${DOCKER_FILE}
-      set +x
-
-      ibmcloud cr image-inspect ${REGISTRY_URL}/${REGISTRY_NAMESPACE}/${IMAGE_NAME}:${IMAGE_TAG}
-
-      # Set PIPELINE_IMAGE_URL for subsequent jobs in stage (e.g. Vulnerability Advisor)
-      export PIPELINE_IMAGE_URL="$REGISTRY_URL/$REGISTRY_NAMESPACE/$IMAGE_NAME:$IMAGE_TAG"
-
-      ibmcloud cr images --restrict ${REGISTRY_NAMESPACE}/${IMAGE_NAME}
-
-      ######################################################################################
-      # Copy any artifacts that will be needed for deployment and testing to $WORKSPACE    #
-      ######################################################################################
-      echo "=========================================================="
-      echo "COPYING ARTIFACTS needed for deployment and testing (in particular build.properties)"
-
-      echo "Checking archive dir presence"
-      if [ -z "${ARCHIVE_DIR}" ]; then
-        echo -e "Build archive directory contains entire working directory."
-      else
-        echo -e "Copying working dir into build archive directory: ${ARCHIVE_DIR} "
-        mkdir -p ${ARCHIVE_DIR}
-        find . -mindepth 1 -maxdepth 1 -not -path "./$ARCHIVE_DIR" -exec cp -R '{}' "${ARCHIVE_DIR}/" ';'
-      fi
-
-      # Persist env variables into a properties file (build.properties) so that all pipeline stages consuming this
-      # build as input and configured with an environment properties file valued 'build.properties'
-      # will be able to reuse the env variables in their job shell scripts.
-
-      # If already defined build.properties from prior build job, append to it.
-      cp build.properties $ARCHIVE_DIR/ || :
-
-      # IMAGE information from build.properties is used in Helm Chart deployment to set the release name
-      echo "IMAGE_NAME=${IMAGE_NAME}" >> $ARCHIVE_DIR/build.properties
-      echo "IMAGE_TAG=${IMAGE_TAG}" >> $ARCHIVE_DIR/build.properties
-      # REGISTRY information from build.properties is used in Helm Chart deployment to generate cluster secret
-      echo "REGISTRY_URL=${REGISTRY_URL}" >> $ARCHIVE_DIR/build.properties
-      echo "REGISTRY_NAMESPACE=${REGISTRY_NAMESPACE}" >> $ARCHIVE_DIR/build.properties
-      echo "GIT_BRANCH=${GIT_BRANCH}" >> $ARCHIVE_DIR/build.properties
-      echo "File 'build.properties' created for passing env variables to subsequent pipeline jobs:"
-      cat $ARCHIVE_DIR/build.properties
+      # This script does build a Docker image into IBM Container Service private image registry.
+      # Minting image tag using format: BUILD_NUMBER-BRANCH-COMMIT_ID-TIMESTAMP
+      # Also copies information into a build.properties file, so they can be reused later on by other scripts (e.g. image url, chart name, ...)
+      source <(curl -sSL "https://raw.githubusercontent.com/open-toolchain/commons/master/scripts/build_image.sh")
   - name: Check vulnerabilities
     type: tester
     test_type: vulnerabilityadvisor
@@ -313,59 +154,8 @@ stages:
       #    source <(curl -sSL "https://raw.githubusercontent.com/open-toolchain/commons/master/scripts/check_vulnerabilities.sh")
       # ------------------
       # source: https://raw.githubusercontent.com/open-toolchain/commons/master/scripts/check_vulnerabilities.sh
-      # Input env variables (can be received via a pipeline environment properties.file.
-
-      # View build properties
-      if [ -f build.properties ]; then 
-        echo "build.properties:"
-        cat build.properties
-      else 
-        echo "build.properties : not found"
-      fi 
-
-      # If running after build_image.sh in same stage, reuse the exported variable PIPELINE_IMAGE_URL
-      if [ -z "${PIPELINE_IMAGE_URL}" ]; then
-        PIPELINE_IMAGE_URL=${REGISTRY_URL}/${REGISTRY_NAMESPACE}/${IMAGE_NAME}:${IMAGE_TAG}
-      else
-        # extract from img url
-        REGISTRY_URL=$(echo ${PIPELINE_IMAGE_URL} | cut -f1 -d/)
-        REGISTRY_NAMESPACE=$(echo ${PIPELINE_IMAGE_URL} | cut -f2 -d/)
-        IMAGE_NAME=$(echo ${PIPELINE_IMAGE_URL} | cut -f3 -d/ | cut -f1 -d:)
-        IMAGE_TAG=$(echo ${PIPELINE_IMAGE_URL} | cut -f3 -d/ | cut -f2 -d:)
-      fi
-      echo "PIPELINE_IMAGE_URL=${PIPELINE_IMAGE_URL}"
-      echo "REGISTRY_URL=${REGISTRY_URL}"
-      echo "REGISTRY_NAMESPACE=${REGISTRY_NAMESPACE}"
-      echo "IMAGE_NAME=${IMAGE_NAME}"
-      echo "IMAGE_TAG=${IMAGE_TAG}"
-
-      # also run 'env' command to find all available env variables
-      # or learn more about the available environment variables at:
-      # https://cloud.ibm.com/docs/services/ContinuousDelivery/pipeline_deploy_var.html#deliverypipeline_environment
-
-      ibmcloud cr images --restrict ${REGISTRY_NAMESPACE}/${IMAGE_NAME}
-      echo -e "Checking vulnerabilities in image: ${PIPELINE_IMAGE_URL}"
-      for ITER in {1..30}
-      do
-        set +e
-        STATUS=$( ibmcloud cr va -e -o json ${PIPELINE_IMAGE_URL} | jq -r '.[0].status' )
-        set -e
-        # Possible status from Vulnerability Advisor: OK, UNSUPPORTED, INCOMPLETE, UNSCANNED, FAIL, WARN
-        if [[ ${STATUS} != "INCOMPLETE" && ${STATUS} != "UNSCANNED" ]]; then
-          break
-        fi
-        echo -e "${ITER} STATUS ${STATUS} : A vulnerability report was not found for the specified image."
-        echo "Either the image doesn't exist or the scan hasn't completed yet. "
-        echo "Waiting for scan to complete..."
-        sleep 10
-      done
-      set +e
-      ibmcloud cr va -e ${PIPELINE_IMAGE_URL}
-      set -e
-      ibmcloud cr va -e -o json ${PIPELINE_IMAGE_URL} > vulnerability_advisor.json
-      ibmcloud doi publishtestrecord --logicalappname "${IMAGE_NAME}" --buildnumber "${SOURCE_BUILD_NUMBER}" --filelocation "vulnerability_advisor.json" --type vulnerabilityadvisor
-      STATUS=$( cat vulnerability_advisor.json | jq -r '.[0].status' )
-      [[ ${STATUS} == "OK" ]] || [[ ${STATUS} == "UNSUPPORTED" ]] || [[ ${STATUS} == "WARN" ]] || { echo "ERROR: The vulnerability scan was not successful, check the OUTPUT of the command and try again."; exit 1; }
+      # Check for vulnerabilities of built image using Vulnerability Advisor
+      source <(curl -sSL "https://raw.githubusercontent.com/open-toolchain/commons/master/scripts/check_vulnerabilities.sh")
 - name: DEPLOY
   inputs:
   - type: job
@@ -593,16 +383,13 @@ stages:
       echo "REGISTRY_NAMESPACE=${REGISTRY_NAMESPACE}"
       echo "DEPLOYMENT_FILE=${DEPLOYMENT_FILE}"
       echo "SOURCE_BUILD_NUMBER=${SOURCE_BUILD_NUMBER}"
-
       #View build properties
       # cat build.properties
       # also run 'env' command to find all available env variables
       # or learn more about the available environment variables at:
       # https://cloud.ibm.com/docs/services/ContinuousDelivery/pipeline_deploy_var.html#deliverypipeline_environment
-
       # Input env variables from pipeline job
       echo "PIPELINE_KUBERNETES_CLUSTER_NAME=${PIPELINE_KUBERNETES_CLUSTER_NAME}"
-
       echo "=========================================================="
       echo "UPDATING manifest with image information"
       IMAGE_REPOSITORY=${REGISTRY_URL}/${REGISTRY_NAMESPACE}/${IMAGE_NAME}
@@ -612,30 +399,25 @@ stages:
       cat $DEPLOYMENT_FILE | yq r - -j | jq --arg i ${REGISTRY_URL}/${REGISTRY_NAMESPACE}/${IMAGE_NAME}:${IMAGE_TAG} '.spec.template.spec.containers[0].image = $i ' | yq r - > ${NEW_DEPLOYMENT_FILE}
       DEPLOYMENT_FILE=${NEW_DEPLOYMENT_FILE} # use modified file
       cat ${DEPLOYMENT_FILE}
-
       echo "=========================================================="
       echo "DEPLOYING using manifest"
       set -x
       kubectl apply --namespace ${CLUSTER_NAMESPACE} -f ${DEPLOYMENT_FILE} 
       set +x
-
       # Record deploy information
       ibmcloud doi publishdeployrecord --env ${PIPELINE_KUBERNETES_CLUSTER_NAME}:${CLUSTER_NAMESPACE} \
         --buildnumber ${SOURCE_BUILD_NUMBER} --logicalappname ${IMAGE_NAME} --status pass
-
       # Extract name from actual Kube deployment resource owning the deployed container image 
       DEPLOYMENT_NAME=$(kubectl get deploy --namespace ${CLUSTER_NAMESPACE} -o json | jq -r '.items[] | select(.spec.template.spec.containers[]?.image=="'"${IMAGE_REPOSITORY}:${IMAGE_TAG}"'") | .metadata.name' )
       echo -e "CHECKING deployment rollout of ${DEPLOYMENT_NAME}"
       echo ""
       kubectl rollout status deploy/${DEPLOYMENT_NAME} --watch=true --namespace ${CLUSTER_NAMESPACE}
-
       # Extract app name from actual Kube pod 
       echo "=========================================================="
       APP_NAME=$(kubectl get pods --namespace ${CLUSTER_NAMESPACE} -o json | jq -r '[ .items[] | select(.spec.containers[]?.image=="'"${IMAGE_REPOSITORY}:${IMAGE_TAG}"'") | .metadata.labels.app] [1]')
       echo -e "APP: ${APP_NAME}"
       echo "DEPLOYED PODS:"
       kubectl describe pods --selector app=${APP_NAME} --namespace ${CLUSTER_NAMESPACE}
-
       # lookup service for current release
       APP_SERVICE=$(kubectl get services --namespace ${CLUSTER_NAMESPACE} -o json | jq -r ' .items[] | select (.spec.selector.release=="'"${RELEASE_NAME}"'") | .metadata.name ')
       if [ -z "${APP_SERVICE}" ]; then
@@ -647,7 +429,6 @@ stages:
         echo "DEPLOYED SERVICES:"
         kubectl describe services ${APP_SERVICE} --namespace ${CLUSTER_NAMESPACE}
       fi
-
       echo ""
       echo "=========================================================="
       echo "DEPLOYMENT SUCCEEDED"
@@ -690,45 +471,9 @@ stages:
       # ------------------
       # source: https://raw.githubusercontent.com/open-toolchain/commons/master/scripts/check_health.sh
       # Check liveness and readiness probes to confirm application is healthy
-      # Input env variables (can be received via a pipeline environment properties.file.
-      echo "IMAGE_NAME=${IMAGE_NAME}"
-      echo "IMAGE_TAG=${IMAGE_TAG}"
-      echo "REGISTRY_URL=${REGISTRY_URL}"
-      echo "REGISTRY_NAMESPACE=${REGISTRY_NAMESPACE}"
-      echo "CLUSTER_NAMESPACE=${CLUSTER_NAMESPACE}"
-      echo "APP_URL=${APP_URL}"
-      IMAGE_REPOSITORY=${REGISTRY_URL}/${REGISTRY_NAMESPACE}/${IMAGE_NAME}
-      CONTAINERS_JSON=$(kubectl get deployments --namespace ${CLUSTER_NAMESPACE} -o json | jq -r ".items[].spec.template.spec.containers[]? | select(.image==\"${IMAGE_REPOSITORY}:${IMAGE_TAG}\") ")
-      echo $CONTAINERS_JSON | jq .
 
-      LIVENESS_PROBE_PATH=$(echo $CONTAINERS_JSON | jq -r ".livenessProbe.httpGet.path" | head -n 1)
-      echo ".$LIVENESS_PROBE_PATH."
-      # LIVENESS_PROBE_PORT=$(echo $CONTAINERS_JSON | jq -r ".livenessProbe.httpGet.port" | head -n 1)
-      if [ ${LIVENESS_PROBE_PATH} != null ]; then
-        LIVENESS_PROBE_URL=${APP_URL}${LIVENESS_PROBE_PATH}
-        if [ "$(curl -Is ${LIVENESS_PROBE_URL} --connect-timeout 3 --max-time 5 --retry 2 --retry-max-time 30 | head -n 1 | grep 200)" != "" ]; then
-          echo "Successfully reached liveness probe endpoint: ${LIVENESS_PROBE_URL}"
-          echo "====================================================================="
-        else
-          echo "Could not reach liveness probe endpoint: ${LIVENESS_PROBE_URL}"
-          exit 1;
-        fi
-      else
-        echo "No liveness probe endpoint defined (should be specified in deployment resource)."
-      fi
+      source <(curl -sSL "https://raw.githubusercontent.com/open-toolchain/commons/master/scripts/check_health.sh")
 
-      READINESS_PROBE_PATH=$(echo $CONTAINERS_JSON | jq -r ".readinessProbe.httpGet.path" | head -n 1)
-      echo ".$READINESS_PROBE_PATH."
-      # READINESS_PROBE_PORT=$(echo $CONTAINERS_JSON | jq -r ".readinessProbe.httpGet.port" | head -n 1)
-      if [ ${READINESS_PROBE_PATH} != null ]; then
-        READINESS_PROBE_URL=${APP_URL}${READINESS_PROBE_PATH}
-        if [ "$(curl -Is ${READINESS_PROBE_URL} --connect-timeout 3 --max-time 5 --retry 2 --retry-max-time 30 | head -n 1 | grep 200)" != "" ]; then
-          echo "Successfully reached readiness probe endpoint: ${READINESS_PROBE_URL}"
-          echo "====================================================================="
-        else
-          echo "Could not reach readiness probe endpoint: ${READINESS_PROBE_URL}"
-          exit 1;
-        fi
-      else
-        echo "No readiness probe endpoint defined (should be specified in deployment resource)."
-      fi
+
+
+
