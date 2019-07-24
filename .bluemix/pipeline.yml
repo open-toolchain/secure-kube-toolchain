@@ -36,10 +36,13 @@ stages:
       echo "SOURCE_BUILD_NUMBER=${BUILD_NUMBER}" >> $ARCHIVE_DIR/build.properties
       cat $ARCHIVE_DIR/build.properties
 
-      # Record build information
-      ibmcloud login --apikey ${IBM_CLOUD_API_KEY} --no-region
-      ibmcloud doi publishbuildrecord --branch ${GIT_BRANCH} --repositoryurl ${GIT_URL} --commitid ${GIT_COMMIT} \
-        --buildnumber ${BUILD_NUMBER} --logicalappname ${IMAGE_NAME} --status pass
+      # check if doi is integrated in this toolchain
+      if jq -e '.services[] | select(.service_id=="draservicebroker")' _toolchain.json; then
+        # Record build information
+        ibmcloud login --apikey ${IBM_CLOUD_API_KEY} --no-region
+        ibmcloud doi publishbuildrecord --branch ${GIT_BRANCH} --repositoryurl ${GIT_URL} --commitid ${GIT_COMMIT} \
+          --buildnumber ${BUILD_NUMBER} --logicalappname ${IMAGE_NAME} --status pass
+      fi
   - name: Unit Tests
     type: tester
     script: |-
@@ -47,14 +50,15 @@ stages:
       # set -x
       if [ -f ./tests/run-tests.sh ]; then
         source ./tests/run-tests.sh
-        
         RESULT=$?
         if [ ! -z "${FILE_LOCATION}"]; then
           if [ ${RESULT} -ne 0 ]; then STATUS=fail; else STATUS=pass; fi
-          ibmcloud login --apikey ${IBM_CLOUD_API_KEY} --no-region
-          ibmcloud doi publishtestrecord --type unittest --buildnumber ${BUILD_NUMBER} --filelocation ${FILE_LOCATION} \
-            --buildnumber ${BUILD_NUMBER} --logicalappname ${IMAGE_NAME} --status ${STATUS}
-          exit $exit_result
+            if jq -e '.services[] | select(.service_id=="draservicebroker")' _toolchain.json; then
+              ibmcloud login --apikey ${IBM_CLOUD_API_KEY} --no-region
+              ibmcloud doi publishtestrecord --type unittest --buildnumber ${BUILD_NUMBER} --filelocation ${FILE_LOCATION} \
+                --buildnumber ${BUILD_NUMBER} --logicalappname ${IMAGE_NAME} --status ${STATUS}
+            fi
+          exit $RESULT
         fi
       else
         echo "Test runner script not found: ./tests/run-tests.sh"
@@ -220,5 +224,4 @@ stages:
       # ------------------
       # source: https://raw.githubusercontent.com/open-toolchain/commons/master/scripts/check_health.sh
       # Check liveness and readiness probes to confirm application is healthy
-
       source <(curl -sSL "https://raw.githubusercontent.com/open-toolchain/commons/master/scripts/check_health.sh")
