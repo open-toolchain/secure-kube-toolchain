@@ -97,7 +97,7 @@
     "required": ["app-name", "api-key", "registry-region", "registry-namespace", "prod-region", "prod-resource-group", "prod-cluster-name", "prod-cluster-namespace"],
     "form": [{
             "type": "validator",
-            "url": "/devops/setup/bm-helper/validator-v1.html"
+            "url": "/devops/validator/validator-v1.html"
         }, {
             "type": "text",
             "readonly": false,
