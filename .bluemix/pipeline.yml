@@ -98,7 +98,7 @@ stages:
       # source: https://raw.githubusercontent.com/open-toolchain/commons/master/scripts/check_dockerfile.sh
 
       # This script lints Dockerfile.
-      source <(curl -sSL "https://raw.githubusercontent.com/open-toolchain/commons/roadmap-9921/scripts/check_dockerfile.sh")
+      source <(curl -sSL "https://raw.githubusercontent.com/open-toolchain/commons/master/scripts/check_dockerfile.sh")
   - name: Check registry
     type: builder
     build_type: cr
@@ -120,7 +120,7 @@ stages:
       # source: https://raw.githubusercontent.com/open-toolchain/commons/master/scripts/check_registry.sh
 
       # This script checks presence of registry namespace.
-      source <(curl -sSL "https://raw.githubusercontent.com/open-toolchain/commons/roadmap-9921/scripts/check_registry.sh")
+      source <(curl -sSL "https://raw.githubusercontent.com/open-toolchain/commons/master/scripts/check_registry.sh")
   - name: Build container image
     type: builder
     build_type: cr
@@ -205,7 +205,7 @@ stages:
 
       # This script checks the IBM Container Service cluster is ready, has a namespace configured with access to the private
       # image registry (using an IBM Cloud API Key), perform a kubectl deploy of container image and check on outcome.
-      source <(curl -sSL "https://raw.githubusercontent.com/open-toolchain/commons/roadmap-9921/scripts/check_and_deploy_kubectl.sh")
+      source <(curl -sSL "https://raw.githubusercontent.com/open-toolchain/commons/master/scripts/check_and_deploy_kubectl.sh")
   - name: Check health
     type: deployer
     target:
