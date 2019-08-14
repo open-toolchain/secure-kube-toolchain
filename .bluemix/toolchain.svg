@@ -127,11 +127,11 @@
 <text id="headerSVG.run" transform="matrix(1 0 0 1 267 19.4998)" class="st14 st15">RUN</text>
 <text id="headerSVG.issueTracker" transform="matrix(1 0 0 1 1.0801 124.4998)" class="st14 st15">ISSUE TRACKER</text>
 
-<text id="headerSVG.repository" transform="matrix(1 0 0 1 102.2417 124.4998)" class="st14 st15">REPOSITORY</text>
+<text id="headerSVG.repository" transform="matrix(1 0 0 1 110.2417 124.4998)" class="st14 st15">REPOSITORY</text>
 
 <text id="headerSVG.pipeline" transform="matrix(1 0 0 1 196.8687 124.4998)" class="st14 st15">PIPELINE</text>
 <text id="headerSVG.ibmCloud" transform="matrix(1 0 0 1 284.3115 124.4998)" class="st14 st15">IBM Cloud</text>
-<text id="headerSVG.webIde" transform="matrix(1 0 0 1 108.9717 238.0994)" class="st14 st15">WEB IDE</text>
+<text id="headerSVG.webIde" transform="matrix(1 0 0 1 110.9717 238.0994)" class="st14 st15">WEB IDE</text>
 <text id="headerSVG.kubernetes" transform="matrix(1 0 0 1 281.2422 138.0994)" class="st14 st15">Kubernetes</text>
 <text id="headerSVG.cluster" transform="matrix(1 0 0 1 292.5508 150.0994)" class="st14 st15">Cluster</text>
 <circle id="svg_7_1_" class="st1" cx="309.1" cy="86.5" r="26.5"/>
@@ -367,4 +367,28 @@
 	<line id="line-12_1_" class="st0" x1="133.9" y1="104.9" x2="133.8" y2="104.9"/>
 	<line id="line-13_1_" class="st0" x1="135.8" y1="104.7" x2="135.7" y2="104.7"/>
 </g>
+<g id="bitbucket_icon1" display="none">
+    <text transform="matrix(1 0 0 1 25 137.4998)" class="st14 st15">Bitbucket</text>
+	<path d="M57.9,79.4v-2.4h-1.1h-1.1v-1.2v-1.2h-1.1H33h-1.1v1.2v1.2h-1.1h-1.1v2.4h-2.2v19.5h32.6V79.4H57.9z M33,75.8h21.6v1.2H33
+		V75.8z M59,97.8H28.7V80.7h1.1h28.1H59V97.8z"/>
+	<polygon points="47.1,89.2 40.6,89.2 40.6,87.9 39.5,87.9 39.5,89.2 39.5,90.4 40.6,90.4 47.1,90.4 48.2,90.4 48.2,89.2 48.2,87.9 
+		47.1,87.9 	"/>
+</g>
+<g id="bitbucket_icon2" display="none">
+    <text transform="matrix(1 0 0 1 119 137.4998)" class="st14 st15">Bitbucket</text>
+	<path d="M145.6,78.7v-2.4h-1.1h-1.1v-1.2v-1.2h-1.1h-21.6h-1.1v1.2v1.2h-1.1h-1.1v2.4h-2.2v19.5h32.4V78.7H145.6z M120.7,74.9h21.6
+		v1.2h-21.6C120.8,76.1,120.8,74.9,120.7,74.9z M146.6,96.9h-30.3V79.8h1.1h28.2h1.1v17.1H146.6z"/>
+	<polygon points="134.8,88.4 128.4,88.4 128.4,87.1 127.2,87.1 127.2,88.4 127.2,89.7 128.4,89.7 134.8,89.7 135.9,89.7 135.9,88.4 
+		135.9,87.1 134.8,87.1 	"/>
+</g>
+<g id="gitlab_icon1" display="none">
+    <text transform="matrix(1 0 0 1 25 137.4998)" class="st14 st15">GitLab</text>
+	<path d="M30.2,97.3l3.8,4.2l16-17.8l-3.8-4.2L30.2,97.3z M34,100l-2.4-2.7l14.7-16.3l2.4,2.7L34,100z"/>
+	<polygon points="57.5,81.6 55.6,81.6 55.6,79.5 49,72.1 41.5,72.1 51.8,83.7 53.7,83.7 53.7,85.8 54.6,86.8 58.4,82.6 	"/>
+</g>
+<g id="gitlab_icon2" display="none">
+    <text transform="matrix(1 0 0 1 119 137.4998)" class="st14 st15">GitLab</text>
+	<path d="M116.3,96.5l3.8,4.2l16-17.8l-3.8-4.2L116.3,96.5z M120.1,99.2l-2.4-2.7l14.7-16.3l2.4,2.7L120.1,99.2z"/>
+	<polygon points="143.6,80.8 141.7,80.8 141.7,78.7 135.1,71.4 127.6,71.4 137.9,82.9 139.8,82.9 139.8,85 140.7,86 144.5,81.8 	"/>
+</g>	
 </svg>

@@ -26,7 +26,8 @@ toolchain:
       $ref: "#/messages/template.gettingStarted"
 services:
   repo:
-    service_id: $env.source_provider ? $env.source_provider:'hostedgit'
+    service_id: >
+      $env.source_provider ? $env.source_provider : 'hostedgit'
     parameters:
       repo_name: 'hello-containers-{{timestamp}}'
       repo_url: >
@@ -38,7 +39,6 @@ services:
       type: $env.type || 'clone'
       has_issues: true
       enable_traceability: true
-      private_repo: false
   build:
     service_id: pipeline
     parameters:
@@ -51,7 +51,7 @@ services:
           $text: pipeline.yml
         env:
           GIT_REPO: repo
-          CF_APP_NAME: '{{form.pipeline.parameters.app-name}}'
+          APP_NAME: '{{form.pipeline.parameters.app-name}}'
           REGISTRY_REGION_ID: '{{form.pipeline.parameters.registry-region}}'
           REGISTRY_NAMESPACE: '{{form.pipeline.parameters.registry-namespace}}'
           API_KEY: '{{form.pipeline.parameters.api-key}}'
