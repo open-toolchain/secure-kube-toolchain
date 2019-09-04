@@ -12,6 +12,7 @@ stages:
     service: ${GIT_REPO}    
   triggers:
   - type: commit
+    events: push pull_request pull_request_closed
   properties:
   - name: IMAGE_NAME
     value: ${APP_NAME}
