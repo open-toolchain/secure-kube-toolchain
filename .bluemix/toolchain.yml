@@ -62,6 +62,8 @@ services:
         execute: true
   webide:
     service_id: orion
+  privateWorker:
+    service_id: private-worker
 form:
   pipeline:
     parameters:
