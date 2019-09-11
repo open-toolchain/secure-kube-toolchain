@@ -63,7 +63,7 @@ services:
   webide:
     service_id: orion
   privateWorker:
-    service_id: private-worker
+    service_id: private_worker
 form:
   pipeline:
     parameters:
