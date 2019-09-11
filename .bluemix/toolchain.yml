@@ -64,6 +64,8 @@ services:
     service_id: orion
   privateWorker:
     service_id: private_worker
+    parameters:
+      name: 'Foo'
 form:
   pipeline:
     parameters:
