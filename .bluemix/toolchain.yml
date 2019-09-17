@@ -26,8 +26,7 @@ toolchain:
       $ref: "#/messages/template.gettingStarted"
 services:
   private-worker:
-    service_id: > 
-      private_worker
+    service_id: private_worker
     parameters:
       name: 'tekton_worker'  
   repo:
