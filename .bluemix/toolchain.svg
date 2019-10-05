@@ -382,12 +382,12 @@
 		135.9,87.1 134.8,87.1 	"/>
 </g>
 <g id="gitlab_icon1" display="none">
-    <text id="headerSVG.gitlab1" transform="matrix(1 0 0 1 25 137.4998)" class="st14 st15">GitLab</text>
+    <text id="headerSVG.gitlab3" transform="matrix(1 0 0 1 25 137.4998)" class="st14 st15">GitLab</text>
 	<path d="M30.2,97.3l3.8,4.2l16-17.8l-3.8-4.2L30.2,97.3z M34,100l-2.4-2.7l14.7-16.3l2.4,2.7L34,100z"/>
 	<polygon points="57.5,81.6 55.6,81.6 55.6,79.5 49,72.1 41.5,72.1 51.8,83.7 53.7,83.7 53.7,85.8 54.6,86.8 58.4,82.6 	"/>
 </g>
 <g id="gitlab_icon2" display="none">
-    <text id="headerSVG.gitlab2" transform="matrix(1 0 0 1 119 137.4998)" class="st14 st15">GitLab</text>
+    <text id="headerSVG.gitlab4" transform="matrix(1 0 0 1 119 137.4998)" class="st14 st15">GitLab</text>
 	<path d="M116.3,96.5l3.8,4.2l16-17.8l-3.8-4.2L116.3,96.5z M120.1,99.2l-2.4-2.7l14.7-16.3l2.4,2.7L120.1,99.2z"/>
 	<polygon points="143.6,80.8 141.7,80.8 141.7,78.7 135.1,71.4 127.6,71.4 137.9,82.9 139.8,82.9 139.8,85 140.7,86 144.5,81.8 	"/>
 </g>	
