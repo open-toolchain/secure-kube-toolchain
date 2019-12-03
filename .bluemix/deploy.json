@@ -60,7 +60,7 @@
         },
         "prod-resource-group": {
             "description": {
-                "$ref": "#/messages/rg"
+                "$ref": "#/messages/deploy.rg"
             },
             "type": "string",
             "validator": {
@@ -70,7 +70,7 @@
         },
         "prod-cluster-name": {
             "description": {
-                "$ref": "#/messages/cluster"
+                "$ref": "#/messages/deploy.cluster"
             },
             "type": "string",
             "pattern": "\\S",
