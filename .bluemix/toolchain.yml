@@ -11,6 +11,7 @@ template:
   required:
     - build
     - repo
+    - sample-vault
   info:
     git url: >
       "[" + $env.repository + "]" +
@@ -62,6 +63,13 @@ services:
         execute: true
   webide:
     service_id: orion
+  sample-vault:
+    service_id: hashicorpvault
+    parameters:
+      name: sample-vault-{{timestamp}}
+      server_url: ""
+      path: ""
+
 form:
   pipeline:
     parameters:
