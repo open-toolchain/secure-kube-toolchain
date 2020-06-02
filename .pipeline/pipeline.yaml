@@ -1,0 +1,133 @@
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: secure-kube-pipeline
+spec:
+  params:
+    - name: repository
+      description: the git repo
+    - name: branch
+      description: the branch for the git repo
+    - name: apikey
+      description: the ibmcloud api key
+    - name: path-to-dockerfile
+      default: '.'
+    - name: pipeline-debug
+      default: "0"
+    - name: cluster-name
+      description: the name of the cluster to target
+    - name: dev-cluster-namespace
+      description: the namespace
+    - name: registry-region
+      description: The IBM Cloud region for image registry
+  resources:
+  - name: app-image
+    type: image
+  - name: target-cluster
+    type: cluster
+  workspaces:
+    - name: pipeline-ws
+  tasks:
+    - name: git-clone
+      taskRef:
+        name: git-clone-repo
+      params:
+        - name: repository
+          value: $(params.repository)
+        - name: branch
+          value: $(params.branch)
+        - name: pipeline-debug
+          value: $(params.pipeline-debug)
+      workspaces:
+        - name: output
+          workspace: pipeline-ws
+    - name: docker-lint
+      runAfter: [git-clone]
+      taskRef:
+        name: docker-check-task
+      workspaces:
+        - name: workspace
+          workspace: pipeline-ws
+    - name: unit-tests
+      runAfter: [docker-lint]
+      taskRef:
+        name: unit-tests-task
+      workspaces:
+        - name: workspace
+          workspace: pipeline-ws
+    - name: containerize
+      runAfter: [unit-tests]
+      taskRef:
+        name: icr-cr-build
+      params:
+        - name: path-to-context
+          value: $(params.path-to-dockerfile)
+        - name: path-to-dockerfile
+          value: $(params.path-to-dockerfile)
+        #- name: additional-tags
+        #  value: 'latest'
+        - name: additional-tags-script
+          value: |
+            # Include the clone task output variables in the environment
+            source /artifacts/build.properties
+            # The script is providing tag(s) as output
+            # But logs can be written as error stderr
+            echo "Providing an image tag including git branch and commit" >&2
+            # Add a specific tag with branch and commit
+            echo "1.0.0-${GIT_BRANCH}-${GIT_COMMIT}"
+            # Add a specific tag with cd build number
+            #echo "1.0.0-${BUILD_NUMBER}"            
+        - name: pipeline-debug
+          value: $(params.pipeline-debug)
+      workspaces:
+        - name: source
+          workspace: pipeline-ws
+      resources:
+        outputs:
+          - name: built-image
+            resource: app-image
+    - name: vulnerability-advisor
+      taskRef:
+        name: icr-check-va-scan
+      params:
+        - name: scan-report-file
+          value: 'app-image-va-report.json'
+        # - name: max-iteration
+        #   value: '5'
+        # - name: sleep-time
+        #   value: '3'
+        # - name: fail-on-scanned-issues
+        #   value: 'false'
+        - name: pipeline-debug
+          value: $(params.pipeline-debug)
+      workspaces:
+        - name: artifacts
+          workspace: pipeline-ws
+      resources:
+        inputs:
+          - name: image
+            resource: app-image
+            from:
+              - containerize
+    - name: deploy-dev
+      taskRef:
+        name: docker-check-task2
+      runAfter: [vulnerability-advisor]
+      params:
+        - name: repository
+          value: $(params.repository)
+        - name: cluster-name
+          value: $(params.cluster-name)
+        - name: cluster-namespace
+          value: $(params.dev-cluster-namespace)
+        - name: cluster-region
+          value: $(params.registry-region)
+        - name: allow-create-route
+          value: "true"
+        - name: pipeline-debug
+          value: $(params.pipeline-debug)
+        - name: ibmcloud-api-key
+          value: $(params.apikey)
+      workspaces:
+        - name: workspace
+          workspace: pipeline-ws
