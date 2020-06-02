@@ -52,10 +52,10 @@ services:
       repo_name: 'secure-kube-toolchain-toolchain-{{timestamp}}'
       repo_url: >
         $env.type === 'link' ?
-          $env.app_repo : 'https://github.com/huayuenh/alt'
+          $env.app_repo : 'https://github.com/open-toolchain/secure-kube-toolchain'
       source_repo_url: >
         $env.type === 'fork' || $env.type === 'clone' ?
-          $env.app_repo : 'https://github.com/huayuenh/alt'
+          $env.app_repo : 'https://github.com/open-toolchain/secure-kube-toolchain'
       type: $env.type || 'link'
       has_issues: false
       enable_traceability: false
