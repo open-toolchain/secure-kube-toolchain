@@ -111,7 +111,7 @@ spec:
               - containerize
     - name: deploy-dev
       taskRef:
-        name: docker-check-task2
+        name: kube-deploy
       runAfter: [vulnerability-advisor]
       params:
         - name: repository

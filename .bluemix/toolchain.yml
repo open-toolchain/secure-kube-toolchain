@@ -67,10 +67,10 @@ services:
       repo_name: 'tekton-catalog-{{timestamp}}'
       repo_url: >
         $env.type === 'link' ?
-          $env.app_repo : 'https://github.com/huayuenh/tekton-catalog'
+          $env.app_repo : 'https://github.com/open-toolcchain/tekton-catalog'
       source_repo_url: >
         $env.type === 'fork' || $env.type === 'clone' ?
-          $env.app_repo : 'https://github.com/huayuenh/tekton-catalog'
+          $env.app_repo : 'https://github.com/open-toolchain/tekton-catalog'
       type: $env.type || 'link'
       has_issues: false
       enable_traceability: false
