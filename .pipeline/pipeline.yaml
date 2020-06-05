@@ -104,6 +104,10 @@ spec:
       taskRef:
         name: icr-check-va-scan
       params:
+        - name: continuous-delivery-context-secret
+          value: "secure-properties"
+        - name: container-registry-apikey-secret-key
+          value: "apikey"
         - name: scan-report-file
           value: 'app-image-va-report.json'
         # - name: max-iteration
