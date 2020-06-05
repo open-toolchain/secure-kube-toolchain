@@ -13,6 +13,14 @@ inputs:
     service: ${TEKTON_CATALOG_REPO}
     path: container-registry
   - type: git
+    service: ${TEKTON_CATALOG_REPO}
+    branch: tkn_v1beta1
+    path: kubernetes-service
+  - type: git
+    service: ${TEKTON_CATALOG_REPO}
+    branch: tkn_v1beta1
+    path: toolchain
+  - type: git
     branch: trialv1
     service: ${TEKTON_CATALOG_REPO}
     path: temp/docker

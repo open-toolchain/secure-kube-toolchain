@@ -1,3 +1,4 @@
+---
 apiVersion: tekton.dev/v1beta1
 kind: Pipeline
 metadata:
@@ -9,7 +10,7 @@ spec:
     - name: branch
       description: the branch for the git repo
     - name: revision
-      description: the git revision/commit for the git repo (default to '' means branch)
+      description: the git revision/commit for the git repo
       default: ""
     - name: apikey
       description: the ibmcloud api key
@@ -82,7 +83,7 @@ spec:
           value: $(params.path-to-dockerfile)
         - name: path-to-dockerfile
           value: $(params.path-to-dockerfile)
-        #- name: additional-tags
+        # - name: additional-tags
         #  value: 'latest'
         - name: additional-tags-script
           value: |
@@ -94,7 +95,7 @@ spec:
             # Add a specific tag with branch and commit
             echo "1.0.0-${GIT_BRANCH}-${GIT_COMMIT}"
             # Add a specific tag with cd build number
-            #echo "1.0.0-${BUILD_NUMBER}"            
+            #echo "1.0.0-${BUILD_NUMBER}"
         - name: pipeline-debug
           value: $(params.pipeline-debug)
       workspaces:
@@ -125,6 +126,20 @@ spec:
       workspaces:
         - name: artifacts
           workspace: pipeline-ws
+    - name: fetch-cluster-config-task
+      runAfter: [unit-tests]
+      taskRef:
+        name: iks-fetch-config
+      params:
+        - name: continuous-delivery-context-secret
+          value: "secure-properties"
+        - name: kubernetes-service-apikey-secret-key
+          value: "apikey"
+        - name: cluster-name
+          value: $(params.cluster-name)
+      workspaces:
+        - name: cluster-configuration
+          workspace: pipeline-ws
     - name: deploy-dev
       taskRef:
         name: kube-deploy
@@ -147,3 +162,18 @@ spec:
       workspaces:
         - name: workspace
           workspace: pipeline-ws
+    - name: publish-deployable-task
+      runAfter: [fetch-cluster-config-task, deploy-dev]
+      taskRef:
+        name: toolchain-publish-deployable-mapping
+      params:
+        - name: deployable-type
+          value: "kubernetes_cluster"
+        - name: deployable-region-id
+          value: $(tasks.fetch-cluster-config-task.results.region)
+        - name: deployable-guid
+          value: $(tasks.fetch-cluster-config-task.results.cluster-id)
+        - name: deployable-rg-id
+          value: $(tasks.fetch-cluster-config-task.results.resource-group-id)
+        - name: pipeline-debug
+          value: $(params.pipeline-debug)

@@ -1,3 +1,4 @@
+---
 apiVersion: tekton.dev/v1beta1
 kind: TriggerTemplate
 metadata:
@@ -9,7 +10,7 @@ spec:
     - name: branch
       description: the branch for the git repo
     - name: revision
-      description: the git revision/commit for the git repo (default to '' means branch)
+      description: the git revision/commit for the git repo
       default: ""
     - name: apikey
       description: the ibmcloud api key
@@ -20,7 +21,7 @@ spec:
     - name: image-name
       description: image name
     - name: path-to-dockerfile
-      default: '.'
+      default: "."
     - name: pipeline-debug
       default: "0"
     - name: cluster-name
@@ -35,7 +36,7 @@ spec:
       spec:
         resources:
           requests:
-            storage:  5Gi
+            storage: 5Gi
         volumeMode: Filesystem
         accessModes:
           - ReadWriteOnce
@@ -70,9 +71,9 @@ spec:
           - name: pipeline-debug
             value: $(params.pipeline-debug)
         workspaces:
-        - name: pipeline-ws
-          persistentVolumeClaim:
-            claimName: secure-kube-$(uid)-pvc
+          - name: pipeline-ws
+            persistentVolumeClaim:
+              claimName: secure-kube-$(uid)-pvc
 ---
 apiVersion: tekton.dev/v1beta1
 kind: TriggerBinding

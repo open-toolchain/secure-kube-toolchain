@@ -18,7 +18,7 @@ template:
         "(" + $env.repository + ")"
     git branch: >
       "[" + $env.branch + "]" +
-        "(" + $env.repository 
+        "(" + $env.repository +
           "/tree/" + $env.branch + ")"
 toolchain:
   name: "kube-toolchain-{{timestamp}}"
@@ -36,10 +36,10 @@ services:
     parameters:
       repo_name: "hello-containers-{{timestamp}}"
       repo_url: >
-        $env.type === 'link' ? 
+        $env.type === 'link' ?
           $env.app_repo : 'https://github.com/open-toolchain/hello-containers'
       source_repo_url: >
-        $env.type === 'fork' || $env.type === 'clone' ? 
+        $env.type === 'fork' || $env.type === 'clone' ?
           $env.app_repo : 'https://github.com/open-toolchain/hello-containers'
       type: $env.type || 'clone'
       has_issues: true
