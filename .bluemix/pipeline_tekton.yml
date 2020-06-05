@@ -50,6 +50,9 @@ triggers:
     branch: master
     events: { "push": true }
 properties:
+  - type: secure
+    name: toolchain-apikey
+    value: ${API_KEY}
   - name: apikey
     value: ${API_KEY}
     type: SECURE
