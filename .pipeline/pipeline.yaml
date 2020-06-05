@@ -20,11 +20,8 @@ spec:
       description: the namespace
     - name: registry-region
       description: The IBM Cloud region for image registry
-  resources:
-  - name: app-image
-    type: image
-  - name: target-cluster
-    type: cluster
+    - name: image-url
+      description: the url of the image to build
   workspaces:
     - name: pipeline-ws
   tasks:
@@ -79,13 +76,11 @@ spec:
             #echo "1.0.0-${BUILD_NUMBER}"            
         - name: pipeline-debug
           value: $(params.pipeline-debug)
+        - name: image-url
+          value: $(params.image-url)
       workspaces:
         - name: source
           workspace: pipeline-ws
-      resources:
-        outputs:
-          - name: built-image
-            resource: app-image
     - name: vulnerability-advisor
       taskRef:
         name: icr-check-va-scan
@@ -100,15 +95,13 @@ spec:
         #   value: 'false'
         - name: pipeline-debug
           value: $(params.pipeline-debug)
+        - name: image-url
+          value: $(tasks.containerize.results.image-repository)
+        - name: image-digest
+          value: $(tasks.containerize.results.image-digest)
       workspaces:
         - name: artifacts
           workspace: pipeline-ws
-      resources:
-        inputs:
-          - name: image
-            resource: app-image
-            from:
-              - containerize
     - name: deploy-dev
       taskRef:
         name: kube-deploy
