@@ -1,17 +1,24 @@
 apiVersion: tekton.dev/v1beta1
 kind: TriggerTemplate
 metadata:
-  name: trigger-template-container-registry
+  name: trigger-template-secure-kube
 spec:
   params:
     - name: repository
       description: The git repo
     - name: branch
       description: the branch for the git repo
+    - name: revision
+      description: the git revision/commit for the git repo (default to '' means branch)
+      default: ""
     - name: apikey
       description: the ibmcloud api key
-    - name: image-url
-      description: The image url in your container registry
+    - name: registry-region
+      description: The IBM Cloud region for image registry
+    - name: registry-namespace
+      description: container registry namespace
+    - name: image-name
+      description: image name
     - name: path-to-dockerfile
       default: '.'
     - name: pipeline-debug
@@ -20,22 +27,11 @@ spec:
       description: the name of the cluster to target
     - name: dev-cluster-namespace
       description: namespace dev
-    - name: registry-region
-      description: The IBM Cloud region for image registry
   resourcetemplates:
-    # CD secret to provide API_KEY to access toolchain information
-    - apiVersion: v1
-      kind: Secret
-      metadata:
-        name: cd-secret
-      type: Opaque
-      stringData:
-        API_KEY: $(params.apikey)
-    # PVC definition like pre-tekton-0.10.1
     - apiVersion: v1
       kind: PersistentVolumeClaim
       metadata:
-        name: containerize-$(uid)-pvc
+        name: secure-kube-$(uid)-pvc
       spec:
         resources:
           requests:
@@ -46,7 +42,7 @@ spec:
     - apiVersion: tekton.dev/v1beta1
       kind: PipelineRun
       metadata:
-        name: containerize-$(uid)
+        name: secure-kube-$(uid)
       spec:
         pipelineRef:
           name: secure-kube-pipeline
@@ -55,41 +51,119 @@ spec:
             value: $(params.repository)
           - name: branch
             value: $(params.branch)
+          - name: revision
+            value: $(params.revision)
+          - name: registry-region
+            value: $(params.registry-region)
+          - name: registry-namespace
+            value: $(params.registry-namespace)
+          - name: image-name
+            value: $(params.image-name)
           - name: path-to-dockerfile
             value: $(params.path-to-dockerfile)
-          - name: pipeline-debug
-            value: $(params.pipeline-debug)
+          - name: apikey
+            value: $(params.apikey)
           - name: cluster-name
             value: $(params.cluster-name)
           - name: dev-cluster-namespace
             value: $(params.dev-cluster-namespace)
-          - name: registry-region
-            value: $(params.registry-region)
-          - name: apikey
-            value: $(params.apikey)
-          - name: image-url
-            value: $(params.image-url)
+          - name: pipeline-debug
+            value: $(params.pipeline-debug)
         workspaces:
         - name: pipeline-ws
           persistentVolumeClaim:
-            claimName: containerize-$(uid)-pvc
+            claimName: secure-kube-$(uid)-pvc
 ---
 apiVersion: tekton.dev/v1beta1
 kind: TriggerBinding
 metadata:
-  name: trigger-binding-container-registry
+  name: trigger-binding-manual
 spec:
   params:
+    - name: repository
+      value: "$params.repository"
     - name: branch
-      value: "master"
+      value: "$params.branch"
 ---
 apiVersion: tekton.dev/v1beta1
 kind: EventListener
 metadata:
-  name: listener
+  name: manual-run
 spec:
   triggers:
     - binding:
-        name: trigger-binding-container-registry
+        name: trigger-binding-manual
       template:
-        name: trigger-template-container-registry
+        name: trigger-template-secure-kube
+---
+apiVersion: tekton.dev/v1beta1
+kind: TriggerBinding
+metadata:
+  name: github-commit
+spec:
+  params:
+    - name: repository
+      value: "$(event.repository.url)"
+    - name: branch
+      value: "$(event.ref)"
+    - name: revision
+      value: "$(event.head_commit.id)"
+---
+apiVersion: tekton.dev/v1beta1
+kind: EventListener
+metadata:
+  name: github-commit
+spec:
+  triggers:
+    - binding:
+        name: github-commit
+      template:
+        name: trigger-template-secure-kube
+---
+apiVersion: tekton.dev/v1beta1
+kind: TriggerBinding
+metadata:
+  name: grit-or-gitlab-commit
+spec:
+  params:
+    - name: repository
+      value: "$(event.repository.git_http_url)"
+    - name: branch
+      value: "$(event.ref)"
+    - name: revision
+      value: "$(event.checkout_sha)"
+---
+apiVersion: tekton.dev/v1beta1
+kind: EventListener
+metadata:
+  name: grit-or-gitlab-commit
+spec:
+  triggers:
+    - binding:
+        name: grit-or-gitlab-commit
+      template:
+        name: trigger-template-secure-kube
+---
+apiVersion: tekton.dev/v1beta1
+kind: TriggerBinding
+metadata:
+  name: bitbucket-commit
+spec:
+  params:
+    - name: repository
+      value: "$(event.repository.links.html.href)"
+    - name: revision
+      value: "$(event.push.changes[0].new.target.hash)"
+    - name: branch
+      value: "$(event.push.changes[0].new.name)"
+---
+apiVersion: tekton.dev/v1beta1
+kind: EventListener
+metadata:
+  name: bitbucket-commit
+spec:
+  triggers:
+    - binding:
+        name: bitbucket-commit
+      template:
+        name: trigger-template-secure-kube
