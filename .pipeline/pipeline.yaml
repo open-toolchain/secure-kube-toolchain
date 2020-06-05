@@ -68,6 +68,10 @@ spec:
       taskRef:
         name: icr-cr-build
       params:
+        - name: continuous-delivery-context-secret
+          value: "secure-properties"
+        - name: container-registry-apikey-secret-key
+          value: "apikey"
         - name: registry-region
           value: $(params.registry-region)
         - name: registry-namespace
