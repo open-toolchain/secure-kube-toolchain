@@ -1,3 +1,4 @@
+---
 apiVersion: tekton.dev/v1beta1
 kind: Pipeline
 metadata:
@@ -8,20 +9,25 @@ spec:
       description: the git repo
     - name: branch
       description: the branch for the git repo
+    - name: revision
+      description: the git revision/commit for the git repo
+      default: ""
     - name: apikey
       description: the ibmcloud api key
     - name: path-to-dockerfile
       default: '.'
-    - name: pipeline-debug
-      default: "0"
+    - name: registry-region
+      description: The IBM Cloud region for image registry
+    - name: registry-namespace
+      description: container registry namespace
+    - name: image-name
+      description: image name
     - name: cluster-name
       description: the name of the cluster to target
     - name: dev-cluster-namespace
       description: the namespace
-    - name: registry-region
-      description: The IBM Cloud region for image registry
-    - name: image-url
-      description: the url of the image to build
+    - name: pipeline-debug
+      default: "0"
   workspaces:
     - name: pipeline-ws
   tasks:
@@ -29,10 +35,16 @@ spec:
       taskRef:
         name: git-clone-repo
       params:
+        - name: continuous-delivery-context-secret
+          value: "secure-properties"
+        - name: ibmcloud-apikey-secret-key
+          value: "toolchain-apikey"
         - name: repository
           value: $(params.repository)
         - name: branch
           value: $(params.branch)
+        - name: revision
+          value: $(params.revision)
         - name: pipeline-debug
           value: $(params.pipeline-debug)
       workspaces:
@@ -57,27 +69,40 @@ spec:
       taskRef:
         name: icr-cr-build
       params:
+        - name: continuous-delivery-context-secret
+          value: "secure-properties"
+        - name: container-registry-apikey-secret-key
+          value: "apikey"
+        - name: registry-region
+          value: $(params.registry-region)
+        - name: registry-namespace
+          value: $(params.registry-namespace)
+        - name: image-name
+          value: $(params.image-name)
         - name: path-to-context
           value: $(params.path-to-dockerfile)
         - name: path-to-dockerfile
           value: $(params.path-to-dockerfile)
-        #- name: additional-tags
+        # - name: additional-tags
         #  value: 'latest'
         - name: additional-tags-script
           value: |
-            # Include the clone task output variables in the environment
-            source /artifacts/build.properties
-            # The script is providing tag(s) as output
-            # But logs can be written as error stderr
-            echo "Providing an image tag including git branch and commit" >&2
-            # Add a specific tag with branch and commit
-            echo "1.0.0-${GIT_BRANCH}-${GIT_COMMIT}"
-            # Add a specific tag with cd build number
-            #echo "1.0.0-${BUILD_NUMBER}"            
+            # Minting image tag using format: BUILD_NUMBER-BRANCH-COMMIT_ID-TIMESTAMP
+            # e.g. 3-master-50da6912-20181123114435
+            # (use build number as first segment to allow image tag as a patch release name according to semantic versioning)
+            GIT_BRANCH="$(tasks.git-clone.results.git-branch)"
+            GIT_COMMIT="$(tasks.git-clone.results.git-commit)"
+            TIMESTAMP=$( date -u "+%Y%m%d%H%M%S")
+            IMAGE_TAG=${TIMESTAMP}
+            if [ ! -z "${GIT_COMMIT}" ]; then
+              GIT_COMMIT_SHORT=$( echo ${GIT_COMMIT} | head -c 8 ) 
+              IMAGE_TAG=${GIT_COMMIT_SHORT}-${IMAGE_TAG}
+            fi
+            if [ ! -z "${GIT_BRANCH}" ]; then IMAGE_TAG=${GIT_BRANCH}-${IMAGE_TAG} ; fi
+            IMAGE_TAG=${BUILD_NUMBER}-${IMAGE_TAG}          
+            echo "$IMAGE_TAG"
         - name: pipeline-debug
           value: $(params.pipeline-debug)
-        - name: image-url
-          value: $(params.image-url)
       workspaces:
         - name: source
           workspace: pipeline-ws
@@ -85,6 +110,10 @@ spec:
       taskRef:
         name: icr-check-va-scan
       params:
+        - name: continuous-delivery-context-secret
+          value: "secure-properties"
+        - name: container-registry-apikey-secret-key
+          value: "apikey"
         - name: scan-report-file
           value: 'app-image-va-report.json'
         # - name: max-iteration
@@ -101,6 +130,20 @@ spec:
           value: $(tasks.containerize.results.image-digest)
       workspaces:
         - name: artifacts
+          workspace: pipeline-ws
+    - name: fetch-cluster-config
+      runAfter: [unit-tests]
+      taskRef:
+        name: iks-fetch-config
+      params:
+        - name: continuous-delivery-context-secret
+          value: "secure-properties"
+        - name: kubernetes-service-apikey-secret-key
+          value: "apikey"
+        - name: cluster-name
+          value: $(params.cluster-name)
+      workspaces:
+        - name: cluster-configuration
           workspace: pipeline-ws
     - name: deploy-dev
       taskRef:
@@ -124,3 +167,18 @@ spec:
       workspaces:
         - name: workspace
           workspace: pipeline-ws
+    - name: publish-deployable-task
+      runAfter: [fetch-cluster-config, deploy-dev]
+      taskRef:
+        name: toolchain-publish-deployable-mapping
+      params:
+        - name: deployable-type
+          value: "kubernetes_cluster"
+        - name: deployable-region-id
+          value: $(tasks.fetch-cluster-config.results.region)
+        - name: deployable-guid
+          value: $(tasks.fetch-cluster-config.results.cluster-id)
+        - name: deployable-rg-id
+          value: $(tasks.fetch-cluster-config.results.resource-group-id)
+        - name: pipeline-debug
+          value: $(params.pipeline-debug)

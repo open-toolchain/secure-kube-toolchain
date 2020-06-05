@@ -1,7 +1,7 @@
 ---
 inputs:
   - type: git
-    branch: master
+    branch: ${PIPELINE_REPO_BRANCH}
     service: ${PIPELINE_REPO}
     path: .pipeline
   - type: git
@@ -12,6 +12,14 @@ inputs:
     branch: tkn_v1beta1
     service: ${TEKTON_CATALOG_REPO}
     path: container-registry
+  - type: git
+    service: ${TEKTON_CATALOG_REPO}
+    branch: tkn_v1beta1
+    path: kubernetes-service
+  - type: git
+    service: ${TEKTON_CATALOG_REPO}
+    branch: tkn_v1beta1
+    path: toolchain
   - type: git
     branch: trialv1
     service: ${TEKTON_CATALOG_REPO}
@@ -27,25 +35,38 @@ inputs:
 triggers:
   - type: manual
     name: Manual Trigger
-    eventListener: listener
+    eventListener: manual-run
+    properties:
+      - type: text
+        name: branch
+        value: master
+      - type: text
+        name: repository
+        value: ${APP_REPO_FULL}
+  - type: git
+    name: commit-push
+    eventListener: ${GIT_COMMIT_EVENT_LISTENER_NAME}
+    service: ${APP_REPO}
+    branch: master
+    events: { "push": true }
 properties:
+  - type: secure
+    name: toolchain-apikey
+    value: ${API_KEY}
   - name: apikey
     value: ${API_KEY}
     type: SECURE
-  - name: image-url
-    value: ${IMAGE_URL}
-    type: text
-  - name: revision
-    value: master
-    type: text
   - name: registry-region
     value: ${REGISTRY_REGION_ID}
     type: text
-  - name: app-name
-    value: ${APP_NAME}
-    type: text
   - name: registry-namespace
     value: ${REGISTRY_NAMESPACE}
+    type: text
+  - name: image-name
+    value: ${APP_NAME}
+    type: text
+  - name: app-name
+    value: ${APP_NAME}
     type: text
   - name: dev-cluster-namespace
     value: ${PROD_CLUSTER_NAMESPACE}
@@ -58,10 +79,4 @@ properties:
     type: text
   - name: dev-resource-group
     value: ${PROD_RESOURCE_GROUP}
-    type: text
-  - name: dockerconfigjson
-    value: ${DOCKER_CONFIG_JSON}
-    type: text
-  - name: repository
-    value: ${APP_REPO_FULL}
     type: text
