@@ -87,15 +87,20 @@ spec:
         #  value: 'latest'
         - name: additional-tags-script
           value: |
-            # Include the clone task output variables in the environment
-            source /artifacts/build.properties
-            # The script is providing tag(s) as output
-            # But logs can be written as error stderr
-            echo "Providing an image tag including git branch and commit" >&2
-            # Add a specific tag with branch and commit
-            echo "1.0.0-${GIT_BRANCH}-${GIT_COMMIT}"
-            # Add a specific tag with cd build number
-            #echo "1.0.0-${BUILD_NUMBER}"
+            # Minting image tag using format: BUILD_NUMBER-BRANCH-COMMIT_ID-TIMESTAMP
+            # e.g. 3-master-50da6912-20181123114435
+            # (use build number as first segment to allow image tag as a patch release name according to semantic versioning)
+            GIT_BRANCH="$(tasks.git-clone.results.git-branch)"
+            GIT_COMMIT="$(tasks.git-clone.results.git-commit)"
+            TIMESTAMP=$( date -u "+%Y%m%d%H%M%S")
+            IMAGE_TAG=${TIMESTAMP}
+            if [ ! -z "${GIT_COMMIT}" ]; then
+              GIT_COMMIT_SHORT=$( echo ${GIT_COMMIT} | head -c 8 ) 
+              IMAGE_TAG=${GIT_COMMIT_SHORT}-${IMAGE_TAG}
+            fi
+            if [ ! -z "${GIT_BRANCH}" ]; then IMAGE_TAG=${GIT_BRANCH}-${IMAGE_TAG} ; fi
+            IMAGE_TAG=${BUILD_NUMBER}-${IMAGE_TAG}          
+            echo "$IMAGE_TAG"
         - name: pipeline-debug
           value: $(params.pipeline-debug)
       workspaces:
