@@ -89,6 +89,8 @@ services:
             $env.source_provider === 'githubconsolidated' ? "https://github.com/{{form.repo.parameters.owner_id}}/{{form.repo.parameters.repo_name}}" :
               $env.source_provider === 'gitlab' ? "https://gitlab.com/{{form.repo.parameters.owner_id}}/{{form.repo.parameters.repo_name}}" : "https://us-south.git.cloud.ibm.com/{{form.repo.parameters.owner_id}}/{{form.repo.parameters.repo_name}}"
           PIPELINE_REPO: pipeline-repo
+          PIPELINE_REPO_BRANCH: >
+            $env.branch ? $env.branch : "master"
           TEKTON_CATALOG_REPO: tekton-catalog-repo
           GIT_COMMIT_EVENT_LISTENER_NAME: >
             $env.source_provider === 'githubconsolidated' ? 'github-commit' :
