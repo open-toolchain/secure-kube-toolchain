@@ -90,8 +90,19 @@ services:
           PROD_CLUSTER_NAME: "{{form.pipeline.parameters.prod-cluster-name}}"
           PROD_CLUSTER_NAMESPACE: "{{form.pipeline.parameters.prod-cluster-namespace}}"
           APP_REPO_FULL: >
-            $env.source_provider === 'githubconsolidated' ? "https://github.com/{{form.repo.parameters.owner_id}}/{{form.repo.parameters.repo_name}}" :
-              $env.source_provider === 'gitlab' ? "https://gitlab.com/{{form.repo.parameters.owner_id}}/{{form.repo.parameters.repo_name}}" : "https://us-south.git.cloud.ibm.com/{{form.repo.parameters.owner_id}}/{{form.repo.parameters.repo_name}}"
+            if ( $env.source_provider === 'githubconsolidated' ) {
+              "https://github.com/{{services.repo.parameters.owner_id}}/{{services.repo.parameters.repo_name}}";
+            } else if ( $env.source_provider === 'hostedgit' ) {
+              "https://us-south.git.cloud.ibm.com/{{services.repo.parameters.owner_id}}/{{services.repo.parameters.repo_name}}"
+            } else if ( $env.source_provider === 'gitlab' ) {
+              "https://gitlab.com/{{services.repo.parameters.owner_id}}/{{services.repo.parameters.repo_name}}";
+            } else if ( $env.source_provider === 'bitbucketgit' ) {
+              "https://bitbucket.org/{{services.repo.parameters.owner_id}}/{{services.repo.parameters.repo_name}}";
+            } else if ( $env.source_provider === 'github_integrated' ) {
+              "https://github.ibm.com/{{services.repo.parameters.owner_id}}/{{services.repo.parameters.repo_name}}";
+            } else {
+              "https://github.com/{{services.repo.parameters.owner_id}}/{{services.repo.parameters.repo_name}}";
+            }
           PIPELINE_REPO: pipeline-repo
           PIPELINE_REPO_BRANCH: >
             $env.branch ? $env.branch : "master"
