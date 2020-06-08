@@ -12,6 +12,10 @@ template:
   required:
     - build
     - repo
+  $configuration:
+    ENABLE_EXTENSIONS: true
+    ENABLE_IF_ELSE: true
+    EXPRESSION_MAXLENGTH: 1000
   info:
     git url: >
       "[" + $env.repository + "]" +
@@ -86,15 +90,37 @@ services:
           PROD_CLUSTER_NAME: "{{form.pipeline.parameters.prod-cluster-name}}"
           PROD_CLUSTER_NAMESPACE: "{{form.pipeline.parameters.prod-cluster-namespace}}"
           APP_REPO_FULL: >
-            $env.source_provider === 'githubconsolidated' ? "https://github.com/{{form.repo.parameters.owner_id}}/{{form.repo.parameters.repo_name}}" :
-              $env.source_provider === 'gitlab' ? "https://gitlab.com/{{form.repo.parameters.owner_id}}/{{form.repo.parameters.repo_name}}" : "https://us-south.git.cloud.ibm.com/{{form.repo.parameters.owner_id}}/{{form.repo.parameters.repo_name}}"
+            if ( $env.source_provider === 'githubconsolidated' ) {
+              "https://github.com/{{services.repo.parameters.owner_id}}/{{services.repo.parameters.repo_name}}";
+            } else if ( $env.source_provider === 'hostedgit' ) {
+              "https://us-south.git.cloud.ibm.com/{{services.repo.parameters.owner_id}}/{{services.repo.parameters.repo_name}}"
+            } else if ( $env.source_provider === 'gitlab' ) {
+              "https://gitlab.com/{{services.repo.parameters.owner_id}}/{{services.repo.parameters.repo_name}}";
+            } else if ( $env.source_provider === 'bitbucketgit' ) {
+              "https://bitbucket.org/{{services.repo.parameters.owner_id}}/{{services.repo.parameters.repo_name}}";
+            } else if ( $env.source_provider === 'github_integrated' ) {
+              "https://github.ibm.com/{{services.repo.parameters.owner_id}}/{{services.repo.parameters.repo_name}}";
+            } else {
+              "https://github.com/{{services.repo.parameters.owner_id}}/{{services.repo.parameters.repo_name}}";
+            }
           PIPELINE_REPO: pipeline-repo
           PIPELINE_REPO_BRANCH: >
             $env.branch ? $env.branch : "master"
           TEKTON_CATALOG_REPO: tekton-catalog-repo
           GIT_COMMIT_EVENT_LISTENER_NAME: >
-            $env.source_provider === 'githubconsolidated' ? 'github-commit' :
-              $env.source_provider === 'gitlab' ? 'grit-or-gitlab-commit' : 'grit-or-gitlab-commit'
+            if ( $env.source_provider === 'githubconsolidated' ) {
+              'github-commit';
+            } else if ( $env.source_provider === 'hostedgit' ) {
+              'grit-or-gitlab-commit';
+            } else if ( $env.source_provider === 'gitlab' ) {
+              'grit-or-gitlab-commit';
+            } else if ( $env.source_provider === 'bitbucketgit' ) {
+              'bitbucket-commit';
+            } else if ( $env.source_provider === 'github_integrated' ) {
+              'github-commit';
+            } else {
+              'github-commit';
+            }
         execute: >
           $env.pipeline_type === 'tekton' ? false : true
   webide:
