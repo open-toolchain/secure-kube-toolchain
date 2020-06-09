@@ -53,7 +53,7 @@ spec:
     - name: docker-lint
       runAfter: [git-clone]
       taskRef:
-        name: docker-check-task
+        name: docker-lint
       workspaces:
         - name: workspace
           workspace: pipeline-ws
