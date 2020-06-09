@@ -53,7 +53,14 @@ spec:
     - name: docker-lint
       runAfter: [git-clone]
       taskRef:
-        name: docker-check-task
+        name: docker-lint
+      params:
+        # - name: hadolint-ignored-rules
+        #   value: "DL3017,DL3020,DL3003"
+        - name: pipeline-debug
+          value: $(params.pipeline-debug)
+        - name: fail-on-lint-errors
+          value: "false"
       workspaces:
         - name: workspace
           workspace: pipeline-ws
