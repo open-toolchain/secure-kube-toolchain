@@ -172,6 +172,8 @@ spec:
             export CLUSTER_NAMESPACE="$(params.dev-cluster-namespace)"
             export DEPLOYMENT_FILE="deployment.yml"
             # Single tag for the image built
+            export IMAGE_TAG=$IMAGE_TAGS
+            # Keep it in build.propetries shuttle file
             echo "IMAGE_TAG=$IMAGE_TAGS" >> build.properties
             echo "================"
             cat build.properties
