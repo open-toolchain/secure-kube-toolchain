@@ -200,7 +200,7 @@ spec:
         - name: deployable-guid
           value: $(tasks.deploy-to-kubernetes.results.cluster-id)
         - name: deployable-rg-id
-          value: $(tasks.deploy-to-kubernetes.resource-group-id)
+          value: $(tasks.deploy-to-kubernetes.results.resource-group-id)
         - name: pipeline-debug
           value: $(params.pipeline-debug)
     - name: check-health
