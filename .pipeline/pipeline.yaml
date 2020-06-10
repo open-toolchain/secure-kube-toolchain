@@ -22,6 +22,8 @@ spec:
       description: container registry namespace
     - name: image-name
       description: image name
+    - name: dev-region
+    - name: dev-resource-group
     - name: cluster-name
       description: the name of the cluster to target
     - name: dev-cluster-namespace
@@ -138,54 +140,99 @@ spec:
       workspaces:
         - name: artifacts
           workspace: pipeline-ws
-    - name: fetch-cluster-config
-      runAfter: [unit-tests]
+    - name: deploy-to-kubernetes
       taskRef:
-        name: iks-fetch-config
-      params:
-        - name: continuous-delivery-context-secret
-          value: "secure-properties"
-        - name: kubernetes-service-apikey-secret-key
-          value: "apikey"
-        - name: cluster-name
-          value: $(params.cluster-name)
-      workspaces:
-        - name: cluster-configuration
-          workspace: pipeline-ws
-    - name: deploy-dev
-      taskRef:
-        name: kube-deploy
+        name: iks-deploy-to-kubernetes
       runAfter: [vulnerability-advisor]
       params:
-        - name: repository
-          value: $(params.repository)
+        - name: shuttle-properties-file
+          value: "build.properties"
+        - name: cluster-region
+          value: $(params.dev-region)
+        - name: resource-group
+          value: $(params.dev-resource-group)
         - name: cluster-name
           value: $(params.cluster-name)
-        - name: cluster-namespace
-          value: $(params.dev-cluster-namespace)
-        - name: cluster-region
-          value: $(params.registry-region)
-        - name: allow-create-route
-          value: "true"
+        - name: setup-script
+          value: |
+            export CLUSTER_NAMESPACE="$(params.dev-cluster-namespace)"
+            export DEPLOYMENT_FILE="deployment.yml"
+            # Single tag for the image built
+            export IMAGE_TAG=$IMAGE_TAGS
+            # Keep it in build.properties shuttle file
+            echo "IMAGE_TAG=$IMAGE_TAGS" >> build.properties
+            echo "================"
+            cat build.properties
+            echo "================"
+        - name: script
+          value: |
+            # uncomment to debug the script
+            # set -x
+            # copy the script below into your app code repo (e.g. ./scripts/check_and_deploy_kubectl.sh) and 'source' it from your pipeline job
+            #    source ./scripts/check_and_deploy_kubectl.sh
+            # alternatively, you can source it from online script:
+            #    source <(curl -sSL "https://raw.githubusercontent.com/open-toolchain/commons/master/scripts/check_and_deploy_kubectl.sh")
+            # ------------------
+            # source: https://raw.githubusercontent.com/open-toolchain/commons/master/scripts/check_and_deploy_kubectl.sh
+
+            # This script checks the IBM Container Service cluster is ready, has a namespace configured with access to the private
+            # image registry (using an IBM Cloud API Key), perform a kubectl deploy of container image and check on outcome.
+            source <(curl -sSL "https://raw.githubusercontent.com/open-toolchain/commons/master/scripts/check_and_deploy_kubectl.sh")
+        - name: post-execution-script
+          value: |
+            # Keep APP_URL in build.properties shuttle file
+            echo "APP_URL=$APP_URL" >> build.properties
+            cat build.properties
         - name: pipeline-debug
           value: $(params.pipeline-debug)
-        - name: ibmcloud-api-key
-          value: $(params.apikey)
       workspaces:
-        - name: workspace
+        - name: artifacts
           workspace: pipeline-ws
     - name: publish-deployable-task
-      runAfter: [fetch-cluster-config, deploy-dev]
+      runAfter: [deploy-to-kubernetes]
       taskRef:
         name: toolchain-publish-deployable-mapping
       params:
         - name: deployable-type
           value: "kubernetes_cluster"
         - name: deployable-region-id
-          value: $(tasks.fetch-cluster-config.results.region)
+          value: $(tasks.deploy-to-kubernetes.results.region)
         - name: deployable-guid
-          value: $(tasks.fetch-cluster-config.results.cluster-id)
+          value: $(tasks.deploy-to-kubernetes.results.cluster-id)
         - name: deployable-rg-id
-          value: $(tasks.fetch-cluster-config.results.resource-group-id)
+          value: $(tasks.deploy-to-kubernetes.results.resource-group-id)
         - name: pipeline-debug
           value: $(params.pipeline-debug)
+    - name: check-health
+      taskRef:
+        name: iks-deploy-to-kubernetes
+      runAfter: [deploy-to-kubernetes]
+      params:
+        - name: shuttle-properties-file
+          value: "build.properties"
+        - name: cluster-region
+          value: $(params.dev-region)
+        - name: resource-group
+          value: $(params.dev-resource-group)
+        - name: cluster-name
+          value: $(params.cluster-name)
+        - name: setup-script
+          value: |
+            export CLUSTER_NAMESPACE="$(params.dev-cluster-namespace)"
+        - name: script
+          value: |
+            # uncomment to debug the script
+            # set -x
+            # copy the script below into your app code repo (e.g. ./scripts/check_health.sh) and 'source' it from your pipeline job
+            #    source ./scripts/check_health.sh
+            # alternatively, you can source it from online script:
+            #    source <(curl -sSL "https://raw.githubusercontent.com/open-toolchain/commons/master/scripts/check_health.sh")
+            # ------------------
+            # source: https://raw.githubusercontent.com/open-toolchain/commons/master/scripts/check_health.sh
+            # Check liveness and readiness probes to confirm application is healthy
+            source <(curl -sSL "https://raw.githubusercontent.com/open-toolchain/commons/master/scripts/check_health.sh")
+        - name: pipeline-debug
+          value: $(params.pipeline-debug)
+      workspaces:
+        - name: artifacts
+          workspace: pipeline-ws
