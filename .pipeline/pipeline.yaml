@@ -216,6 +216,9 @@ spec:
           value: $(params.dev-resource-group)
         - name: cluster-name
           value: $(params.cluster-name)
+        - name: setup-script
+          value: |
+            export CLUSTER_NAMESPACE="$(params.dev-cluster-namespace)"
         - name: script
           value: |
             # uncomment to debug the script
