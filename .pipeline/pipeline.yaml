@@ -172,7 +172,7 @@ spec:
             export CLUSTER_NAMESPACE="$(params.dev-cluster-namespace)"
             export DEPLOYMENT_FILE="deployment.yml"
             # Single tag for the image built
-            echo "IMAGE_TAG=$(tasks.containerize.results.image-tags)" >> build.properties
+            echo "IMAGE_TAG=$IMAGE_TAGS" >> build.properties
             echo "================"
             cat build.properties
             echo "================"
