@@ -159,18 +159,21 @@ spec:
         name: iks-deploy-to-kubernetes
       runAfter: [vulnerability-advisor]
       params:
+        - name: shuttle-properties-file
+          value: "build.properties"
         - name: cluster-region
           value: $(params.dev-region)
         - name: resource-group
           value: $(params.dev-resource-group)
         - name: cluster-name
           value: $(params.cluster-name)
-        - name: pipeline-debug
-          value: $(params.pipeline-debug)
         - name: setup-script
           value: |
             export CLUSTER_NAMESPACE="$(params.dev-cluster-namespace)"
             export DEPLOYMENT_FILE="deployment.yml"
+            echo "================"
+            cat build.properties
+            echo "================"
         - name: script
           value: |
             # uncomment to debug the script
@@ -188,6 +191,8 @@ spec:
         - name: post-execution-script
           value: |
             # do something with the shuttle file - ie APP_URL
+        - name: pipeline-debug
+          value: $(params.pipeline-debug)
       workspaces:
         - name: artifacts
           workspace: pipeline-ws
