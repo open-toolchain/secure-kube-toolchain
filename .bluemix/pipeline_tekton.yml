@@ -81,5 +81,5 @@ properties:
     value: ${PROD_RESOURCE_GROUP}
     type: text
   - name: app-url
-    value: ${APP_URL}
+    value: ${APP_REPO_FULL}
     type: text
