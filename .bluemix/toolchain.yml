@@ -126,6 +126,8 @@ services:
           $env.pipeline_type === 'tekton' ? false : true
   webide:
     service_id: orion
+  slack:
+    service_id: slack
 form:
   pipeline:
     parameters:
