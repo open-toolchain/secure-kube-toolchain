@@ -130,6 +130,10 @@ services:
     service_id: slack
   pagerduty:
     service_id: pagerduty
+  privateWorker:
+    service_id: private_worker
+  artifactory:
+    service_id: artifactory
 form:
   pipeline:
     parameters:
