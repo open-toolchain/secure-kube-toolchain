@@ -126,14 +126,6 @@ services:
           $env.pipeline_type === 'tekton' ? false : true
   webide:
     service_id: orion
-  slack:
-    service_id: slack
-  pagerduty:
-    service_id: pagerduty
-  privateWorker:
-    service_id: private_worker
-  artifactory:
-    service_id: artifactory
 form:
   pipeline:
     parameters:
