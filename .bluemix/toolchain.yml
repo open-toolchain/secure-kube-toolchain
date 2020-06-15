@@ -33,6 +33,7 @@ services:
   repo:
     service_id: >
       $env.source_provider ? $env.source_provider : 'hostedgit'
+    labels: ['code']
     # service_id: >
     #   $env.pipeline_type === 'tekton' ?
     #     'githubconsolidated' : $env.source_provider ?
@@ -62,6 +63,7 @@ services:
   tekton-catalog-repo:
     service_id: >
       $env.pipeline_type === 'tekton' ? 'githubconsolidated' : ''
+    labels: ['pipeline','code']
     parameters:
       repo_url: "https://github.com/open-toolchain/tekton-catalog"
       type: "link"
