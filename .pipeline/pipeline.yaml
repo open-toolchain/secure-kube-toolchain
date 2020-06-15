@@ -203,6 +203,8 @@ spec:
             # pipeline build number is the doi build record id (if any)
             export SOURCE_BUILD_NUMBER=$BUILD_NUMBER
             echo "SOURCE_BUILD_NUMBER=$BUILD_NUMBER" >> build.properties
+            # For doi plugin invocation if needed
+            export TOOLCHAIN_ID=$PIPELINE_TOOLCHAIN_ID
             # Single tag for the image built
             export IMAGE_TAG=$IMAGE_TAGS
             # Keep it in build.properties shuttle file
@@ -265,8 +267,6 @@ spec:
         - name: setup-script
           value: |
             export CLUSTER_NAMESPACE="$(params.dev-cluster-namespace)"
-            # For doi plugin invocation if needed
-            export TOOLCHAIN_ID=$PIPELINE_TOOLCHAIN_ID
         - name: script
           value: |
             # uncomment to debug the script
