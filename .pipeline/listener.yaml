@@ -66,8 +66,6 @@ spec:
             value: $(params.image-name)
           - name: path-to-dockerfile
             value: $(params.path-to-dockerfile)
-          - name: apikey
-            value: $(params.apikey)
           - name: dev-region
             value: $(params.dev-region)
           - name: dev-resource-group

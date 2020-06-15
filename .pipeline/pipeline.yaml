@@ -12,8 +12,6 @@ spec:
     - name: revision
       description: the git revision/commit for the git repo
       default: ""
-    - name: apikey
-      description: the ibmcloud api key
     - name: path-to-dockerfile
       default: '.'
     - name: registry-region
@@ -175,9 +173,9 @@ spec:
         - name: build-number
           value: "$(tasks.publish-doi-buildrecord.results.build-number)"
         - name: app-name
-          value: $(params.operator-name)
+          value: $(params.app-name)
         - name: file-locations
-          value: $(tasks.va-scan.results.scan-report-file)
+          value: $(tasks.vulnerability-advisor.results.scan-report-file)
         - name: test-types
           value: vulnerabilityadvisor
         - name: pipeline-debug
