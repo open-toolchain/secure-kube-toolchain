@@ -265,6 +265,8 @@ spec:
         - name: setup-script
           value: |
             export CLUSTER_NAMESPACE="$(params.dev-cluster-namespace)"
+            # For doi plugin invocation if needed
+            export TOOLCHAIN_ID=$PIPELINE_TOOLCHAIN_ID
         - name: script
           value: |
             # uncomment to debug the script
