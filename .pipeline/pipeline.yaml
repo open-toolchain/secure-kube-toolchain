@@ -56,8 +56,9 @@ spec:
       taskRef:
         name: toolchain-extract-value
       params:
+        # count the number of service in the toolchain that are DevopsInsights
         - name: expression
-          value: '.services[] | select(.service_id=="draservicebroker") | length'
+          value: 'reduce .services[] as $service (0; if $service.service_id=="draservicebroker" then .+1 else . end)'
         - name: pipeline-debug
           value: $(params.pipeline-debug)
     - name: publish-doi-buildrecord
