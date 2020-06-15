@@ -52,10 +52,25 @@ spec:
       workspaces:
         - name: output
           workspace: pipeline-ws
+    - name: extract-doi-enablement
+      taskRef:
+        name: toolchain-extract-value
+      params:
+        - name: expression
+          value: '.services[] | select(.service_id=="draservicebroker") | length'
+        - name: pipeline-debug
+          value: $(params.pipeline-debug)
     - name: publish-doi-buildrecord
       runAfter: [git-clone]
       taskRef:
         name: doi-publish-buildrecord
+      conditions:
+        - conditionRef: utils-evaluate
+          params:
+            - name: value
+              value: $(tasks.extract-doi-enablement.extracted-value)
+            - name: expected
+              value: "1"
       params:
         - name: toolchain-apikey-secret-key
           value: "toolchain-apikey"
@@ -167,6 +182,13 @@ spec:
       runAfter: [vulnerability-advisor]
       taskRef:
         name: doi-publish-testrecord
+      conditions:
+        - conditionRef: utils-evaluate
+          params:
+            - name: value
+              value: $(tasks.extract-doi-enablement.extracted-value)
+            - name: expected
+              value: "1"
       params:
         - name: toolchain-apikey-secret-key
           value: "toolchain-apikey"
