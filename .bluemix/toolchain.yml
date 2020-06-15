@@ -53,6 +53,7 @@ services:
   pipeline-repo:
     service_id: >
       $env.pipeline_type === 'tekton' ? 'githubconsolidated' : '' 
+    labels: ['foo'] 
     parameters:
       repo_url: >
         $env.repository
