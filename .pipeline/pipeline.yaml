@@ -69,9 +69,17 @@ spec:
     - name: unit-tests
       runAfter: [docker-lint]
       taskRef:
-        name: unit-tests-task
+        name: tests-run
+      params:
+        - name: tests-script
+          value: |
+            if [ -f ./tests/run-tests.sh ]; then
+              source ./tests/run-tests.sh
+            else
+              echo "Test runner script not found: ./tests/run-tests.sh"
+            fi
       workspaces:
-        - name: workspace
+        - name: artifacts
           workspace: pipeline-ws
     - name: containerize
       runAfter: [unit-tests]
