@@ -58,12 +58,14 @@ services:
       repo_url: >
         $env.repository
       type: "link"
+      lifecyclePhase: "DELIVER"
       has_issues: false
       enable_traceability: false
   tekton-catalog-repo:
     service_id: >
       $env.pipeline_type === 'tekton' ? 'githubconsolidated' : ''
-    labels: ['pipeline', 'code'] 
+    labels: ['pipeline', 'code']
+    lifecyclePhase: "DELIVER"
     parameters:
       repo_url: "https://github.com/open-toolchain/tekton-catalog"
       type: "link"
