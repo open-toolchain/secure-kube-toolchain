@@ -31,7 +31,7 @@ inputs:
   - type: git
     branch: trialv1
     service: ${TEKTON_CATALOG_REPO}
-    path: temp/deploy
+    path: temp/iks
   - type: git
     branch: trialv1
     service: ${TEKTON_CATALOG_REPO}
