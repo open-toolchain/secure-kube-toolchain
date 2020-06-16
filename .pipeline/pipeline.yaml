@@ -12,14 +12,14 @@ spec:
     - name: revision
       description: the git revision/commit for the git repo
       default: ""
-    - name: apikey
-      description: the ibmcloud api key
     - name: path-to-dockerfile
       default: '.'
     - name: registry-region
       description: The IBM Cloud region for image registry
     - name: registry-namespace
       description: container registry namespace
+    - name: app-name
+      description: application name
     - name: image-name
       description: image name
     - name: dev-region
@@ -52,6 +52,37 @@ spec:
       workspaces:
         - name: output
           workspace: pipeline-ws
+    - name: extract-doi-enablement
+      taskRef:
+        name: toolchain-extract-value
+      params:
+        # count the number of service in the toolchain that are DevopsInsights
+        - name: expression
+          value: 'reduce .services[] as $service (0; if $service.service_id=="draservicebroker" then .+1 else . end)'
+        - name: pipeline-debug
+          value: $(params.pipeline-debug)
+    - name: publish-doi-buildrecord
+      runAfter: [git-clone]
+      taskRef:
+        name: doi-publish-buildrecord
+      conditions:
+        - conditionRef: utils-evaluate
+          params:
+            - name: value
+              value: $(tasks.extract-doi-enablement.results.extracted-value)
+            - name: expected
+              value: "1"
+      params:
+        - name: toolchain-apikey-secret-key
+          value: "toolchain-apikey"
+        - name: app-name
+          value: $(params.app-name)
+        - name: git-repository
+          value: $(tasks.git-clone.results.git-repository)
+        - name: git-branch
+          value: $(tasks.git-clone.results.git-branch)
+        - name: git-commit
+          value: $(tasks.git-clone.results.git-commit)
     - name: docker-lint
       runAfter: [git-clone]
       taskRef:
@@ -148,6 +179,33 @@ spec:
       workspaces:
         - name: artifacts
           workspace: pipeline-ws
+    - name: publish-doi-va-scan-record
+      runAfter: [vulnerability-advisor]
+      taskRef:
+        name: doi-publish-testrecord
+      conditions:
+        - conditionRef: utils-evaluate
+          params:
+            - name: value
+              value: $(tasks.extract-doi-enablement.results.extracted-value)
+            - name: expected
+              value: "1"
+      params:
+        - name: toolchain-apikey-secret-key
+          value: "toolchain-apikey"
+        - name: build-number
+          value: "$(tasks.publish-doi-buildrecord.results.build-number)"
+        - name: app-name
+          value: $(params.app-name)
+        - name: file-locations
+          value: $(tasks.vulnerability-advisor.results.scan-report-file)
+        - name: test-types
+          value: vulnerabilityadvisor
+        - name: pipeline-debug
+          value: $(params.pipeline-debug)
+      workspaces:
+        - name: artifacts
+          workspace: pipeline-ws
     - name: deploy-to-kubernetes
       taskRef:
         name: iks-deploy-to-kubernetes
@@ -165,6 +223,11 @@ spec:
           value: |
             export CLUSTER_NAMESPACE="$(params.dev-cluster-namespace)"
             export DEPLOYMENT_FILE="deployment.yml"
+            # pipeline build number is the doi build record id (if any)
+            export SOURCE_BUILD_NUMBER=$BUILD_NUMBER
+            echo "SOURCE_BUILD_NUMBER=$BUILD_NUMBER" >> build.properties
+            # For doi plugin invocation if needed
+            export TOOLCHAIN_ID=$PIPELINE_TOOLCHAIN_ID
             # Single tag for the image built
             export IMAGE_TAG=$IMAGE_TAGS
             # Keep it in build.properties shuttle file
