@@ -69,7 +69,7 @@ services:
       type: "link"
       has_issues: false
       enable_traceability: false
-      labels: ['pipeline-codee'] 
+      labels: ['pipeline-code'] 
   build:
     service_id: pipeline
     parameters:
