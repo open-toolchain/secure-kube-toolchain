@@ -36,6 +36,14 @@ inputs:
     branch: trialv1
     service: ${TEKTON_CATALOG_REPO}
     path: temp/tests
+  - type: git
+    branch: trialv1
+    service: ${TEKTON_CATALOG_REPO}
+    path: temp/toolchain
+  - type: git
+    branch: trialv1
+    service: ${TEKTON_CATALOG_REPO}
+    path: temp/utils
 triggers:
   - type: manual
     name: Manual Trigger
