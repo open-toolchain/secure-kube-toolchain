@@ -119,7 +119,7 @@ services:
             } else if ( $env.source_provider === 'github_integrated' ) {
               'github-commit';
             } else {
-              'github-commit';
+              'grit-or-gitlab-commit';
             }
         execute: >
           $env.pipeline_type === 'tekton' ? false : true
