@@ -12,8 +12,8 @@ spec:
     - name: revision
       description: the git revision/commit for the git repo
       default: ""
-    - name: apikey
-      description: the ibmcloud api key
+    - name: app-name
+      description: application name
     - name: registry-region
       description: The IBM Cloud region for image registry
     - name: registry-namespace
@@ -56,6 +56,8 @@ spec:
             value: $(params.branch)
           - name: revision
             value: $(params.revision)
+          - name: app-name
+            value: $(params.app-name)
           - name: registry-region
             value: $(params.registry-region)
           - name: registry-namespace
@@ -64,8 +66,6 @@ spec:
             value: $(params.image-name)
           - name: path-to-dockerfile
             value: $(params.path-to-dockerfile)
-          - name: apikey
-            value: $(params.apikey)
           - name: dev-region
             value: $(params.dev-region)
           - name: dev-resource-group

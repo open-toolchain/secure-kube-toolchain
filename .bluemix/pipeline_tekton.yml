@@ -21,6 +21,10 @@ inputs:
     branch: tkn_v1beta1
     path: toolchain
   - type: git
+    service: ${TEKTON_CATALOG_REPO}
+    branch: tkn_v1beta1
+    path: devops-insights
+  - type: git
     branch: trialv1
     service: ${TEKTON_CATALOG_REPO}
     path: temp/docker
@@ -31,7 +35,15 @@ inputs:
   - type: git
     branch: trialv1
     service: ${TEKTON_CATALOG_REPO}
-    path: temp/unit-tests
+    path: temp/tests
+  - type: git
+    branch: trialv1
+    service: ${TEKTON_CATALOG_REPO}
+    path: temp/toolchain
+  - type: git
+    branch: trialv1
+    service: ${TEKTON_CATALOG_REPO}
+    path: temp/utils
 triggers:
   - type: manual
     name: Manual Trigger

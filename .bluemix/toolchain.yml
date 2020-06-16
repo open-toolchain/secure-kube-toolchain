@@ -101,7 +101,7 @@ services:
             } else if ( $env.source_provider === 'github_integrated' ) {
               "https://github.ibm.com/{{services.repo.parameters.owner_id}}/{{services.repo.parameters.repo_name}}";
             } else {
-              "https://github.com/{{services.repo.parameters.owner_id}}/{{services.repo.parameters.repo_name}}";
+              "https://us-south.git.cloud.ibm.com/{{services.repo.parameters.owner_id}}/{{services.repo.parameters.repo_name}}"
             }
           PIPELINE_REPO: pipeline-repo
           PIPELINE_REPO_BRANCH: >
