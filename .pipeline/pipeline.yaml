@@ -69,8 +69,7 @@ spec:
         - conditionRef: utils-evaluate
           params:
             - name: value
-              # value: $(tasks.extract-doi-enablement.results.extracted-value)
-              value: "1"
+              value: $(tasks.extract-doi-enablement.results.extracted-value)
             - name: expected
               value: "1"
       params:
@@ -188,8 +187,7 @@ spec:
         - conditionRef: utils-evaluate
           params:
             - name: value
-              # value: $(tasks.extract-doi-enablement.results.extracted-value)
-              value: "1"
+              value: $(tasks.extract-doi-enablement.results.extracted-value)
             - name: expected
               value: "1"
       params:
