@@ -33,7 +33,6 @@ services:
   repo:
     service_id: >
       $env.source_provider ? $env.source_provider : 'hostedgit'
-    labels: ['code']
     # service_id: >
     #   $env.pipeline_type === 'tekton' ?
     #     'githubconsolidated' : $env.source_provider ?
@@ -50,6 +49,7 @@ services:
       has_issues: true
       enable_traceability: true
       legal: true
+      ui_tags: ['app-code']
   pipeline-repo:
     service_id: >
       $env.pipeline_type === 'tekton' ? 'githubconsolidated' : '' 
@@ -59,6 +59,7 @@ services:
       type: "link"
       has_issues: false
       enable_traceability: false
+      ui_tags: ['pipeline-code']
   tekton-catalog-repo:
     service_id: >
       $env.pipeline_type === 'tekton' ? 'githubconsolidated' : ''
@@ -67,6 +68,7 @@ services:
       type: "link"
       has_issues: false
       enable_traceability: false
+      ui_tags: ['pipeline-code']
   build:
     service_id: pipeline
     parameters:
