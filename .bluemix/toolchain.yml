@@ -49,7 +49,7 @@ services:
       has_issues: true
       enable_traceability: true
       legal: true
-      ui_tags: ['app-code']
+      labels: ['app-code']
   pipeline-repo:
     service_id: >
       $env.pipeline_type === 'tekton' ? 'githubconsolidated' : '' 
@@ -59,7 +59,7 @@ services:
       type: "link"
       has_issues: false
       enable_traceability: false
-      ui_tags: ['pipeline-code']
+      labels: ['pipeline-code']
   tekton-catalog-repo:
     service_id: >
       $env.pipeline_type === 'tekton' ? 'githubconsolidated' : ''
@@ -68,7 +68,7 @@ services:
       type: "link"
       has_issues: false
       enable_traceability: false
-      ui_tags: ['pipeline-code']
+      labels: ['pipeline-code']
   build:
     service_id: pipeline
     parameters:
