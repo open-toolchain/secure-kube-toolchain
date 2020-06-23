@@ -55,6 +55,7 @@ services:
     parameters:
       repo_url: >
         $env.repository
+      source_repo_url: "foo"  
       type: "link"
       has_issues: false
       enable_traceability: false
