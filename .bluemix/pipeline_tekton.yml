@@ -5,33 +5,37 @@ inputs:
     service: ${PIPELINE_REPO}
     path: .pipeline
   - type: git
-    branch: tkn_v1beta1
+    branch: master
     service: ${TEKTON_CATALOG_REPO}
     path: git
   - type: git
-    branch: tkn_v1beta1
+    branch: master
     service: ${TEKTON_CATALOG_REPO}
     path: container-registry
   - type: git
     service: ${TEKTON_CATALOG_REPO}
-    branch: tkn_v1beta1
+    branch: trialv1
     path: kubernetes-service
   - type: git
     service: ${TEKTON_CATALOG_REPO}
-    branch: tkn_v1beta1
+    branch: master
     path: toolchain
   - type: git
-    branch: trialv1
     service: ${TEKTON_CATALOG_REPO}
-    path: temp/docker
+    branch: master
+    path: devops-insights
   - type: git
     branch: trialv1
     service: ${TEKTON_CATALOG_REPO}
-    path: temp/deploy
+    path: linter
   - type: git
     branch: trialv1
     service: ${TEKTON_CATALOG_REPO}
-    path: temp/unit-tests
+    path: tester
+  - type: git
+    branch: trialv1
+    service: ${TEKTON_CATALOG_REPO}
+    path: utils
 triggers:
   - type: manual
     name: Manual Trigger
@@ -79,7 +83,4 @@ properties:
     type: text
   - name: dev-resource-group
     value: ${PROD_RESOURCE_GROUP}
-    type: text
-  - name: app-url
-    value: ${APP_REPO_FULL}
     type: text
