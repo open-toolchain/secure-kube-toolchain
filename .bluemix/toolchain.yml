@@ -20,7 +20,7 @@ template:
         "(" + $env.repository +
           "/tree/" + $env.branch + ")"
 toolchain:
-  name: 'kube-{{timestamp}}'
+  name: 'kube-toolchain-{{timestamp}}'
   template:
     getting_started:
       $ref: "#/messages/template.gettingStarted"
@@ -62,10 +62,6 @@ services:
         execute: true
   webide:
     service_id: orion
-  privateWorker:
-    service_id: private_worker
-    parameters:
-      name: 'Foo'
 form:
   pipeline:
     parameters:
