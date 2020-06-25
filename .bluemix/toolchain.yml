@@ -13,9 +13,9 @@ template:
     - build
     - repo
   $configuration:
-    ENABLE_EXTENSIONS: true
-    ENABLE_IF_ELSE: true
-    EXPRESSION_MAXLENGTH: 1000
+     ENABLE_EXTENSIONS: true
+     ENABLE_IF_ELSE: true
+     EXPRESSION_MAXLENGTH: 1000
   info:
     git url: >
       "[" + $env.repository + "]" +
@@ -45,23 +45,27 @@ services:
       has_issues: true
       enable_traceability: true
       legal: true
+      kind: ['app']
   pipeline-repo:
     service_id: >
-      $env.pipeline_type === 'tekton' ? 'githubconsolidated' : ''
+      $env.pipeline_type === 'tekton' ? 'githubconsolidated' : '' 
     parameters:
-      repo_url: >
-        $env.repository
+      repo_url: $env.repository
+      source_repo_url: "https://github.com/proc-org/secure-kube-toolchain"  
       type: "link"
       has_issues: false
       enable_traceability: false
+      kind: ['pipeline']
   tekton-catalog-repo:
     service_id: >
       $env.pipeline_type === 'tekton' ? 'githubconsolidated' : ''
     parameters:
       repo_url: "https://github.com/open-toolchain/tekton-catalog"
+      source_repo_url: "https://github.com/open-toolchain/tekton-catalog"
       type: "link"
       has_issues: false
       enable_traceability: false
+      kind: ['pipeline']
   build:
     service_id: pipeline
     parameters:
@@ -88,6 +92,8 @@ services:
           APP_REPO_FULL: >
             if ( $env.source_provider === 'githubconsolidated' ) {
               "https://github.com/{{services.repo.parameters.owner_id}}/{{services.repo.parameters.repo_name}}";
+            } else if ( $env.source_provider === 'hostedgit' && $env.env_id === 'ibm:yp:au-syd' ) {
+              "https://au-syd.git.cloud.ibm.com/{{services.repo.parameters.owner_id}}/{{services.repo.parameters.repo_name}}"
             } else if ( $env.source_provider === 'gitlab' ) {
               "https://gitlab.com/{{services.repo.parameters.owner_id}}/{{services.repo.parameters.repo_name}}";
             } else if ( $env.source_provider === 'bitbucketgit' ) {
