@@ -86,7 +86,7 @@ spec:
     - name: docker-lint
       runAfter: [git-clone]
       taskRef:
-        name: docker-lint
+        name: linter-docker-lint
       params:
         # - name: hadolint-ignored-rules
         #   value: "DL3017,DL3020,DL3003"
@@ -100,7 +100,7 @@ spec:
     - name: unit-tests
       runAfter: [docker-lint]
       taskRef:
-        name: tests-run
+        name: tester-run-tests
       params:
         - name: tests-script
           value: |

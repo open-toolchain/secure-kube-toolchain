@@ -14,7 +14,7 @@ inputs:
     path: container-registry
   - type: git
     service: ${TEKTON_CATALOG_REPO}
-    branch: trialv1
+    branch: master
     path: kubernetes-service
   - type: git
     service: ${TEKTON_CATALOG_REPO}
@@ -25,15 +25,15 @@ inputs:
     branch: master
     path: devops-insights
   - type: git
-    branch: trialv1
+    branch: master
     service: ${TEKTON_CATALOG_REPO}
     path: linter
   - type: git
-    branch: trialv1
+    branch: master
     service: ${TEKTON_CATALOG_REPO}
     path: tester
   - type: git
-    branch: trialv1
+    branch: master
     service: ${TEKTON_CATALOG_REPO}
     path: utils
 triggers:
