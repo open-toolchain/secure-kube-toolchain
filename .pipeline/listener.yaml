@@ -27,7 +27,7 @@ spec:
       default: "."
     - name: fail-on-scanned-issues
       description: force failure of task when vulnerability advisor scan issues are found
-      default: "true"
+      default: "false"
     - name: pipeline-debug
       default: "0"
     - name: cluster-name
