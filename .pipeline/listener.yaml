@@ -23,11 +23,21 @@ spec:
       description: container registry namespace
     - name: image-name
       description: image name
+    - name: path-to-context
+      default: "."
     - name: path-to-dockerfile
       default: "."
+    - name: dockerfile
+      default: "Dockerfile"
+    - name: build-args
+      description: ibmcloud cr build argument list in the format 'KEY=VALUE' with a key-value pair per line.
+      default: ""
     - name: fail-on-scanned-issues
       description: force failure of task when vulnerability advisor scan issues are found
       default: "false"
+    - name: deployment-file
+      description: file containing the kubernetes deployment definition
+      default: "deployment.yml"
     - name: pipeline-debug
       default: "0"
     - name: cluster-name
@@ -72,10 +82,18 @@ spec:
             value: $(params.registry-namespace)
           - name: image-name
             value: $(params.image-name)
+          - name: path-to-context
+            value: $(params.path-to-context)
           - name: path-to-dockerfile
             value: $(params.path-to-dockerfile)
+          - name: dockerfile
+            value: $(params.dockerfile)
+          - name: build-args
+            value: $(params.build-args)
           - name: fail-on-scanned-issues
             value: $(params.fail-on-scanned-issues)
+          - name: deployment-file
+            value: $(params.deployment-file)
           - name: dev-region
             value: $(params.dev-region)
           - name: dev-resource-group
