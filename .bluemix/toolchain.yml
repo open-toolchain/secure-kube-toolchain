@@ -45,7 +45,6 @@ services:
       has_issues: true
       enable_traceability: true
       legal: true
-      kind: ['app']
   pipeline-repo:
     service_id: >
       $env.pipeline_type === 'tekton' ? 'githubconsolidated' : '' 
