@@ -18,8 +18,15 @@ spec:
     - name: fail-on-scanned-issues
       description: force failure of task when vulnerability advisor scan issues are found
       default: "true"
+    - name: path-to-context
+      default: "."
     - name: path-to-dockerfile
-      default: '.'
+      default: "."
+    - name: dockerfile
+      default: "Dockerfile"
+    - name: build-args
+      description: ibmcloud cr build argument list in the format 'KEY=VALUE' with a key-value pair per line.
+      default: ""
     - name: registry-region
       description: The IBM Cloud region for image registry
     - name: registry-namespace
@@ -28,6 +35,9 @@ spec:
       description: application name
     - name: image-name
       description: image name
+    - name: deployment-file
+      description: file containing the kubernetes deployment definition
+      default: "deployment.yml"
     - name: dev-region
     - name: dev-resource-group
     - name: cluster-name
@@ -94,12 +104,14 @@ spec:
       taskRef:
         name: linter-docker-lint
       params:
-        # - name: hadolint-ignored-rules
-        #   value: "DL3017,DL3020,DL3003"
-        - name: pipeline-debug
-          value: $(params.pipeline-debug)
+        - name: path-to-dockerfile
+          value: $(params.path-to-dockerfile)
+        - name: dockerfile
+          value: $(params.dockerfile)
         - name: fail-on-lint-errors
           value: $(params.fail-on-lint-errors)
+        - name: pipeline-debug
+          value: $(params.pipeline-debug)
       workspaces:
         - name: workspace
           workspace: pipeline-ws
@@ -134,11 +146,13 @@ spec:
         - name: image-name
           value: $(params.image-name)
         - name: path-to-context
-          value: $(params.path-to-dockerfile)
+          value: $(params.path-to-context)
         - name: path-to-dockerfile
           value: $(params.path-to-dockerfile)
-        # - name: additional-tags
-        #  value: 'latest'
+        - name: dockerfile
+          value: $(params.dockerfile)
+        - name: build-args
+          value: $(params.build-args)
         - name: additional-tags-script
           value: |
             # Minting image tag using format: BUILD_NUMBER-BRANCH-COMMIT_ID-TIMESTAMP
@@ -149,11 +163,11 @@ spec:
             TIMESTAMP=$( date -u "+%Y%m%d%H%M%S")
             IMAGE_TAG=${TIMESTAMP}
             if [ ! -z "${GIT_COMMIT}" ]; then
-              GIT_COMMIT_SHORT=$( echo ${GIT_COMMIT} | head -c 8 ) 
+              GIT_COMMIT_SHORT=$( echo ${GIT_COMMIT} | head -c 8 )
               IMAGE_TAG=${GIT_COMMIT_SHORT}-${IMAGE_TAG}
             fi
             if [ ! -z "${GIT_BRANCH}" ]; then IMAGE_TAG=${GIT_BRANCH}-${IMAGE_TAG} ; fi
-            IMAGE_TAG=${BUILD_NUMBER}-${IMAGE_TAG}          
+            IMAGE_TAG=${BUILD_NUMBER}-${IMAGE_TAG}
             echo "$IMAGE_TAG"
         - name: pipeline-debug
           value: $(params.pipeline-debug)
@@ -224,7 +238,7 @@ spec:
         - name: setup-script
           value: |
             export CLUSTER_NAMESPACE="$(params.dev-cluster-namespace)"
-            export DEPLOYMENT_FILE="deployment.yml"
+            export DEPLOYMENT_FILE="$(params.deployment-file)"
             # pipeline build number is the doi build record id (if any)
             export SOURCE_BUILD_NUMBER=$BUILD_NUMBER
             echo "SOURCE_BUILD_NUMBER=$BUILD_NUMBER" >> build.properties
@@ -234,9 +248,6 @@ spec:
             export IMAGE_TAG=$IMAGE_TAGS
             # Keep it in build.properties shuttle file
             echo "IMAGE_TAG=$IMAGE_TAGS" >> build.properties
-            echo "================"
-            cat build.properties
-            echo "================"
         - name: script
           value: |
             # uncomment to debug the script
@@ -255,7 +266,6 @@ spec:
           value: |
             # Keep APP_URL in build.properties shuttle file
             echo "APP_URL=$APP_URL" >> build.properties
-            cat build.properties
         - name: pipeline-debug
           value: $(params.pipeline-debug)
       workspaces:
