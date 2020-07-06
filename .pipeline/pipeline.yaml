@@ -104,12 +104,14 @@ spec:
       taskRef:
         name: linter-docker-lint
       params:
-        # - name: hadolint-ignored-rules
-        #   value: "DL3017,DL3020,DL3003"
-        - name: pipeline-debug
-          value: $(params.pipeline-debug)
+        - name: path-to-dockerfile
+          value: $(params.path-to-dockerfile)
+        - name: dockerfile
+          value: $(params.dockerfile)
         - name: fail-on-lint-errors
           value: $(params.fail-on-lint-errors)
+        - name: pipeline-debug
+          value: $(params.pipeline-debug)
       workspaces:
         - name: workspace
           workspace: pipeline-ws
