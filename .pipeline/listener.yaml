@@ -16,7 +16,7 @@ spec:
       description: application name
     - name: fail-on-lint-errors
       description: force failure of task when docker lint errors are found
-      default: "false"
+      default: "true"
     - name: registry-region
       description: The IBM Cloud region for image registry
     - name: registry-namespace
