@@ -285,7 +285,7 @@ spec:
         - name: deployable-rg-id
           value: $(tasks.deploy-to-kubernetes.results.resource-group-id)
         - name: environment-label
-          value: "cluster $(params.cluster-name) - namespace: $(params.dev-cluster-namespace)"
+          value: "$(params.cluster-name) namespace:$(params.dev-cluster-namespace)"
         - name: git-inputs
           value: "$(tasks.git-clone.results.git-repository),$(tasks.git-clone.results.git-commit),$(tasks.git-clone.results.git-branch)"
         - name: pipeline-debug
