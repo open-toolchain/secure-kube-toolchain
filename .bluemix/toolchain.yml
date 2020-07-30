@@ -62,6 +62,8 @@ services:
         execute: true
   webide:
     service_id: orion
+  vault:
+    service_id: hashicorpvault
 form:
   pipeline:
     parameters:
