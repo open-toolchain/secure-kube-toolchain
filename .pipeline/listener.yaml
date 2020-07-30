@@ -116,9 +116,9 @@ metadata:
 spec:
   params:
     - name: repository
-      value: "$(params.repository)"
+      value: $(params.repository)
     - name: branch
-      value: "$(params.branch)"
+      value: $(params.branch)
 ---
 apiVersion: tekton.dev/v1beta1
 kind: EventListener
