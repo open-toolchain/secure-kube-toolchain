@@ -9,6 +9,7 @@ spec:
       description: The git repo
     - name: branch
       description: the branch for the git repo
+      default: "master"
     - name: revision
       description: the git revision/commit for the git repo
       default: ""
@@ -115,10 +116,6 @@ metadata:
   name: trigger-binding-manual
 spec:
   params:
-    - name: repository
-      value: "$params.repository"
-    - name: branch
-      value: "$params.branch"
 ---
 apiVersion: tekton.dev/v1beta1
 kind: EventListener
