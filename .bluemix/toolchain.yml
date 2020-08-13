@@ -12,6 +12,7 @@ template:
   required:
     - build
     - repo
+    - hv-vault
   $configuration:
      ENABLE_EXTENSIONS: true
      ENABLE_IF_ELSE: true
