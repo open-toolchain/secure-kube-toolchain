@@ -122,6 +122,8 @@ services:
           $env.pipeline_type === 'tekton' ? false : true
   webide:
     service_id: orion
+  hv-vault:
+    service_id: hashicorpvault
 form:
   pipeline:
     parameters:
