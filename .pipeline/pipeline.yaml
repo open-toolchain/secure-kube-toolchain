@@ -6,9 +6,11 @@ metadata:
 spec:
   params:
     - name: repository
-      description: the git repo
+      description: the git repo containing source code. If empty, the repository url will be found from toolchain
+      default: ""
     - name: branch
       description: the branch for the git repo
+      default: "master"
     - name: revision
       description: the git revision/commit for the git repo
       default: ""
@@ -49,6 +51,15 @@ spec:
   workspaces:
     - name: pipeline-ws
   tasks:
+    - name: extract-repository-url
+      taskRef:
+        name: toolchain-extract-value
+      params:
+        - name: expression
+          # if a params.repository is given, it takes precedence
+          value: '. as $toolchain | ["$(params.repository)"] | if .[0]=="" then $toolchain | .services[] | select(.toolchain_binding.name=="repo") | .dashboard_url else .[0] end'
+        - name: pipeline-debug
+          value: $(params.pipeline-debug)  
     - name: git-clone
       taskRef:
         name: git-clone-repo
@@ -58,7 +69,7 @@ spec:
         - name: ibmcloud-apikey-secret-key
           value: "toolchain-apikey"
         - name: repository
-          value: $(params.repository)
+          value: $(tasks.extract-repository-url.results.extracted-value)
         - name: branch
           value: $(params.branch)
         - name: revision

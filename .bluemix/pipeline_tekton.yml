@@ -43,6 +43,10 @@ triggers:
     service: ${APP_REPO}
     branch: master
     events: { "push": true }
+  - type: manual
+    name: manual-run
+    eventListener: manual-run
+    properties: []
 properties:
   - type: secure
     name: toolchain-apikey
