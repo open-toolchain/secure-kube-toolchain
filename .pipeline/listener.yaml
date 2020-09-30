@@ -9,19 +9,36 @@ spec:
       description: The git repo
     - name: branch
       description: the branch for the git repo
+      default: "master"
     - name: revision
       description: the git revision/commit for the git repo
       default: ""
     - name: app-name
       description: application name
+    - name: fail-on-lint-errors
+      description: force failure of task when docker lint errors are found
+      default: "true"
     - name: registry-region
       description: The IBM Cloud region for image registry
     - name: registry-namespace
       description: container registry namespace
     - name: image-name
       description: image name
+    - name: path-to-context
+      default: "."
     - name: path-to-dockerfile
       default: "."
+    - name: dockerfile
+      default: "Dockerfile"
+    - name: build-args
+      description: ibmcloud cr build argument list in the format 'KEY=VALUE' with a key-value pair per line.
+      default: ""
+    - name: fail-on-scanned-issues
+      description: force failure of task when vulnerability advisor scan issues are found
+      default: "false"
+    - name: deployment-file
+      description: file containing the kubernetes deployment definition
+      default: "deployment.yml"
     - name: pipeline-debug
       default: "0"
     - name: cluster-name
@@ -58,14 +75,26 @@ spec:
             value: $(params.revision)
           - name: app-name
             value: $(params.app-name)
+          - name: fail-on-lint-errors
+            value: $(params.fail-on-lint-errors)
           - name: registry-region
             value: $(params.registry-region)
           - name: registry-namespace
             value: $(params.registry-namespace)
           - name: image-name
             value: $(params.image-name)
+          - name: path-to-context
+            value: $(params.path-to-context)
           - name: path-to-dockerfile
             value: $(params.path-to-dockerfile)
+          - name: dockerfile
+            value: $(params.dockerfile)
+          - name: build-args
+            value: $(params.build-args)
+          - name: fail-on-scanned-issues
+            value: $(params.fail-on-scanned-issues)
+          - name: deployment-file
+            value: $(params.deployment-file)
           - name: dev-region
             value: $(params.dev-region)
           - name: dev-resource-group
@@ -87,10 +116,6 @@ metadata:
   name: trigger-binding-manual
 spec:
   params:
-    - name: repository
-      value: "$params.repository"
-    - name: branch
-      value: "$params.branch"
 ---
 apiVersion: tekton.dev/v1beta1
 kind: EventListener

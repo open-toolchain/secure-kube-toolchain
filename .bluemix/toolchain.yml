@@ -45,13 +45,12 @@ services:
       has_issues: true
       enable_traceability: true
       legal: true
-      kind: ['app']
   pipeline-repo:
     service_id: >
       $env.pipeline_type === 'tekton' ? 'githubconsolidated' : '' 
     parameters:
       repo_url: $env.repository
-      source_repo_url: "https://github.com/proc-org/secure-kube-toolchain"  
+      source_repo_url: "https://github.com/open-toolchain/secure-kube-toolchain"  
       type: "link"
       has_issues: false
       enable_traceability: false
@@ -127,7 +126,6 @@ form:
   pipeline:
     parameters:
       app-name: "{{services.repo.parameters.repo_name}}"
-      prod-cluster-namespace: >
-        $env.pipeline_type === 'tekton' ? 'default' : 'prod'
+      prod-cluster-namespace: prod
     schema:
       $ref: deploy.json
