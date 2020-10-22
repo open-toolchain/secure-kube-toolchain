@@ -119,7 +119,7 @@ services:
               'grit-or-gitlab-commit';
             }
         execute: >
-          $env.pipeline_type === 'tekton' ? false : true
+          $env.pipeline_type === 'tekton' ? manual-run : true
   webide:
     service_id: orion
 form:
