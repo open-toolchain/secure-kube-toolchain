@@ -98,13 +98,6 @@ spec:
       runAfter: [git-clone]
       taskRef:
         name: doi-publish-buildrecord
-      conditions:
-        - conditionRef: utils-evaluate
-          params:
-            - name: value
-              value: $(tasks.extract-doi-enablement.results.extracted-value)
-            - name: expected
-              value: "1"
       params:
         - name: toolchain-apikey-secret-key
           value: "toolchain-apikey"
