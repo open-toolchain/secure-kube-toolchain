@@ -1,0 +1,71 @@
+---
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: pr-pipeline
+spec:
+  params:
+
+    - name: branch
+      description: branch
+    - name: revision
+      description: the git revision/commit for the git repo
+      default: ""
+    - name: pipeline-debug
+      description: toggles debug mode for the pipeline
+    - name: pr-url
+      description: pr url
+    - name: repository
+      description: the git repo containing source code. If empty, the repository url will be found from toolchain
+      default: ""
+    - name: commit-timestamp
+    - name: scm-type
+    - name: project-id
+      default: ""
+  workspaces:
+    - name: pipeline-ws
+
+  tasks:
+    - name: extract-repository-url
+      taskRef:
+        name: toolchain-extract-value
+      params:
+        - name: expression
+          # if a params.repository is given, it takes precedence
+          value: '. as $toolchain | ["$(params.repository)"] | if .[0]=="" then $toolchain | .services[] | select(.toolchain_binding.name=="repo") | .dashboard_url else .[0] end'
+        - name: pipeline-debug
+          value: $(params.pipeline-debug)  
+    - name: git-clone
+      taskRef:
+        name: git-clone-repo
+      params:
+        - name: continuous-delivery-context-secret
+          value: "secure-properties"
+        - name: ibmcloud-apikey-secret-key
+          value: "apikey"
+        - name: repository
+          value: $(tasks.extract-repository-url.results.extracted-value)
+        - name: branch
+          value: $(params.branch)
+        - name: revision
+          value: $(params.revision)
+        - name: pipeline-debug
+          value: $(params.pipeline-debug)
+      workspaces:
+        - name: output
+          workspace: pipeline-ws
+    - name: unit-tests
+      runAfter: [git-clone]
+      taskRef:
+        name: tester-run-tests
+      params:
+        - name: tests-script
+          value: |
+            if [ -f ./tests/run-tests.sh ]; then
+              source ./tests/run-tests.sh
+            else
+              echo "Test runner script not found: ./tests/run-tests.sh"
+            fi
+      workspaces:
+        - name: artifacts
+          workspace: pipeline-ws

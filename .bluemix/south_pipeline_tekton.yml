@@ -3,7 +3,7 @@ inputs:
   - type: git
     branch: ${PIPELINE_REPO_BRANCH}
     service: ${PIPELINE_REPO}
-    path: .pipeline
+    path: .south_pipeline
   - type: git
     branch: master
     service: ${TEKTON_CATALOG_REPO}
