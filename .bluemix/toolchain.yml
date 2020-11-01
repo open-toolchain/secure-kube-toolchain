@@ -182,7 +182,7 @@ services:
             }
         execute: >
             if ( $env.pipeline_type === 'tekton' ) {
-              manual-run;
+              `manual-run`;
             } else {
               true;
             }
