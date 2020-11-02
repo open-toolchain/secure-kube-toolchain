@@ -69,7 +69,8 @@ services:
       enable_traceability: false
       kind: ['pipeline']
   pr:
-    service_id: pipeline
+    service_id: >
+      $env.pipeline_type === 'tekton' ? 'pipeline' : ''
     parameters:
       services:
         - repo
@@ -120,7 +121,6 @@ services:
     parameters:
       services:
         - repo
-        - tekton-catalog-repo
       name: 'ci-pipeline'
       ui-pipeline: true
       type: >
