@@ -47,6 +47,16 @@ spec:
     - name: dev-resource-group
     - name: dev-cluster-namespace
       description: namespace dev
+    - name: pr-url
+      description: PR url
+    - name: apikey
+    - name: commit-timestamp
+      description: commit timestamp
+    - name: scm-type
+      description: source code type used (github, github-ent, gitlab)
+    - name: project-id
+      description: project id
+      default: ""
   resourcetemplates:
     - apiVersion: v1
       kind: PersistentVolumeClaim
@@ -105,6 +115,16 @@ spec:
             value: $(params.dev-cluster-namespace)
           - name: pipeline-debug
             value: $(params.pipeline-debug)
+          - name: apikey
+            value: $(params.apikey)
+          - name: pr-url
+            value: $(params.pr-url)
+          - name: commit-timestamp
+            value: $(params.commit-timestamp)
+          - name: scm-type
+            value: $(params.scm-type)
+          - name: project-id
+            value: $(params.project-id) 
         workspaces:
           - name: pipeline-ws
             persistentVolumeClaim:
@@ -153,7 +173,9 @@ spec:
     - name: commit-timestamp
       value: $(event.repository.updated_at)
     - name: repository
-      value: $(event.repository.html_url) 
+      value: $(event.repository.html_url)
+    - name: scm-type
+      value: "github"
 ---
 apiVersion: tekton.dev/v1beta1
 kind: EventListener
@@ -201,7 +223,9 @@ spec:
     - name: commit-timestamp
       value: $(event.commits[0].timestamp)
     - name: repository
-      value: $(event.project.http_url) 
+      value: $(event.project.http_url)
+    - name: scm-type
+      value: "gitlab"
 ---
 apiVersion: tekton.dev/v1beta1
 kind: TriggerBinding
@@ -217,6 +241,8 @@ spec:
       value: $(event.repository.pushed_at)
     - name: repository
       value: $(event.repository.html_url)
+    - name: scm-type
+      value: "github-ent"
 ---
 apiVersion: tekton.dev/v1beta1
 kind: TriggerBinding
@@ -234,6 +260,8 @@ spec:
       value: "$(event.pull_request.head.repo.pushed_at)"
     - name: commit-id
       value: "$(event.pull_request.head.sha)"
+    - name: scm-type
+      value: "bitbucket"
 ---
 apiVersion: tekton.dev/v1beta1
 kind: EventListener

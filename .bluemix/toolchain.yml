@@ -12,6 +12,8 @@ template:
   required:
     - build
     - repo
+    - tekton-catalog-repo
+    - tekton-gitsecure
   $configuration:
      ENABLE_EXTENSIONS: true
      ENABLE_IF_ELSE: true
@@ -54,6 +56,7 @@ services:
       type: "link"
       has_issues: false
       enable_traceability: false
+      legal: true
       kind: ['pipeline']
   tekton-catalog-repo:
     service_id: >
@@ -65,19 +68,75 @@ services:
       has_issues: false
       enable_traceability: false
       kind: ['pipeline']
+  pr:
+    service_id: >
+      $env.pipeline_type === 'tekton' ? 'pipeline' : ''
+    parameters:
+      services:
+        - repo
+        - tekton-catalog-repo
+      name: 'pr-pipeline'
+      type: >
+        $env.pipeline_type === 'tekton' ? 'tekton': 'classic'
+      ui-pipeline: true
+      configuration:
+        content:
+          $text: >
+            if ( $env.pipeline_type === 'tekton' ) {
+              if ( $env.env_id === 'ibm:yp:us-south' ) {
+                "south_pr_pipeline_tekton.yml"
+              } else {
+                "pr_pipeline_tekton.yml"
+              }
+            } else {
+              "pipeline.yml"
+            }
+        env:
+          PIPELINE_REPO: pipeline-repo
+          APP_REPO: repo
+          API_KEY: '{{form.pipeline.parameters.api-key}}'
+          APP_NAME: "{{form.pipeline.parameters.app-name}}"
+          ARTIFACTORY_DOCKER_CONFIG_JSON: '{{form.artifactoryComp.parameters.docker_config_json}}'
+          PRIVATE_WORKER: '{{services.privateWorker.parameters.name}}'
+          PIPELINE_REPO_BRANCH: >
+            $env.branch ? $env.branch : "master"
+          TEKTON_CATALOG_REPO: tekton-catalog-repo
+          REGISTRY_REGION_ID: "{{form.pipeline.parameters.registry-region}}"
+          REGISTRY_NAMESPACE: "{{form.pipeline.parameters.registry-namespace}}"
+          GIT_COMMIT_EVENT_LISTENER_NAME: >
+            if ( $env.source_provider === 'githubconsolidated' ) {
+              'github-pr-listener';
+            } else if ( $env.source_provider === 'gitlab' ) {
+              'gitlab-pr-listener';
+            } else if ( $env.source_provider === 'bitbucketgit' ) {
+              'bitbucket-commit';
+            } else if ( $env.source_provider === 'github_integrated' ) {
+              'github-ent-pr-listener';
+            } else {
+              'gitlab-pr-listener';
+            }
+        execute: false
   build:
     service_id: pipeline
     parameters:
       services:
         - repo
-      name: "{{services.repo.parameters.repo_name}}"
+      name: 'ci-pipeline'
       ui-pipeline: true
       type: >
         $env.pipeline_type === 'tekton' ? 'tekton': 'classic'
       configuration:
         content:
           $text: >
-            $env.pipeline_type === 'tekton' ? 'pipeline_tekton.yml' : 'pipeline.yml'
+            if ( $env.pipeline_type === 'tekton' ) {
+              if ( $env.env_id === 'ibm:yp:us-south' ) {
+                "south_pipeline_tekton.yml"
+              } else {
+                "pipeline_tekton.yml"
+              }
+            } else {
+              "pipeline.yml"
+            }
         env:
           APP_REPO: repo
           APP_NAME: "{{form.pipeline.parameters.app-name}}"
@@ -108,18 +167,21 @@ services:
           TEKTON_CATALOG_REPO: tekton-catalog-repo
           GIT_COMMIT_EVENT_LISTENER_NAME: >
             if ( $env.source_provider === 'githubconsolidated' ) {
-              'github-commit';
+              'github-ci-listener';
             } else if ( $env.source_provider === 'gitlab' ) {
-              'grit-or-gitlab-commit';
+              'gitlab-ci-listener';
             } else if ( $env.source_provider === 'bitbucketgit' ) {
               'bitbucket-commit';
             } else if ( $env.source_provider === 'github_integrated' ) {
-              'github-commit';
+              'github-ent-ci-listener';
             } else {
-              'grit-or-gitlab-commit';
+              'gitlab-ci-listener';
             }
         execute: >
           $env.pipeline_type === 'tekton' ? 'manual-run' : true
+  devops-insights:
+    service_id: >
+      $env.pipeline_type === 'tekton' && $env.env_id === 'ibm:yp:us-south' ? 'draservicebroker' : '' 
   webide:
     service_id: orion
 form:

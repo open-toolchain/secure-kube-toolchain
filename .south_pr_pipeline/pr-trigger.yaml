@@ -1,0 +1,73 @@
+---
+apiVersion: tekton.dev/v1beta1
+kind: TriggerTemplate
+metadata:
+  name: pr-template
+spec:
+  params:
+    - name: branch
+      description: branch
+    - name: target-branch
+      description: target branch
+    - name: target-commit-id
+      description: target commit id
+    - name: repository-integration
+      description: the repo integration name
+    - name: commit-id
+      description: commit id
+    - name: pipeline-debug
+      description: toggles debug mode for the pipeline
+    - name: pr-url
+      description: PR url
+    - name: apikey
+    - name: commit-timestamp
+      description: commit timestamp
+    - name: scm-type
+      description: source code type used (github, github-ent, gitlab)
+    - name: project-id
+      description: project id
+      default: ""
+  resourcetemplates:
+    - apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
+        name: pipelinerun-$(uid)-pvc
+      spec:
+        resources:
+          requests:
+            storage: 5Gi
+        volumeMode: Filesystem
+        accessModes:
+          - ReadWriteOnce
+    - apiVersion: tekton.dev/v1beta1
+      kind: PipelineRun
+      metadata:
+        name: pipelinerun-$(uid)
+      spec:
+        pipelineRef:
+          name: pr-pipeline
+        workspaces:
+          - name: pipeline-ws
+            persistentVolumeClaim:
+              claimName: pipelinerun-$(uid)-pvc
+        params:
+          - name: branch
+            value: $(params.branch)
+          - name: target-branch
+            value: $(params.target-branch)
+          - name: repository-integration
+            value: $(params.repository-integration)
+          - name: commit-id
+            value: $(params.commit-id)
+          - name: pipeline-debug
+            value: $(params.pipeline-debug)
+          - name: pr-url
+            value: $(params.pr-url)
+          - name: apikey
+            value: $(params.apikey)
+          - name: commit-timestamp
+            value: $(params.commit-timestamp)
+          - name: scm-type
+            value: $(params.scm-type)
+          - name: project-id
+            value: $(params.project-id) 

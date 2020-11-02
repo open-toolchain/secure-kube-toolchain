@@ -1,0 +1,45 @@
+---
+inputs:
+  - type: git
+    branch: ${PIPELINE_REPO_BRANCH}
+    service: ${PIPELINE_REPO}
+    path: .south_pr_pipeline
+  - type: git
+    branch: master
+    service: ${TEKTON_CATALOG_REPO}
+    path: git
+  - type: git
+    service: ${TEKTON_CATALOG_REPO}
+    branch: master
+    path: toolchain
+  - type: git
+    branch: master
+    service: ${TEKTON_CATALOG_REPO}
+    path: cra
+  - type: git
+    branch: master
+    service: ${TEKTON_CATALOG_REPO}
+    path: linter
+  - type: git
+    branch: master
+    service: ${TEKTON_CATALOG_REPO}
+    path: tester
+  - type: git
+    branch: master
+    service: ${TEKTON_CATALOG_REPO}
+    path: utils
+triggers:
+  - type: git
+    name: Git PR Trigger
+    service: ${APP_REPO}
+    branch: master
+    events:
+      pull_request: true
+    eventListener: ${GIT_COMMIT_EVENT_LISTENER_NAME}
+properties:
+  - name: apikey
+    value: ${API_KEY}
+    type: SECURE
+  - name: pipeline-debug
+    value: "0"
+    type: text
