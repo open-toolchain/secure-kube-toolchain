@@ -180,12 +180,7 @@ services:
             } else {
               'gitlab-ci-listener';
             }
-        execute: >
-            if ( $env.pipeline_type === 'tekton' ) {
-              `manual-run`;
-            } else {
-              true;
-            }
+        execute: manual-run
   devops-insights:
     service_id: >
       $env.pipeline_type === 'tekton' && $env.env_id === 'ibm:yp:us-south' ? 'draservicebroker' : '' 
