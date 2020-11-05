@@ -167,15 +167,15 @@ services:
           TEKTON_CATALOG_REPO: tekton-catalog-repo
           GIT_COMMIT_EVENT_LISTENER_NAME: >
             if ( $env.source_provider === 'githubconsolidated' ) {
-              'github-ci-listener';
+              'github-commit';
             } else if ( $env.source_provider === 'gitlab' ) {
-              'gitlab-ci-listener';
+              'grit-or-gitlab-commit';
             } else if ( $env.source_provider === 'bitbucketgit' ) {
               'bitbucket-commit';
             } else if ( $env.source_provider === 'github_integrated' ) {
-              'github-ent-ci-listener';
+              'github-commit';
             } else {
-              'gitlab-ci-listener';
+              'grit-or-gitlab-commit';
             }
         execute: >
           $env.pipeline_type === 'tekton' ? 'manual-run' : true
