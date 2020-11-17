@@ -131,7 +131,35 @@ spec:
 apiVersion: tekton.dev/v1beta1
 kind: TriggerBinding
 metadata:
-  name: github-ci-binding
+  name: github-ent-commit
+spec:
+  params:
+    - name: branch
+      value: $(event.ref)
+    - name: commit-id
+      value: $(event.after)
+    - name: commit-timestamp
+      value: $(event.repository.pushed_at)
+    - name: repository
+      value: $(event.repository.html_url)
+    - name: scm-type
+      value: "github-ent"
+---        
+apiVersion: tekton.dev/v1beta1
+kind: EventListener
+metadata:
+  name: github-ent-commit
+spec:
+  triggers:
+    - bindings: 
+        - name: github-ent-commit   
+      template:
+        name: trigger-template-secure-kube
+---
+apiVersion: tekton.dev/v1beta1
+kind: TriggerBinding
+metadata:
+  name: github-commit
 spec:
   params:
     - name: branch
@@ -148,40 +176,18 @@ spec:
 apiVersion: tekton.dev/v1beta1
 kind: EventListener
 metadata:
-  name: github-ci-listener
+  name: github-commit
 spec:
   triggers:
     - bindings:  
-        - name: github-ci-binding   
-      template:
-        name: trigger-template-secure-kube
----
-apiVersion: tekton.dev/v1beta1
-kind: EventListener
-metadata:
-  name: gitlab-ci-listener
-spec:
-  triggers:
-    - bindings:   
-        - name: gitlab-ci-binding
-      template:
-        name: trigger-template-secure-kube
----        
-apiVersion: tekton.dev/v1beta1
-kind: EventListener
-metadata:
-  name: github-ent-ci-listener
-spec:
-  triggers:
-    - bindings: 
-        - name: github-ent-ci-binding   
+        - name: github-commit   
       template:
         name: trigger-template-secure-kube
 ---
 apiVersion: tekton.dev/v1beta1
 kind: TriggerBinding
 metadata:
-  name: gitlab-ci-binding
+  name: grit-or-gitlab-commit
 spec:
   params:
     - name: branch
@@ -196,21 +202,15 @@ spec:
       value: "gitlab"
 ---
 apiVersion: tekton.dev/v1beta1
-kind: TriggerBinding
+kind: EventListener
 metadata:
-  name: github-ent-ci-binding
+  name: grit-or-gitlab-commit
 spec:
-  params:
-    - name: branch
-      value: $(event.ref)
-    - name: commit-id
-      value: $(event.after)
-    - name: commit-timestamp
-      value: $(event.repository.pushed_at)
-    - name: repository
-      value: $(event.repository.html_url)
-    - name: scm-type
-      value: "github-ent"
+  triggers:
+    - bindings:   
+        - name: grit-or-gitlab-commit
+      template:
+        name: trigger-template-secure-kube
 ---
 apiVersion: tekton.dev/v1beta1
 kind: TriggerBinding
