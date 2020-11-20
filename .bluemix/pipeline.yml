@@ -47,10 +47,10 @@ stages:
     script: |-
       #!/bin/bash
       # set -x
-      if [ -f ./tests/run-tests.sh ]; then
-        source ./tests/run-tests.sh
+      if [ -f ./tests/start-tests.sh ]; then
+        source ./tests/start-tests.sh
       else
-        echo "Test runner script not found: ./tests/run-tests.sh"
+        echo "Test runner script not found: ./tests/start-tests.sh"
       fi
 - name: CONTAINERIZE
   properties:
