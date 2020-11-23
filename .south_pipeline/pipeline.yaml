@@ -95,7 +95,11 @@ spec:
         - name: pipeline-debug
           value: $(params.pipeline-debug)
     - name: publish-doi-buildrecord
-      runAfter: [git-clone]
+      runAfter: [extract-doi-enablement]
+      when:
+        - input: $(tasks.extract-doi-enablement.results.extracted-value)
+          operator: in
+          values: ["1"]
       taskRef:
         name: doi-publish-buildrecord
       params:
@@ -303,15 +307,12 @@ spec:
           workspace: pipeline-ws
     - name: publish-doi-va-scan-record
       runAfter: [vulnerability-advisor]
+      when:
+        - input: $(tasks.extract-doi-enablement.results.extracted-value)
+          operator: in
+          values: ["1"]
       taskRef:
         name: doi-publish-testrecord
-      conditions:
-        - conditionRef: utils-evaluate
-          params:
-            - name: value
-              value: $(tasks.extract-doi-enablement.results.extracted-value)
-            - name: expected
-              value: "1"
       params:
         - name: toolchain-apikey-secret-key
           value: "toolchain-apikey"
