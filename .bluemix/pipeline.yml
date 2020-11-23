@@ -47,15 +47,15 @@ stages:
     script: |-
       #!/bin/bash
       # set -x
-      if [ -f ./test/start-tests.sh ]; then
-        source ./test/start-tests.sh
+      if [ -f ./test/run-tests.sh ]; then
+        source ./test/run-tests.sh
         if jq -e '.services[] | select(.service_id=="draservicebroker")' _toolchain.json; then
           ibmcloud login --apikey ${IBM_CLOUD_API_KEY} --no-region
           ibmcloud doi publishtestrecord --logicalappname ${IMAGE_NAME} --buildnumber=$BUILD_NUMBER --filelocation=./tests/unit-test.json --type=unittest
           ibmcloud doi publishtestrecord --logicalappname ${IMAGE_NAME} --buildnumber=$BUILD_NUMBER --filelocation=./tests/fvt-test.json --type=fvt
         fi
       else
-        echo "Test runner script not found: ./test/start-tests.sh"
+        echo "Test runner script not found: ./test/run-tests.sh"
       fi
 - name: CONTAINERIZE
   properties:
