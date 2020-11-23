@@ -51,8 +51,8 @@ stages:
         source ./test/run-tests.sh
         if jq -e '.services[] | select(.service_id=="draservicebroker")' _toolchain.json; then
           ibmcloud login --apikey ${IBM_CLOUD_API_KEY} --no-region
-          ibmcloud doi publishtestrecord --logicalappname ${IMAGE_NAME} --buildnumber=$BUILD_NUMBER --filelocation=./tests/unit-test.json --type=unittest
-          ibmcloud doi publishtestrecord --logicalappname ${IMAGE_NAME} --buildnumber=$BUILD_NUMBER --filelocation=./tests/fvt-test.json --type=fvt
+          ibmcloud doi publishtestrecord --logicalappname ${IMAGE_NAME} --buildnumber=$BUILD_NUMBER --filelocation=./test/unit-test.json --type=unittest
+          ibmcloud doi publishtestrecord --logicalappname ${IMAGE_NAME} --buildnumber=$BUILD_NUMBER --filelocation=./test/fvt-test.json --type=fvt
         fi
       else
         echo "Test runner script not found: ./test/run-tests.sh"
