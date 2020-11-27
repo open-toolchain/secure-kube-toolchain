@@ -129,7 +129,7 @@ services:
         content:
           $text: >
             if ( $env.pipeline_type === 'tekton' ) {
-              if ( $env.env_id === 'ibm:yp:us-south' ) {
+              if ( $env.env_id === 'ibm:yp:us-south' || $env.env_id === 'ibm:yp:au-syd') {
                 "south_pipeline_tekton.yml"
               } else {
                 "pipeline_tekton.yml"
@@ -180,8 +180,8 @@ services:
         execute: >
           $env.pipeline_type === 'tekton' ? 'manual-run' : true
   devops-insights:
-    service_id: >
-      $env.pipeline_type === 'tekton' && $env.env_id === 'ibm:yp:us-south' ? 'draservicebroker' : '' 
+      service_id: >
+        $env.env_id === 'ibm:yp:us-south' || $env.env_id === 'ibm:yp:eu-de' || $env.env_id === 'ibm:yp:eu-gb' || $env.env_id === 'ibm:yp:au-syd' ? 'draservicebroker' : ''
   webide:
     service_id: orion
 form:
