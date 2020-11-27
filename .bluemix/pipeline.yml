@@ -49,10 +49,15 @@ stages:
       # set -x
       if [ -f ./test/run-tests.sh ]; then
         source ./test/run-tests.sh
+        ibmcloud login --apikey $IBM_CLOUD_API_KEY --no-region
+        IFS=';' read -ra locations <<< "$FILE_LOCATIONS"
+        IFS=';' read -ra types <<< "$TEST_TYPES"
         if jq -e '.services[] | select(.service_id=="draservicebroker")' _toolchain.json; then
-          ibmcloud login --apikey ${IBM_CLOUD_API_KEY} --no-region
-          ibmcloud doi publishtestrecord --logicalappname ${IMAGE_NAME} --buildnumber=$BUILD_NUMBER --filelocation=./test/unit-test.json --type=unittest
-          ibmcloud doi publishtestrecord --logicalappname ${IMAGE_NAME} --buildnumber=$BUILD_NUMBER --filelocation=./test/fvt-test.json --type=fvt
+          for i in "${!locations[@]}"
+          do
+            echo "$i ${locations[i]} ${types[i]}"
+            ibmcloud doi publishtestrecord --logicalappname=${IMAGE_NAME} --buildnumber=$BUILD_NUMBER --filelocation=${locations[i]} --type=${types[i]}
+          done
         fi
       else
         echo "Test runner script not found: ./test/run-tests.sh"
