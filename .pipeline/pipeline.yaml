@@ -127,6 +127,16 @@ spec:
       runAfter: [docker-lint]
       taskRef:
         name: tester-run-tests
+      params:
+        - name: tests-script
+          value: |
+            if [ -f ./tests/run-tests.sh ]; then
+              source ./test/run-tests.sh
+              echo -n $FILE_LOCATIONS > $(results.test-result-file-paths.path)
+              echo -n $TEST_TYPES > $(results.test-types.path)
+            else
+              echo "Test runner script not found: ./test/run-tests.sh"
+            fi
       workspaces:
         - name: artifacts
           workspace: pipeline-ws
@@ -149,9 +159,9 @@ spec:
         - name: app-name
           value: $(params.app-name)
         - name: file-locations
-          value: ""
+          value: "$(tasks.unit-tests.results.test-result-file-paths)"
         - name: test-types
-          value: "unittest;fvt"
+          value: "$(tasks.unit-tests.results.test-types)"
         - name: pipeline-debug
           value: $(params.pipeline-debug)
       workspaces:
