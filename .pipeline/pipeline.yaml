@@ -138,7 +138,7 @@ spec:
       workspaces:
         - name: artifacts
           workspace: pipeline-ws
-    - name: publish-doi-test-results
+    - name: publish-doi-code-tests
       runAfter: [unit-test]
       when:
         - input: $(tasks.extract-doi-enablement.results.extracted-value)
