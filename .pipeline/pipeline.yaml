@@ -149,7 +149,7 @@ spec:
         - name: app-name
           value: $(params.app-name)
         - name: file-locations
-          value: "./test/unit-test.json;./test/fvt-test.json"
+          value: ""
         - name: test-types
           value: "unittest;fvt"
         - name: pipeline-debug
