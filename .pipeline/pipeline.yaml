@@ -130,7 +130,7 @@ spec:
       params:
         - name: tests-script
           value: |
-            if [ -f ./test/run-tests.sh ]; then
+            if [ -f ./tests/run-tests.sh ]; then
               source ./test/run-tests.sh
             else
               echo "Test runner script not found: ./test/run-tests.sh"
