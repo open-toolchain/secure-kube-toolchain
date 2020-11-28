@@ -139,7 +139,7 @@ spec:
         - name: artifacts
           workspace: pipeline-ws
     - name: publish-doi-code-tests
-      runAfter: [unit-test]
+      runAfter: [unit-tests]
       when:
         - input: $(tasks.extract-doi-enablement.results.extracted-value)
           operator: in
