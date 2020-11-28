@@ -146,9 +146,6 @@ spec:
         - input: $(tasks.extract-doi-enablement.results.extracted-value)
           operator: in
           values: ["1"]
-        - input: $(tasks.unit-tests.results.tests-exit-code)
-          operator: in
-          values: ["0"]
       taskRef:
         name: doi-publish-testrecord
       params:
