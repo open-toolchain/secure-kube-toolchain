@@ -132,8 +132,10 @@ spec:
           value: |
             if [ -f ./tests/run-tests.sh ]; then
               source ./test/run-tests.sh
-              echo -n $FILE_LOCATIONS > $(results.test-result-file-paths.path)
-              echo -n $TEST_TYPES > $(results.test-types.path)
+              #echo -n $FILE_LOCATIONS > $(results.test-result-file-paths.path)
+              #echo -n $TEST_TYPES > $(results.test-types.path)
+              echo "$FILE_LOCATIONS"
+              echo "$TEST_TYPES"
             else
               echo "Test runner script not found: ./test/run-tests.sh"
             fi
