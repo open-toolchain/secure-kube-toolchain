@@ -130,11 +130,38 @@ spec:
       params:
         - name: tests-script
           value: |
-            if [ -f ./tests/run-tests.sh ]; then
-              source ./tests/run-tests.sh
+            if [ -f ./test/run-tests.sh ]; then
+              source ./test/run-tests.sh
             else
-              echo "Test runner script not found: ./tests/run-tests.sh"
+              echo "Test runner script not found: ./test/run-tests.sh"
             fi
+      workspaces:
+        - name: artifacts
+          workspace: pipeline-ws
+    - name: publish-doi-test-results
+      runAfter: [unit-test]
+      when:
+        - input: $(tasks.extract-doi-enablement.results.extracted-value)
+          operator: in
+          values: ["1"]
+        - input: $(tasks.unit-tests.results.tests-exit-code)
+          operator: in
+          values: ["1"]
+      taskRef:
+        name: doi-publish-testrecord
+      params:
+        - name: toolchain-apikey-secret-key
+          value: "toolchain-apikey"
+        - name: build-number
+          value: "$(tasks.publish-doi-buildrecord.results.build-number)"
+        - name: app-name
+          value: $(params.app-name)
+        - name: file-locations
+          value: "./test/unit-test.json;./test/fvt-test.json"
+        - name: test-types
+          value: "unittest;fvt"
+        - name: pipeline-debug
+          value: $(params.pipeline-debug)
       workspaces:
         - name: artifacts
           workspace: pipeline-ws
