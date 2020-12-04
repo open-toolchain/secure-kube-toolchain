@@ -27,4 +27,5 @@ zh-HK:
   $ref: ./nls/messages_zh_HK.yml
 zh-TW:
   $ref: ./nls/messages_zh_TW.yml
-  
+zh-CN:
+  $ref: ./nls/messages_zh.yml
