@@ -53,7 +53,7 @@ services:
     parameters:
       repo_url: $env.repository
       source_repo_url: "https://github.com/open-toolchain/secure-kube-toolchain"  
-      type: "link"
+      type: $env.type || 'clone'
       has_issues: false
       enable_traceability: false
       legal: true
