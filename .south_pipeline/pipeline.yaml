@@ -269,7 +269,7 @@ spec:
     - name: containerize
       runAfter: [unit-tests]
       taskRef:
-        name: icr-cr-build
+        name: icr-containerize
       params:
         - name: continuous-delivery-context-secret
           value: "secure-properties"
