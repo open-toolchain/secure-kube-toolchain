@@ -61,10 +61,10 @@ spec:
       params:
         - name: tests-script
           value: |
-            if [ -f ./tests/run-tests.sh ]; then
-              source ./tests/run-tests.sh
+            if [ -f ./test/run-tests.sh ]; then
+              source ./test/run-tests.sh
             else
-              echo "Test runner script not found: ./tests/run-tests.sh"
+              echo "Test runner script not found: ./test/run-tests.sh"
             fi
       workspaces:
         - name: artifacts

@@ -42,35 +42,33 @@ stages:
 
       # check if doi is integrated in this toolchain
       if jq -e '.services[] | select(.service_id=="draservicebroker")' _toolchain.json; then
-        # Record build information
         ibmcloud login --apikey ${IBM_CLOUD_API_KEY} --no-region
         ibmcloud doi publishbuildrecord --branch ${GIT_BRANCH} --repositoryurl ${GIT_URL} --commitid ${GIT_COMMIT} \
           --buildnumber ${BUILD_NUMBER} --logicalappname ${IMAGE_NAME} --status pass
       fi
-  - name: Unit Tests
+  - name: Tests
     type: tester
     script: |-
       #!/bin/bash
       # set -x
-      # need to set the ibmcloud api for staging env. The value defaults to cloud.ibm.com
       export match=`echo $IDS_URL | grep test`
       if [ $match ]; then
           ibmcloud api test.cloud.ibm.com
       fi
-      if [ -f ./tests/run-tests.sh ]; then
-        source ./tests/run-tests.sh
-        RESULT=$?
-        if [ ! -z "${FILE_LOCATION}"]; then
-          if [ ${RESULT} -ne 0 ]; then STATUS=fail; else STATUS=pass; fi
-            if jq -e '.services[] | select(.service_id=="draservicebroker")' _toolchain.json; then
-              ibmcloud login --apikey ${IBM_CLOUD_API_KEY} --no-region
-              ibmcloud doi publishtestrecord --type unittest --buildnumber ${BUILD_NUMBER} --filelocation ${FILE_LOCATION} \
-                --buildnumber ${BUILD_NUMBER} --logicalappname ${IMAGE_NAME} --status ${STATUS}
-            fi
-          exit $RESULT
+      if [ -f ./test/run-tests.sh ]; then
+        source ./test/run-tests.sh
+        ibmcloud login --apikey $IBM_CLOUD_API_KEY --no-region
+        IFS=';' read -ra locations <<< "$FILE_LOCATIONS"
+        IFS=';' read -ra types <<< "$TEST_TYPES"
+        if jq -e '.services[] | select(.service_id=="draservicebroker")' _toolchain.json; then
+          for i in "${!locations[@]}"
+          do
+            echo "$i ${locations[i]} ${types[i]}"
+            ibmcloud doi publishtestrecord --logicalappname=${IMAGE_NAME} --buildnumber=$BUILD_NUMBER --filelocation=${locations[i]} --type=${types[i]}
+          done
         fi
       else
-        echo "Test runner script not found: ./tests/run-tests.sh"
+        echo "Test runner script not found: ./test/run-tests.sh"
       fi
 - name: CONTAINERIZE
   properties:
