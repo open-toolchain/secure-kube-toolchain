@@ -89,4 +89,4 @@ properties:
   - name: insights
     value: ${INSIGHTS}
     type: integration
-    path: service
+    path: service_id
