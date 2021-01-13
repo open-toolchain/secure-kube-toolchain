@@ -1,4 +1,5 @@
-version: '2'
+---
+version: "2"
 messages:
   $i18n: locales.yml
 template:
@@ -6,11 +7,17 @@ template:
     $ref: "#/messages/template.name"
   description:
     $ref: "#/messages/template.description"
-  header: '![](toolchain.svg?localize)'
+  header: "![](toolchain.svg?localize)"
   icon: secure-lock-kubernetes.svg
   required:
     - build
     - repo
+    - tekton-catalog-repo
+    - tekton-gitsecure
+  $configuration:
+     ENABLE_EXTENSIONS: true
+     ENABLE_IF_ELSE: true
+     EXPRESSION_MAXLENGTH: 1000
   info:
     git url: >
       "[" + $env.repository + "]" +
@@ -20,7 +27,7 @@ template:
         "(" + $env.repository +
           "/tree/" + $env.branch + ")"
 toolchain:
-  name: 'kube-toolchain-{{timestamp}}'
+  name: "kube-toolchain-{{timestamp}}"
   template:
     getting_started:
       $ref: "#/messages/template.gettingStarted"
@@ -29,37 +36,152 @@ services:
     service_id: >
       $env.source_provider ? $env.source_provider : 'hostedgit'
     parameters:
-      repo_name: 'hello-containers-{{timestamp}}'
+      repo_name: "hello-containers-{{timestamp}}"
       repo_url: >
-        $env.type === 'link' ? 
+        $env.type === 'link' ?
           $env.app_repo : 'https://github.com/open-toolchain/hello-containers'
       source_repo_url: >
-        $env.type === 'fork' || $env.type === 'clone' ? 
+        $env.type === 'fork' || $env.type === 'clone' ?
           $env.app_repo : 'https://github.com/open-toolchain/hello-containers'
       type: $env.type || 'clone'
       has_issues: true
       enable_traceability: true
+      legal: true
+  pipeline-repo:
+    service_id: >
+      $env.pipeline_type === 'tekton' ? $env.source_provider ? $env.source_provider : 'hostedgit' : ''
+    parameters:
+      repo_name: "secure-kube-toolchain-{{timestamp}}"
+      repo_url: $env.repository
+      source_repo_url: "https://github.com/open-toolchain/secure-kube-toolchain"  
+      type: $env.type || 'clone'
+      has_issues: false
+      enable_traceability: false
+      legal: true
+      kind: ['pipeline']
+  tekton-catalog-repo:
+    service_id: >
+      $env.pipeline_type === 'tekton' ? 'githubconsolidated' : ''
+    parameters:
+      repo_url: "https://github.com/open-toolchain/tekton-catalog"
+      source_repo_url: "https://github.com/open-toolchain/tekton-catalog"
+      type: "link"
+      has_issues: false
+      enable_traceability: false
+      kind: ['pipeline']
+  pr:
+    service_id: >
+      $env.pipeline_type === 'tekton' ? 'pipeline' : ''
+    parameters:
+      services:
+        - repo
+        - tekton-catalog-repo
+      name: 'pr-pipeline'
+      type: >
+        $env.pipeline_type === 'tekton' ? 'tekton': 'classic'
+      ui-pipeline: true
+      configuration:
+        content:
+          $text: >
+            if ( $env.pipeline_type === 'tekton' ) {
+              if ( $env.env_id === 'ibm:yp:us-south' ) {
+                "south_pr_pipeline_tekton.yml"
+              } else {
+                "pr_pipeline_tekton.yml"
+              }
+            } else {
+              "pipeline.yml"
+            }
+        env:
+          PIPELINE_REPO: pipeline-repo
+          APP_REPO: repo
+          API_KEY: '{{form.pipeline.parameters.api-key}}'
+          APP_NAME: "{{form.pipeline.parameters.app-name}}"
+          ARTIFACTORY_DOCKER_CONFIG_JSON: '{{form.artifactoryComp.parameters.docker_config_json}}'
+          PRIVATE_WORKER: '{{services.privateWorker.parameters.name}}'
+          PIPELINE_REPO_BRANCH: >
+            $env.branch ? $env.branch : "master"
+          TEKTON_CATALOG_REPO: tekton-catalog-repo
+          REGISTRY_REGION_ID: "{{form.pipeline.parameters.registry-region}}"
+          REGISTRY_NAMESPACE: "{{form.pipeline.parameters.registry-namespace}}"
+          GIT_COMMIT_EVENT_LISTENER_NAME: >
+            if ( $env.source_provider === 'githubconsolidated' ) {
+              'github-pr-listener';
+            } else if ( $env.source_provider === 'gitlab' ) {
+              'gitlab-pr-listener';
+            } else if ( $env.source_provider === 'bitbucketgit' ) {
+              'bitbucket-commit';
+            } else if ( $env.source_provider === 'github_integrated' ) {
+              'github-ent-pr-listener';
+            } else {
+              'gitlab-pr-listener';
+            }
+        execute: false
   build:
     service_id: pipeline
     parameters:
       services:
         - repo
-      name: '{{services.repo.parameters.repo_name}}'
+      name: 'ci-pipeline'
       ui-pipeline: true
+      type: >
+        $env.pipeline_type === 'tekton' ? 'tekton': 'classic'
       configuration:
         content:
-          $text: pipeline.yml
+          $text: >
+            if ( $env.pipeline_type === 'tekton' ) {
+              if ( $env.env_id === 'ibm:yp:us-south' || $env.env_id === 'ibm:yp:au-syd') {
+                "south_pipeline_tekton.yml"
+              } else {
+                "pipeline_tekton.yml"
+              }
+            } else {
+              "pipeline.yml"
+            }
         env:
-          GIT_REPO: repo
-          APP_NAME: '{{form.pipeline.parameters.app-name}}'
-          REGISTRY_REGION_ID: '{{form.pipeline.parameters.registry-region}}'
-          REGISTRY_NAMESPACE: '{{form.pipeline.parameters.registry-namespace}}'
-          API_KEY: '{{form.pipeline.parameters.api-key}}'
-          PROD_REGION_ID: '{{form.pipeline.parameters.prod-region}}'
-          PROD_RESOURCE_GROUP: '{{form.pipeline.parameters.prod-resource-group}}'
-          PROD_CLUSTER_NAME: '{{form.pipeline.parameters.prod-cluster-name}}'
-          PROD_CLUSTER_NAMESPACE: '{{form.pipeline.parameters.prod-cluster-namespace}}'
-        execute: true
+          APP_REPO: repo
+          APP_NAME: "{{form.pipeline.parameters.app-name}}"
+          REGISTRY_REGION_ID: "{{form.pipeline.parameters.registry-region}}"
+          REGISTRY_NAMESPACE: "{{form.pipeline.parameters.registry-namespace}}"
+          API_KEY: "{{form.pipeline.parameters.api-key}}"
+          PROD_REGION_ID: "{{form.pipeline.parameters.prod-region}}"
+          PROD_RESOURCE_GROUP: "{{form.pipeline.parameters.prod-resource-group}}"
+          PROD_CLUSTER_NAME: "{{form.pipeline.parameters.prod-cluster-name}}"
+          PROD_CLUSTER_NAMESPACE: "{{form.pipeline.parameters.prod-cluster-namespace}}"
+          APP_REPO_FULL: >
+            if ( $env.source_provider === 'githubconsolidated' ) {
+              "https://github.com/{{services.repo.parameters.owner_id}}/{{services.repo.parameters.repo_name}}";
+            } else if ( $env.source_provider === 'hostedgit' && $env.env_id === 'ibm:yp:au-syd' ) {
+              "https://au-syd.git.cloud.ibm.com/{{services.repo.parameters.owner_id}}/{{services.repo.parameters.repo_name}}"
+            } else if ( $env.source_provider === 'gitlab' ) {
+              "https://gitlab.com/{{services.repo.parameters.owner_id}}/{{services.repo.parameters.repo_name}}";
+            } else if ( $env.source_provider === 'bitbucketgit' ) {
+              "https://bitbucket.org/{{services.repo.parameters.owner_id}}/{{services.repo.parameters.repo_name}}";
+            } else if ( $env.source_provider === 'github_integrated' ) {
+              "https://github.ibm.com/{{services.repo.parameters.owner_id}}/{{services.repo.parameters.repo_name}}";
+            } else {
+              "https://us-south.git.cloud.ibm.com/{{services.repo.parameters.owner_id}}/{{services.repo.parameters.repo_name}}"
+            }
+          PIPELINE_REPO: pipeline-repo
+          PIPELINE_REPO_BRANCH: >
+            $env.branch ? $env.branch : "master"
+          TEKTON_CATALOG_REPO: tekton-catalog-repo
+          GIT_COMMIT_EVENT_LISTENER_NAME: >
+            if ( $env.source_provider === 'githubconsolidated' ) {
+              'github-commit';
+            } else if ( $env.source_provider === 'gitlab' ) {
+              'grit-or-gitlab-commit';
+            } else if ( $env.source_provider === 'bitbucketgit' ) {
+              'bitbucket-commit';
+            } else if ( $env.source_provider === 'github_integrated' ) {
+              'github-ent-commit';
+            } else {
+              'grit-or-gitlab-commit';
+            }
+        execute: >
+          $env.pipeline_type === 'tekton' ? 'manual-run' : true
+  devops-insights:
+      service_id: draservicebroker
   webide:
     service_id: orion
   vault:
@@ -67,7 +189,17 @@ services:
 form:
   pipeline:
     parameters:
-      app-name: '{{services.repo.parameters.repo_name}}'
-      prod-cluster-namespace: prod
+      app-name: >
+        $env.appName ?
+          '{{appName}}' : '{{services.repo.parameters.repo_name}}'
+      prod-cluster-namespace: >
+        $env.prodClusterNamespace ?
+          '{{prodClusterNamespace}}' : 'prod'
+      registry-region: '{{registryRegion}}'
+      registry-namespace: '{{registryNamespace}}'
+      api-key: '{{apiKey}}'
+      prod-region: '{{prodRegion}}'
+      prod-resource-group: '{{prodResourceGroup}}'
+      prod-cluster-name: '{{prodClusterName}}'
     schema:
       $ref: deploy.json
