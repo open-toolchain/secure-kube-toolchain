@@ -139,7 +139,7 @@ services:
               "pipeline.yml"
             }
         env:
-          APP_REPO: repo
+          APP_REPO: 'repo'
           APP_NAME: "{{form.pipeline.parameters.app-name}}"
           REGISTRY_REGION_ID: "{{form.pipeline.parameters.registry-region}}"
           REGISTRY_NAMESPACE: "{{form.pipeline.parameters.registry-namespace}}"
