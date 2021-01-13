@@ -83,6 +83,6 @@ properties:
     value: ${PROD_RESOURCE_GROUP}
     type: text
   - name: repository
-    value: ${INTEGRATION_TEST}
+    value: ${APP_REPO}
     type: integration
     path: parameters.repo_url
