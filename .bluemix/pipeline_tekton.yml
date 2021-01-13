@@ -82,7 +82,7 @@ properties:
   - name: dev-resource-group
     value: ${PROD_RESOURCE_GROUP}
     type: text
-  - name: app_url
+  - name: repository
     value: ${INTEGRATION_TEST}
     type: integration
     path: parameters.repo_url
