@@ -122,6 +122,7 @@ services:
     parameters:
       services:
         - repo
+        - devops-insights
       name: 'ci-pipeline'
       ui-pipeline: true
       type: >
@@ -139,7 +140,8 @@ services:
               "pipeline.yml"
             }
         env:
-          APP_REPO: 'repo'
+          APP_REPO: repo
+          INSIGHTS: devops-insights
           APP_NAME: "{{form.pipeline.parameters.app-name}}"
           REGISTRY_REGION_ID: "{{form.pipeline.parameters.registry-region}}"
           REGISTRY_NAMESPACE: "{{form.pipeline.parameters.registry-namespace}}"
