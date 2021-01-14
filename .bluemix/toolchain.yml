@@ -182,7 +182,7 @@ services:
           $env.pipeline_type === 'tekton' ? 'manual-run' : true
   devops-insights:
       service_id: >
-        $env.env_id === 'ibm:ys1:us-south' ? '' : 'draservicebroker'
+        $env.env_id === 'ibm:yp:us-south' ? 'draservicebroker' : ''
   webide:
     service_id: orion
 form:
