@@ -50,6 +50,7 @@ spec:
     - name: pr-url
       description: PR url
     - name: apikey
+    - name: insights
     - name: commit-timestamp
       description: commit timestamp
     - name: scm-type
@@ -124,7 +125,9 @@ spec:
           - name: scm-type
             value: $(params.scm-type)
           - name: project-id
-            value: $(params.project-id) 
+            value: $(params.project-id)
+          - name: insights
+            value: $(params.insights) 
         workspaces:
           - name: pipeline-ws
             persistentVolumeClaim:
