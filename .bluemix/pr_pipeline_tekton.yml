@@ -43,3 +43,7 @@ properties:
   - name: pipeline-debug
     value: "0"
     type: text
+  - name: insights
+    value: ${INSIGHTS}
+    type: integration
+    path: service_id
