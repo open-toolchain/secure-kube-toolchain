@@ -28,6 +28,8 @@ spec:
     - name: project-id
       description: project id
       default: ""
+    - name: repository
+      description: the repo integration url
   resourcetemplates:
     - apiVersion: v1
       kind: PersistentVolumeClaim
@@ -74,4 +76,5 @@ spec:
             value: $(params.project-id)
           - name: insights
             value: $(params.insights)
- 
+           - name: repository
+            value: $(params.repository)
