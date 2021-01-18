@@ -188,8 +188,6 @@ services:
       service_id: draservicebroker
   webide:
     service_id: orion
-  vault:
-    service_id: hashicorpvault
 form:
   pipeline:
     parameters:
