@@ -94,6 +94,7 @@ services:
             }
         env:
           PIPELINE_REPO: pipeline-repo
+          INSIGHTS: devops-insights
           APP_REPO: repo
           API_KEY: '{{form.pipeline.parameters.api-key}}'
           APP_NAME: "{{form.pipeline.parameters.app-name}}"
