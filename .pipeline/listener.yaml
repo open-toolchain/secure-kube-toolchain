@@ -45,6 +45,7 @@ spec:
       description: the name of the cluster to target
     - name: dev-region
     - name: dev-resource-group
+    - name: insights
     - name: dev-cluster-namespace
       description: namespace dev
   resourcetemplates:
@@ -105,6 +106,8 @@ spec:
             value: $(params.dev-cluster-namespace)
           - name: pipeline-debug
             value: $(params.pipeline-debug)
+          - name: insights
+            value: $(params.insights)
         workspaces:
           - name: pipeline-ws
             persistentVolumeClaim:
