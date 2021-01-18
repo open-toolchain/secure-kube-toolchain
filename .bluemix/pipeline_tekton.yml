@@ -86,3 +86,7 @@ properties:
     value: ${APP_REPO}
     type: integration
     path: parameters.repo_url
+  - name: insights
+    value: ${INSIGHTS}
+    type: integration
+    path: service_id
