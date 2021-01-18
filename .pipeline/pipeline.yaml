@@ -72,7 +72,7 @@ spec:
         - name: output
           workspace: pipeline-ws
     - name: publish-doi-buildrecord
-      runAfter: [extract-doi-enablement]
+      runAfter: [git-clone]
       when:
         - input: $(params.insights)
           operator: in
