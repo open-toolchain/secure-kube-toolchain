@@ -76,6 +76,7 @@ services:
       services:
         - repo
         - tekton-catalog-repo
+        - devops-insights
       name: 'pr-pipeline'
       type: >
         $env.pipeline_type === 'tekton' ? 'tekton': 'classic'
