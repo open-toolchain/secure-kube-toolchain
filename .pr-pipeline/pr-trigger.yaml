@@ -76,5 +76,5 @@ spec:
             value: $(params.project-id)
           - name: insights
             value: $(params.insights)
-           - name: repository
+          - name: repository
             value: $(params.repository)
