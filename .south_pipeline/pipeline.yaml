@@ -56,16 +56,7 @@ spec:
       default: ""
   workspaces:
     - name: pipeline-ws
-  tasks:
-#    - name: extract-repository-url
-#      taskRef:
-#        name: toolchain-extract-value
-#      params:
-#        - name: expression
-#          # if a params.repository is given, it takes precedence
-#          value: '. as $toolchain | ["$(params.repository)"] | if .[0]=="" then $toolchain | .services[] | select(.toolchain_binding.name=="repo") | .dashboard_url else .[0] end'
-#        - name: pipeline-debug
-#          value: $(params.pipeline-debug)  
+  tasks: 
     - name: git-clone
       taskRef:
         name: git-clone-repo
@@ -85,21 +76,21 @@ spec:
       workspaces:
         - name: output
           workspace: pipeline-ws
-#    - name: extract-doi-enablement
-#      taskRef:
-#        name: toolchain-extract-value
-#      params:
+    - name: extract-doi-enablement
+      taskRef:
+        name: toolchain-extract-value
+      params:
         # count the number of service in the toolchain that are DevopsInsights
-#        - name: expression
-#          value: 'reduce .services[] as $service (0; if $service.service_id=="draservicebroker" then .+1 else . end)'
-#        - name: pipeline-debug
-#          value: $(params.pipeline-debug)
+        - name: expression
+          value: 'reduce .services[] as $service (0; if $service.service_id=="draservicebroker" then .+1 else . end)'
+        - name: pipeline-debug
+          value: $(params.pipeline-debug)
     - name: publish-doi-buildrecord
       runAfter: [extract-doi-enablement]
       when:
-        - input: $(params.insights)
+        - input: $(tasks.extract-doi-enablement.results.extracted-value)
           operator: in
-          values: ["draservicebroker"]
+          values: ["1"]
       taskRef:
         name: doi-publish-buildrecord
       params:
