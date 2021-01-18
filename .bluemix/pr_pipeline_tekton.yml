@@ -43,6 +43,10 @@ properties:
   - name: pipeline-debug
     value: "0"
     type: text
+  - name: repository
+    value: ${APP_REPO}
+    type: integration
+    path: parameters.repo_url
   - name: insights
     value: ${INSIGHTS}
     type: integration
