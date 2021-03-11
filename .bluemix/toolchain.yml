@@ -76,6 +76,7 @@ services:
       services:
         - repo
         - tekton-catalog-repo
+        - devops-insights
       name: 'pr-pipeline'
       type: >
         $env.pipeline_type === 'tekton' ? 'tekton': 'classic'
@@ -94,6 +95,7 @@ services:
             }
         env:
           PIPELINE_REPO: pipeline-repo
+          INSIGHTS: devops-insights
           APP_REPO: repo
           API_KEY: '{{form.pipeline.parameters.api-key}}'
           APP_NAME: "{{form.pipeline.parameters.app-name}}"
@@ -122,6 +124,7 @@ services:
     parameters:
       services:
         - repo
+        - devops-insights
       name: 'ci-pipeline'
       ui-pipeline: true
       type: >
@@ -140,6 +143,7 @@ services:
             }
         env:
           APP_REPO: repo
+          INSIGHTS: devops-insights
           APP_NAME: "{{form.pipeline.parameters.app-name}}"
           REGISTRY_REGION_ID: "{{form.pipeline.parameters.registry-region}}"
           REGISTRY_NAMESPACE: "{{form.pipeline.parameters.registry-namespace}}"

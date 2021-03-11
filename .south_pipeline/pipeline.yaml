@@ -56,16 +56,7 @@ spec:
       default: ""
   workspaces:
     - name: pipeline-ws
-  tasks:
-    - name: extract-repository-url
-      taskRef:
-        name: toolchain-extract-value
-      params:
-        - name: expression
-          # if a params.repository is given, it takes precedence
-          value: '. as $toolchain | ["$(params.repository)"] | if .[0]=="" then $toolchain | .services[] | select(.toolchain_binding.name=="repo") | .dashboard_url else .[0] end'
-        - name: pipeline-debug
-          value: $(params.pipeline-debug)  
+  tasks: 
     - name: git-clone
       taskRef:
         name: git-clone-repo
@@ -75,7 +66,7 @@ spec:
         - name: ibmcloud-apikey-secret-key
           value: "toolchain-apikey"
         - name: repository
-          value: $(tasks.extract-repository-url.results.extracted-value)
+          value: $(params.repository)
         - name: branch
           value: $(params.branch)
         - name: revision
@@ -123,7 +114,7 @@ spec:
           workspace: pipeline-ws
       params:
         - name: repository
-          value: $(tasks.extract-repository-url.results.extracted-value)
+          value: $(params.repository)
         - name: revision
           value: $(params.branch)
         - name: commit-id
@@ -146,7 +137,7 @@ spec:
           workspace: pipeline-ws
       params:
         - name: repository
-          value: $(tasks.extract-repository-url.results.extracted-value)
+          value: $(params.repository)
         - name: revision
           value: $(params.branch)
         - name: pr-url
@@ -169,7 +160,7 @@ spec:
           workspace: pipeline-ws
       params:
         - name: repository
-          value: $(tasks.extract-repository-url.results.extracted-value)
+          value: $(params.repository)
         - name: revision
           value: $(params.branch)
         - name: pr-url
@@ -194,7 +185,7 @@ spec:
           workspace: pipeline-ws          
       params:
         - name: repository
-          value: $(tasks.extract-repository-url.results.extracted-value)
+          value: $(params.repository)
         - name: revision
           value: $(params.branch)
         - name: pr-url

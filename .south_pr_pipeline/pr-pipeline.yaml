@@ -26,15 +26,6 @@ spec:
     - name: pipeline-ws
 
   tasks:
-    - name: extract-repository-url
-      taskRef:
-        name: toolchain-extract-value
-      params:
-        - name: expression
-          # if a params.repository is given, it takes precedence
-          value: '. as $toolchain | ["$(params.repository)"] | if .[0]=="" then $toolchain | .services[] | select(.toolchain_binding.name=="repo") | .dashboard_url else .[0] end'
-        - name: pipeline-debug
-          value: $(params.pipeline-debug)  
     - name: git-clone
       taskRef:
         name: git-clone-repo
@@ -44,7 +35,7 @@ spec:
         - name: ibmcloud-apikey-secret-key
           value: "apikey"
         - name: repository
-          value: $(tasks.extract-repository-url.results.extracted-value)
+          value: $(params.repository)
         - name: branch
           value: $(params.branch)
         - name: revision
@@ -79,7 +70,7 @@ spec:
           workspace: pipeline-ws
       params:
         - name: repository
-          value: $(tasks.extract-repository-url.results.extracted-value)
+          value: $(params.repository)
         - name: revision
           value: $(params.branch)
         - name: commit-id
@@ -108,7 +99,7 @@ spec:
         - name: context
           value: "Vulnerability scan"
         - name: repository
-          value: $(tasks.extract-repository-url.results.extracted-value)
+          value: $(params.repository)
     - name: code-vulnerability-scan
       runAfter:
         - cra-discovery-scan
@@ -121,7 +112,7 @@ spec:
           workspace: pipeline-ws
       params:
         - name: repository
-          value: $(tasks.extract-repository-url.results.extracted-value)
+          value: $(params.repository)
         - name: revision
           value: $(params.branch)
         - name: pr-url
@@ -142,7 +133,7 @@ spec:
           workspace: pipeline-ws
       params:
         - name: repository
-          value: $(tasks.extract-repository-url.results.extracted-value)
+          value: $(params.repository)
         - name: state
           value: "$(tasks.code-vulnerability-scan.results.status)"
         - name: context
@@ -169,7 +160,7 @@ spec:
         - name: context
           value: "CIS scan"
         - name: repository
-          value: $(tasks.extract-repository-url.results.extracted-value)
+          value: $(params.repository)
     - name: cra-cis-check
       taskRef:
         name: cra-cis-check
@@ -182,7 +173,7 @@ spec:
           workspace: pipeline-ws
       params:
         - name: repository
-          value: $(tasks.extract-repository-url.results.extracted-value)
+          value: $(params.repository)
         - name: revision
           value: $(params.branch)
         - name: pr-url
@@ -213,7 +204,7 @@ spec:
         - name: context
           value: "CIS scan"
         - name: repository
-          value: $(tasks.extract-repository-url.results.extracted-value)
+          value: $(params.repository)
     - name: code-bom-check-status-pending
       runAfter:
         - git-clone
@@ -232,7 +223,7 @@ spec:
         - name: context
           value: "BOM check"
         - name: repository
-          value: $(tasks.extract-repository-url.results.extracted-value)
+          value: $(params.repository)
     - name: cra-bom
       taskRef:
         name: cra-bom
@@ -245,7 +236,7 @@ spec:
           workspace: pipeline-ws          
       params:
         - name: repository
-          value: $(tasks.extract-repository-url.results.extracted-value)
+          value: $(params.repository)
         - name: revision
           value: $(params.branch)
         - name: pr-url
@@ -278,4 +269,4 @@ spec:
         - name: context
           value: "BOM check"
         - name: repository
-          value: $(tasks.extract-repository-url.results.extracted-value)
+          value: $(params.repository)

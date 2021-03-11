@@ -20,6 +20,7 @@ spec:
     - name: pr-url
       description: PR url
     - name: apikey
+    - name: insights
     - name: commit-timestamp
       description: commit timestamp
     - name: scm-type
@@ -27,6 +28,8 @@ spec:
     - name: project-id
       description: project id
       default: ""
+    - name: repository
+      description: the repo integration url
   resourcetemplates:
     - apiVersion: v1
       kind: PersistentVolumeClaim
@@ -70,4 +73,8 @@ spec:
           - name: scm-type
             value: $(params.scm-type)
           - name: project-id
-            value: $(params.project-id) 
+            value: $(params.project-id)
+          - name: insights
+            value: $(params.insights)
+          - name: repository
+            value: $(params.repository)

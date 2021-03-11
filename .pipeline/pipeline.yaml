@@ -42,6 +42,7 @@ spec:
       default: "deployment.yml"
     - name: dev-region
     - name: dev-resource-group
+    - name: insights
     - name: cluster-name
       description: the name of the cluster to target
     - name: dev-cluster-namespace
@@ -51,15 +52,6 @@ spec:
   workspaces:
     - name: pipeline-ws
   tasks:
-    - name: extract-repository-url
-      taskRef:
-        name: toolchain-extract-value
-      params:
-        - name: expression
-          # if a params.repository is given, it takes precedence
-          value: '. as $toolchain | ["$(params.repository)"] | if .[0]=="" then $toolchain | .services[] | select(.toolchain_binding.name=="repo") | .dashboard_url else .[0] end'
-        - name: pipeline-debug
-          value: $(params.pipeline-debug)  
     - name: git-clone
       taskRef:
         name: git-clone-repo
@@ -69,7 +61,7 @@ spec:
         - name: ibmcloud-apikey-secret-key
           value: "toolchain-apikey"
         - name: repository
-          value: $(tasks.extract-repository-url.results.extracted-value)
+          value: $(params.repository)
         - name: branch
           value: $(params.branch)
         - name: revision
@@ -79,21 +71,12 @@ spec:
       workspaces:
         - name: output
           workspace: pipeline-ws
-    - name: extract-doi-enablement
-      taskRef:
-        name: toolchain-extract-value
-      params:
-        # count the number of service in the toolchain that are DevopsInsights
-        - name: expression
-          value: 'reduce .services[] as $service (0; if $service.service_id=="draservicebroker" then .+1 else . end)'
-        - name: pipeline-debug
-          value: $(params.pipeline-debug)
     - name: publish-doi-buildrecord
-      runAfter: [extract-doi-enablement]
+      runAfter: [git-clone]
       when:
-        - input: $(tasks.extract-doi-enablement.results.extracted-value)
+        - input: $(params.insights)
           operator: in
-          values: ["1"]
+          values: ["draservicebroker"]
       taskRef:
         name: doi-publish-buildrecord
       params:
@@ -143,9 +126,9 @@ spec:
     - name: publish-doi-code-tests
       runAfter: [unit-tests]
       when:
-        - input: $(tasks.extract-doi-enablement.results.extracted-value)
+        - input: $(params.insights)
           operator: in
-          values: ["1"]
+          values: ["draservicebroker"]
       taskRef:
         name: doi-publish-testrecord
       params:
@@ -232,9 +215,9 @@ spec:
     - name: publish-doi-va-scan-record
       runAfter: [vulnerability-advisor]
       when:
-        - input: $(tasks.extract-doi-enablement.results.extracted-value)
+        - input: $(params.insights)
           operator: in
-          values: ["1"]
+          values: ["draservicebroker"]
       taskRef:
         name: doi-publish-testrecord
       params:
