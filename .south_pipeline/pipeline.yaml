@@ -308,6 +308,7 @@ spec:
             if [ ! -z "${GIT_BRANCH}" ]; then IMAGE_TAG=${GIT_BRANCH}-${IMAGE_TAG} ; fi
             IMAGE_TAG=${BUILD_NUMBER}-${IMAGE_TAG}
             echo "$IMAGE_TAG"
+            
         - name: pipeline-debug
           value: $(params.pipeline-debug)
       workspaces:
@@ -373,6 +374,7 @@ spec:
           value: $(params.cluster-name)
         - name: setup-script
           value: |
+            echo "TEST DIGEST"
             GIT_BRANCH="$(tasks.git-clone.results.git-branch)"
             echo "GIT BRANCH ${GIT_BRANCH}"
             #IMAGE_DIGEST="${tasks.containerize.results.image-digest}"
