@@ -381,7 +381,7 @@ spec:
             echo "SOURCE_BUILD_NUMBER=$BUILD_NUMBER" >> build.properties
             # For doi plugin invocation if needed
             export TOOLCHAIN_ID=$PIPELINE_TOOLCHAIN_ID
-            export IMAGE_DIGEST=${tasks.containerize.results.image-digest}
+            export IMAGE_DIGEST="${tasks.containerize.results.image-digest}"
             # Keep it in build.properties shuttle file
             echo "IMAGE_DIGEST=$IMAGE_DIGEST" >> build.properties 
         - name: script
@@ -397,7 +397,7 @@ spec:
 
             # This script checks the IBM Container Service cluster is ready, has a namespace configured with access to the private
             # image registry (using an IBM Cloud API Key), perform a kubectl deploy of container image and check on outcome.
-            source <(curl -sSL "https://raw.githubusercontent.com/open-toolchain/commons/master/scripts/check_and_deploy_kubectl.sh")
+            source <(curl -sSL "https://raw.githubusercontent.com/open-toolchain/commons/digest/scripts/check_and_deploy_kubectl.sh")
         - name: post-execution-script
           value: |
             # Keep APP_URL in build.properties shuttle file
@@ -453,7 +453,7 @@ spec:
             # ------------------
             # source: https://raw.githubusercontent.com/open-toolchain/commons/master/scripts/check_health.sh
             # Check liveness and readiness probes to confirm application is healthy
-            source <(curl -sSL "https://raw.githubusercontent.com/open-toolchain/commons/master/scripts/check_health.sh")
+            source <(curl -sSL "https://raw.githubusercontent.com/open-toolchain/commons/digest/scripts/check_health.sh")
         - name: pipeline-debug
           value: $(params.pipeline-debug)
       workspaces:
