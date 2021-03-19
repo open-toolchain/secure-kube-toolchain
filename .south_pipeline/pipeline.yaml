@@ -381,10 +381,9 @@ spec:
             echo "SOURCE_BUILD_NUMBER=$BUILD_NUMBER" >> build.properties
             # For doi plugin invocation if needed
             export TOOLCHAIN_ID=$PIPELINE_TOOLCHAIN_ID
-            # Single tag for the image built
-            export IMAGE_TAG=$IMAGE_TAGS
+            export IMAGE_DIGEST=${tasks.containerize.results.image-digest}
             # Keep it in build.properties shuttle file
-            echo "IMAGE_TAG=$IMAGE_TAGS" >> build.properties
+            echo "IMAGE_DIGEST=$IMAGE_DIGEST" >> build.properties 
         - name: script
           value: |
             # uncomment to debug the script
