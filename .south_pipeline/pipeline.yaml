@@ -377,7 +377,7 @@ spec:
             echo "TEST DIGEST"
             GIT_BRANCH="$(tasks.git-clone.results.git-branch)"
             echo "GIT BRANCH ${GIT_BRANCH}"
-            IMAGE_DIGEST="${tasks.containerize.results.image-digest}"
+            IMAGE_DIGEST="$(tasks.containerize.results.image-digest)"
             echo "IMAGE_DIGEST $IMAGE_DIGEST"
             export CLUSTER_NAMESPACE="$(params.dev-cluster-namespace)"
             export DEPLOYMENT_FILE="$(params.deployment-file)"
