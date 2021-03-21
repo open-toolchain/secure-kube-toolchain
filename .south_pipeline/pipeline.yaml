@@ -376,11 +376,6 @@ spec:
           value: $(params.cluster-name)
         - name: setup-script
           value: |
-            echo "TEST DIGEST"
-            GIT_BRANCH="$(tasks.git-clone.results.git-branch)"
-            echo "GIT BRANCH ${GIT_BRANCH}"
-            IMAGE_DIGEST="$(tasks.containerize.results.image-digest)"
-            echo "IMAGE_DIGEST $IMAGE_DIGEST"
             export CLUSTER_NAMESPACE="$(params.dev-cluster-namespace)"
             export DEPLOYMENT_FILE="$(params.deployment-file)"
             export KEEP_INGRESS_CUSTOM_DOMAIN="$(params.keep-ingress-custom-domain)"
@@ -389,10 +384,9 @@ spec:
             echo "SOURCE_BUILD_NUMBER=$BUILD_NUMBER" >> build.properties
             # For doi plugin invocation if needed
             export TOOLCHAIN_ID=$PIPELINE_TOOLCHAIN_ID
-            #export IMAGE_DIGEST="${tasks.containerize.results.image-digest}"
-
+            export IMAGE_MANIFEST_SHA="$(tasks.containerize.results.image-digest)"
             # Keep it in build.properties shuttle file
-            #echo "IMAGE_DIGEST=$IMAGE_DIGEST" >> build.properties 
+            echo "IMAGE_MANIFEST_SHA=$IMAGE_MANIFEST_SHA" >> build.properties 
         - name: script
           value: |
             # uncomment to debug the script
