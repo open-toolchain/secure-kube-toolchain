@@ -22,6 +22,10 @@ spec:
     - name: scm-type
     - name: project-id
       default: ""
+    - name: context
+      default: "unit tests"
+    - name: description
+      default: "Unit tests passed"
   workspaces:
     - name: pipeline-ws
 
@@ -35,6 +39,25 @@ spec:
           value: '. as $toolchain | ["$(params.repository)"] | if .[0]=="" then $toolchain | .services[] | select(.toolchain_binding.name=="repo") | .dashboard_url else .[0] end'
         - name: pipeline-debug
           value: $(params.pipeline-debug)  
+    - name: set-git-commit-pending
+      taskRef:
+        name: git-set-commit-status
+      workspaces:
+        - name: artifacts
+          workspace: pipeline-ws
+      params:
+        - name: repository
+          value: $(tasks.extract-repository-url.results.extracted-value)
+        - name: revision
+          value: $(params.revision)
+        - name: context
+          value: $(params.context)
+        - name: description
+          value: $(params.description)
+        - name: state
+          value: "pending"
+        - name: pipeline-debug
+          value: $(params.pipeline-debug)
     - name: git-clone
       taskRef:
         name: git-clone-repo
@@ -69,3 +92,23 @@ spec:
       workspaces:
         - name: artifacts
           workspace: pipeline-ws
+  finally:
+    - name: set-git-commit-status
+      taskRef:
+        name: git-set-commit-status
+      workspaces:
+        - name: artifacts
+          workspace: pipeline-ws
+      params:
+        - name: repository
+          value: $(tasks.extract-repository-url.results.extracted-value)
+        - name: revision
+          value: $(params.revision)
+        - name: context
+          value: $(params.context)
+        - name: description
+          value: $(params.description)
+        - name: state
+          value: "$(tasks.unit-tests.status)"
+        - name: pipeline-debug
+          value: $(params.pipeline-debug)
