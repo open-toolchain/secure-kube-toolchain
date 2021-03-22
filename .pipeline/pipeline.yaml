@@ -33,6 +33,9 @@ spec:
       description: The IBM Cloud region for image registry
     - name: registry-namespace
       description: container registry namespace
+    - name: registry-create-namespace
+      description: create container registry namespace if it doesn't already exists
+      default: "true"
     - name: app-name
       description: application name
     - name: image-name
@@ -127,7 +130,7 @@ spec:
         - name: workspace
           workspace: pipeline-ws
     - name: unit-tests
-      runAfter: [docker-lint]
+      runAfter: [docker-lint,build]
       taskRef:
         name: tester-run-tests
       params:
@@ -167,15 +170,34 @@ spec:
       workspaces:
         - name: artifacts
           workspace: pipeline-ws
-    - name: containerize
-      runAfter: [unit-tests]
+    - name: build
+      runAfter: [git-clone]
       taskRef:
-        name: icr-containerize
+        name: build-task
+      params:
+        - name: repository
+          value: $(tasks.extract-repository-url.results.extracted-value)
+        - name: custom-script
+          value: |
+            # uncomment to debug the script
+            # set -x
+            echo "No op"
+        - name: pipeline-debug
+          value: $(params.pipeline-debug)
+      workspaces:
+        - name: output
+          workspace: pipeline-ws
+    - name: containerize
+      runAfter: [build]
+      taskRef:
+        name: icr-execute-in-dind
       params:
         - name: continuous-delivery-context-secret
           value: "secure-properties"
         - name: container-registry-apikey-secret-key
           value: "apikey"
+        - name: registry-create-namespace
+          value: $(params.registry-namespace)
         - name: registry-region
           value: $(params.registry-region)
         - name: registry-namespace
@@ -188,9 +210,7 @@ spec:
           value: $(params.path-to-dockerfile)
         - name: dockerfile
           value: $(params.dockerfile)
-        - name: build-args
-          value: $(params.build-args)
-        - name: additional-tags-script
+        - name: docker-commands
           value: |
             # Minting image tag using format: BUILD_NUMBER-BRANCH-COMMIT_ID-TIMESTAMP
             # e.g. 3-master-50da6912-20181123114435
@@ -206,6 +226,10 @@ spec:
             if [ ! -z "${GIT_BRANCH}" ]; then IMAGE_TAG=${GIT_BRANCH}-${IMAGE_TAG} ; fi
             IMAGE_TAG=${BUILD_NUMBER}-${IMAGE_TAG}
             echo "$IMAGE_TAG"
+            # Default docker build / inspect / push command
+            docker build --tag "$IMAGE_URL:$IMAGE_TAG" --file $PATH_TO_DOCKERFILE/$DOCKERFILE $PATH_TO_CONTEXT
+            docker inspect ${IMAGE_URL}:${IMAGE_TAG}
+            docker push ${IMAGE_URL}:${IMAGE_TAG}
         - name: pipeline-debug
           value: $(params.pipeline-debug)
       workspaces:

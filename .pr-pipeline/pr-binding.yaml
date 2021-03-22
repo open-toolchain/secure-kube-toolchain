@@ -5,24 +5,24 @@ metadata:
   name: github-ent-pr-binding
 spec:
   params:
-    - name: branch
-      value: $(event.pull_request.head.ref)
+    - name: target-repository
+      value: $(event.pull_request.base.repo.clone_url)
     - name: target-branch
       value: $(event.pull_request.base.ref)
-    - name: commit-id
-      value: $(event.pull_request.head.sha)
-    - name: commit-timestamp
-      value: $(event.pull_request.head.repo.pushed_at)
     - name: target-commit-id
       value: $(event.pull_request.base.sha)      
-    - name: pr-url
-      value: $(event.pull_request.url)
+    - name: pr-commit-id
+      value: $(event.pull_request.head.sha)
+    - name: pr-commit-timestamp
+      value: $(event.pull_request.head.repo.pushed_at)
+    - name: pr-repository
+      value: $(event.pull_request.head.repo.clone_url)
+    - name: pr-branch
+      value: $(event.pull_request.head.ref)
     - name: pr-number
       value: $(event.pull_request.number) 
     - name: pr-name
       value: $(event.pull_request.user.login)             
-    - name: repository
-      value: $(event.repository.html_url)
     - name: scm-type
       value: "github-ent"
 ---
@@ -32,24 +32,24 @@ metadata:
   name: github-pr-binding
 spec:
   params:
-    - name: branch
-      value: $(event.pull_request.head.ref)
+    - name: target-repository
+      value: $(event.pull_request.base.repo.clone_url)
     - name: target-branch
       value: $(event.pull_request.base.ref)
-    - name: commit-id
-      value: $(event.pull_request.head.sha)
-    - name: commit-timestamp
-      value: $(event.pull_request.head.repo.pushed_at)
     - name: target-commit-id
       value: $(event.pull_request.base.sha)      
-    - name: pr-url
-      value: $(event.pull_request.url)
+    - name: pr-commit-id
+      value: $(event.pull_request.head.sha)
+    - name: pr-commit-timestamp
+      value: $(event.pull_request.head.repo.pushed_at)
+    - name: pr-repository
+      value: $(event.pull_request.head.repo.clone_url)
+    - name: pr-branch
+      value: $(event.pull_request.head.ref)
     - name: pr-number
       value: $(event.pull_request.number)  
     - name: pr-name
       value: $(event.pull_request.user.login)             
-    - name: repository
-      value: $(event.repository.html_url)
     - name: scm-type
       value: "github"          
 ---
@@ -59,18 +59,20 @@ metadata:
   name: gitlab-pr-binding
 spec:
   params:
-    - name: branch
-      value: $(event.object_attributes.source_branch)
+    - name: target-repository
+      value: "$(event.object_attributes.target.git_http_url)"
     - name: target-branch
-      value: $(event.object_attributes.target_branch)
-    - name: commit-id
-      value: $(event.object_attributes.last_commit.id)
-    - name: commit-timestamp
-      value: $(event.object_attributes.last_commit.timestamp)
+      value: "$(event.object_attributes.target_branch)"
     - name: target-commit-id
       value: $(event.merge_request.base.sha)      
-    - name: pr-url
-      value: $(event.object_attributes.url)
+    - name: pr-repository
+      value: "$(event.object_attributes.source.git_http_url)"
+    - name: pr-branch
+      value: "$(event.object_attributes.source_branch)"
+    - name: pr-commit-id
+      value: "$(event.object_attributes.last_commit.id)"
+    - name: pr-commit-timestamp
+      value: $(event.object_attributes.last_commit.timestamp)
     - name: pr-number
       value: $(event.object_attributes.iid) 
     - name: pr-name
@@ -79,5 +81,3 @@ spec:
       value: $(event.project.id)
     - name: scm-type
       value: "gitlab"
-    - name: repository
-      value: $(event.project.http_url) 

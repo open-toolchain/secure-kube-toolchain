@@ -5,28 +5,18 @@ metadata:
   name: pr-template
 spec:
   params:
-    - name: branch
-      description: branch
+    - name: target-repository
+      description: the repo integration name
     - name: target-branch
       description: target branch
-    - name: target-commit-id
-      description: target commit id
-    - name: repository-integration
-      description: the repo integration name
-    - name: commit-id
+    - name: pr-repository
+      description: PR url
+    - name: pr-branch
+      description: branch
+    - name: pr-commit-id
       description: commit id
     - name: pipeline-debug
       description: toggles debug mode for the pipeline
-    - name: pr-url
-      description: PR url
-    - name: apikey
-    - name: commit-timestamp
-      description: commit timestamp
-    - name: scm-type
-      description: source code type used (github, github-ent, gitlab)
-    - name: project-id
-      description: project id
-      default: ""
   resourcetemplates:
     - apiVersion: v1
       kind: PersistentVolumeClaim
@@ -51,23 +41,15 @@ spec:
             persistentVolumeClaim:
               claimName: pipelinerun-$(uid)-pvc
         params:
-          - name: branch
-            value: $(params.branch)
+          - name: pr-repository
+            value: $(params.pr-repository)
+          - name: pr-branch
+            value: $(params.pr-branch)
+          - name: pr-commit-id
+            value: $(params.pr-commit-id)
+          - name: target-repository
+            value: $(params.target-repository)
           - name: target-branch
             value: $(params.target-branch)
-          - name: repository-integration
-            value: $(params.repository-integration)
-          - name: commit-id
-            value: $(params.commit-id)
           - name: pipeline-debug
             value: $(params.pipeline-debug)
-          - name: pr-url
-            value: $(params.pr-url)
-          - name: apikey
-            value: $(params.apikey)
-          - name: commit-timestamp
-            value: $(params.commit-timestamp)
-          - name: scm-type
-            value: $(params.scm-type)
-          - name: project-id
-            value: $(params.project-id) 
