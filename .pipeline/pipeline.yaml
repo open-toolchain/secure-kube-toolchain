@@ -130,7 +130,7 @@ spec:
         - name: workspace
           workspace: pipeline-ws
     - name: unit-tests
-      runAfter: [docker-lint]
+      runAfter: [docker-lint,build]
       taskRef:
         name: tester-run-tests
       params:
@@ -171,7 +171,7 @@ spec:
         - name: artifacts
           workspace: pipeline-ws
     - name: build
-      runAfter: [unit-tests]
+      runAfter: [git-clone]
       taskRef:
         name: build-task
       params:
