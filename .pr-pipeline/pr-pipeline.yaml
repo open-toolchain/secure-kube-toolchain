@@ -47,7 +47,7 @@ spec:
           workspace: pipeline-ws
       params:
         - name: repository
-          value: $(tasks.extract-repository-url.results.extracted-value)
+          value: $(params.repository)
         - name: revision
           value: $(params.revision)
         - name: context
@@ -101,7 +101,7 @@ spec:
           workspace: pipeline-ws
       params:
         - name: repository
-          value: $(tasks.extract-repository-url.results.extracted-value)
+          value: $(params.repository)
         - name: revision
           value: $(params.revision)
         - name: context
