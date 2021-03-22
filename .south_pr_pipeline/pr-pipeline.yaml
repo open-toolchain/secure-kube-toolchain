@@ -124,13 +124,13 @@ spec:
         - name: revision
           value: $(params.pr-branch)
         - name: commit-id
-          value: $(tasks.git-clone.results.git-commit)
+          value: $(params-pr-commit-id)
+        - name: commit-timestamp
+          value: $(params.pr-commit-timestamp)
         - name: pipeline-debug
           value: $(params.pipeline-debug)
         - name: directory-name
           value: ""
-        - name: commit-timestamp
-          value: $(params.pr-commit-timestamp)
     - name: code-vulnerability-scan-status-pending
       runAfter:
         - git-clone
