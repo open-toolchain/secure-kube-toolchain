@@ -315,7 +315,7 @@ spec:
           value: $(params.pr-commit-id)
 
   finally:
-    - name: unit-tests-status-pending
+    - name: unit-tests-status-finished
       taskRef:
         name: git-set-commit-status
       workspaces:
