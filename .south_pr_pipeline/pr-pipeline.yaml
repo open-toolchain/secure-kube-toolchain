@@ -5,36 +5,31 @@ metadata:
   name: pr-pipeline
 spec:
   params:
-
-    - name: branch
+    - name: target-repository
+      description: the git repo containing source code
+    - name: target-branch
       description: branch
-    - name: revision
+    - name: target-commit-id
+      description: commit id in the target 
+    - name: pr-branch
+      description: branch
+    - name: pr-commit-id
       description: the git revision/commit for the git repo
       default: ""
-    - name: pipeline-debug
-      description: toggles debug mode for the pipeline
+    - name: pr-repository
+      description: pr repo
+    - name: pr-commit-timestamp
     - name: pr-url
-      description: pr url
-    - name: repository
-      description: the git repo containing source code. If empty, the repository url will be found from toolchain
-      default: ""
-    - name: commit-timestamp
+      description: pr URL
     - name: scm-type
     - name: project-id
       default: ""
+    - name: pipeline-debug
+      description: toggles debug mode for the pipeline
   workspaces:
     - name: pipeline-ws
 
   tasks:
-    - name: extract-repository-url
-      taskRef:
-        name: toolchain-extract-value
-      params:
-        - name: expression
-          # if a params.repository is given, it takes precedence
-          value: '. as $toolchain | ["$(params.repository)"] | if .[0]=="" then $toolchain | .services[] | select(.toolchain_binding.name=="repo") | .dashboard_url else .[0] end'
-        - name: pipeline-debug
-          value: $(params.pipeline-debug)  
     - name: git-clone
       taskRef:
         name: git-clone-repo
@@ -44,16 +39,41 @@ spec:
         - name: ibmcloud-apikey-secret-key
           value: "apikey"
         - name: repository
-          value: $(tasks.extract-repository-url.results.extracted-value)
+          value: $(params.target-repository)
         - name: branch
-          value: $(params.branch)
+          value: $(params.target-branch)
         - name: revision
-          value: $(params.revision)
+          value: $(params.target-commit-id)
+        - name: pr-repository
+          value: $(params.pr-repository)
+        - name: pr-branch
+          value: $(params.pr-branch)
+        - name: pr-revision
+          value: $(params.pr-commit-id)
         - name: pipeline-debug
           value: $(params.pipeline-debug)
       workspaces:
         - name: output
           workspace: pipeline-ws
+    - name: unit-tests-status-pending
+      taskRef:
+        name: git-set-commit-status
+      workspaces:
+        - name: artifacts
+          workspace: pipeline-ws
+      params:
+        - name: repository
+          value: $(params.target-repository)
+        - name: revision
+          value: $(params.pr-commit-id)
+        - name: context
+          value: "Unit tests"
+        - name: description
+          value: "Unit tests passed"
+        - name: state
+          value: "pending"
+        - name: pipeline-debug
+          value: $(params.pipeline-debug)
     - name: unit-tests
       runAfter: [git-clone]
       taskRef:
@@ -61,6 +81,7 @@ spec:
       params:
         - name: tests-script
           value: |
+            cat README.md
             if [ -f ./test/run-tests.sh ]; then
               source ./test/run-tests.sh
             else
@@ -79,9 +100,9 @@ spec:
           workspace: pipeline-ws
       params:
         - name: repository
-          value: $(tasks.extract-repository-url.results.extracted-value)
+          value: $(params.pr-repository)
         - name: revision
-          value: $(params.branch)
+          value: $(params.pr-branch)
         - name: commit-id
           value: $(tasks.git-clone.results.git-commit)
         - name: pipeline-debug
@@ -89,8 +110,8 @@ spec:
         - name: directory-name
           value: ""
         - name: commit-timestamp
-          value: $(params.commit-timestamp)
-    - name: code-detect-secrets-status-pending
+          value: $(params.pr-commit-timestamp)
+    - name: code-vulnerability-scan-status-pending
       runAfter:
         - git-clone
       taskRef:
@@ -108,10 +129,13 @@ spec:
         - name: context
           value: "Vulnerability scan"
         - name: repository
-          value: $(tasks.extract-repository-url.results.extracted-value)
+          value: $(params.target-repository)
+        - name: revision
+          value: $(params.pr-commit-id)
     - name: code-vulnerability-scan
       runAfter:
         - cra-discovery-scan
+        - code-vulnerability-scan-status-pending
       taskRef:
         name: cra-vulnerability-remediation
       workspaces:
@@ -121,9 +145,9 @@ spec:
           workspace: pipeline-ws
       params:
         - name: repository
-          value: $(tasks.extract-repository-url.results.extracted-value)
+          value: $(params.target-repository)
         - name: revision
-          value: $(params.branch)
+          value: $(params.pr-branch)
         - name: pr-url
           value: $(params.pr-url)
         - name: commit-id
@@ -142,7 +166,7 @@ spec:
           workspace: pipeline-ws
       params:
         - name: repository
-          value: $(tasks.extract-repository-url.results.extracted-value)
+          value: $(params.target-repository)
         - name: state
           value: "$(tasks.code-vulnerability-scan.results.status)"
         - name: context
@@ -151,7 +175,7 @@ spec:
           value: "Tekton PR Pipeline Status"
         - name: pipeline-debug
           value: $(params.pipeline-debug)
-    - name: code-cis-scan-status-pending
+    - name: code-cis-check-status-pending
       runAfter:
         - git-clone
       taskRef:
@@ -169,12 +193,15 @@ spec:
         - name: context
           value: "CIS scan"
         - name: repository
-          value: $(tasks.extract-repository-url.results.extracted-value)
+          value: $(params.target-repository)
+        - name: revision
+          value: $(params.pr-commit-id)
     - name: cra-cis-check
       taskRef:
         name: cra-cis-check
       runAfter:
         - cra-discovery-scan
+        - code-cis-check-status-pending
       workspaces:
         - name: secrets
           workspace: pipeline-ws
@@ -182,9 +209,9 @@ spec:
           workspace: pipeline-ws
       params:
         - name: repository
-          value: $(tasks.extract-repository-url.results.extracted-value)
+          value: $(params.target-repository)
         - name: revision
-          value: $(params.branch)
+          value: $(params.pr-branch)
         - name: pr-url
           value: $(params.pr-url)
         - name: commit-id
@@ -195,7 +222,7 @@ spec:
           value: $(params.scm-type)
         - name: project-id
           value: $(params.project-id)
-    - name: code-cis-scan-status-finished
+    - name: code-cis-check-status-finished
       runAfter:
         - cra-cis-check
       taskRef:
@@ -213,7 +240,9 @@ spec:
         - name: context
           value: "CIS scan"
         - name: repository
-          value: $(tasks.extract-repository-url.results.extracted-value)
+          value: $(params.target-repository)
+        - name: revision
+          value: $(params.pr-commit-id)
     - name: code-bom-check-status-pending
       runAfter:
         - git-clone
@@ -232,12 +261,15 @@ spec:
         - name: context
           value: "BOM check"
         - name: repository
-          value: $(tasks.extract-repository-url.results.extracted-value)
+          value: $(params.target-repository)
+        - name: revision
+          value: $(params.pr-commit-id)
     - name: cra-bom
       taskRef:
         name: cra-bom
       runAfter:
         - cra-discovery-scan
+        - code-bom-check-status-pending
       workspaces:
         - name: artifacts
           workspace: pipeline-ws
@@ -245,15 +277,15 @@ spec:
           workspace: pipeline-ws          
       params:
         - name: repository
-          value: $(tasks.extract-repository-url.results.extracted-value)
+          value: $(params.target-repository)
         - name: revision
-          value: $(params.branch)
+          value: $(params.pr-branch)
         - name: pr-url
           value: $(params.pr-url)
         - name: commit-id
           value: $(tasks.git-clone.results.git-commit)
         - name: target-branch
-          value: $(params.branch)
+          value: $(params.target-branch)
         - name: target-commit-id
           value: $(tasks.git-clone.results.git-commit)      
         - name: scm-type
@@ -278,4 +310,27 @@ spec:
         - name: context
           value: "BOM check"
         - name: repository
-          value: $(tasks.extract-repository-url.results.extracted-value)
+          value: $(params.target-repository)
+        - name: revision
+          value: $(params.pr-commit-id)
+
+  finally:
+    - name: unit-tests-status-pending
+      taskRef:
+        name: git-set-commit-status
+      workspaces:
+        - name: artifacts
+          workspace: pipeline-ws
+      params:
+        - name: repository
+          value: $(params.target-repository)
+        - name: revision
+          value: $(params.pr-commit-id)
+        - name: context
+          value: "Unit tests"
+        - name: description
+          value: "Unit tests passed"
+        - name: state
+          value: "$(tasks.unit-tests.status)"
+        - name: pipeline-debug
+          value: $(params.pipeline-debug)
