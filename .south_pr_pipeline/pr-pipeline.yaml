@@ -288,7 +288,7 @@ spec:
         - name: context
           value: "Discovery"
         - name: description
-          value: "Deep discovery passed"
+          value: "Tekton PR Pipeline Status"
         - name: state
           value: "$(tasks.cra-discovery-scan.status)"
         - name: pipeline-debug
@@ -307,7 +307,7 @@ spec:
         - name: context
           value: "Unit tests"
         - name: description
-          value: "Unit tests passed"
+          value: "Tekton PR Pipeline Status"
         - name: state
           value: "$(tasks.unit-tests.status)"
         - name: pipeline-debug
@@ -321,6 +321,8 @@ spec:
       params:
         - name: repository
           value: $(params.target-repository)
+        - name: revision
+          value: $(params.pr-commit-id)
         - name: state
           value: "$(tasks.code-vulnerability-scan.status)"
         - name: context
