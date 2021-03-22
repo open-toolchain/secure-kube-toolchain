@@ -156,25 +156,6 @@ spec:
           value: $(params.scm-type)
         - name: project-id
           value: $(params.project-id) 
-    - name: code-vulnerability-scan-status-finished
-      runAfter:
-        - code-vulnerability-scan
-      taskRef:
-        name: git-set-commit-status
-      workspaces:
-        - name: artifacts
-          workspace: pipeline-ws
-      params:
-        - name: repository
-          value: $(params.target-repository)
-        - name: state
-          value: "$(tasks.code-vulnerability-scan.results.status)"
-        - name: context
-          value: "Vulnerability scan"
-        - name: description
-          value: "Tekton PR Pipeline Status"
-        - name: pipeline-debug
-          value: $(params.pipeline-debug)
     - name: code-cis-check-status-pending
       runAfter:
         - git-clone
@@ -222,27 +203,6 @@ spec:
           value: $(params.scm-type)
         - name: project-id
           value: $(params.project-id)
-    - name: code-cis-check-status-finished
-      runAfter:
-        - cra-cis-check
-      taskRef:
-        name: git-set-commit-status
-      workspaces:
-        - name: artifacts
-          workspace: pipeline-ws
-      params:
-        - name: state
-          value: "$(tasks.cra-cis-check.results.status)"
-        - name: description
-          value: "Tekton PR Pipeline Status"
-        - name: pipeline-debug
-          value: $(params.pipeline-debug)
-        - name: context
-          value: "CIS scan"
-        - name: repository
-          value: $(params.target-repository)
-        - name: revision
-          value: $(params.pr-commit-id)
     - name: code-bom-check-status-pending
       runAfter:
         - git-clone
@@ -292,27 +252,6 @@ spec:
           value: $(params.scm-type)
         - name: project-id
           value: $(params.project-id)
-    - name: code-bom-check-status-finished
-      runAfter:
-        - cra-bom
-      taskRef:
-        name: git-set-commit-status
-      workspaces:
-        - name: artifacts
-          workspace: pipeline-ws
-      params:
-        - name: state
-          value: "$(tasks.cra-bom.results.status)"
-        - name: description
-          value: "Tekton PR Pipeline Status"
-        - name: pipeline-debug
-          value: $(params.pipeline-debug)
-        - name: context
-          value: "BOM check"
-        - name: repository
-          value: $(params.target-repository)
-        - name: revision
-          value: $(params.pr-commit-id)
 
   finally:
     - name: unit-tests-status-finished
@@ -334,3 +273,64 @@ spec:
           value: "$(tasks.unit-tests.status)"
         - name: pipeline-debug
           value: $(params.pipeline-debug)
+    - name: code-vulnerability-scan-status-finished    
+      runAfter:
+        - code-vulnerability-scan
+      taskRef:
+        name: git-set-commit-status
+      workspaces:
+        - name: artifacts
+          workspace: pipeline-ws
+      params:
+        - name: repository
+          value: $(params.target-repository)
+        - name: state
+          value: "$(tasks.code-vulnerability-scan.status)"
+        - name: context
+          value: "Vulnerability scan"
+        - name: description
+          value: "Tekton PR Pipeline Status"
+        - name: pipeline-debug
+          value: $(params.pipeline-debug)
+    - name: code-cis-check-status-finished
+      runAfter:
+        - cra-cis-check
+      taskRef:
+        name: git-set-commit-status
+      workspaces:
+        - name: artifacts
+          workspace: pipeline-ws
+      params:
+        - name: state
+          value: "$(tasks.cra-cis-check.results.status)"
+        - name: description
+          value: "Tekton PR Pipeline Status"
+        - name: pipeline-debug
+          value: $(params.pipeline-debug)
+        - name: context
+          value: "CIS scan"
+        - name: repository
+          value: $(params.target-repository)
+        - name: revision
+          value: $(params.pr-commit-id)
+    - name: code-bom-check-status-finished
+      runAfter:
+        - cra-bom
+      taskRef:
+        name: git-set-commit-status
+      workspaces:
+        - name: artifacts
+          workspace: pipeline-ws
+      params:
+        - name: state
+          value: "$(tasks.cra-bom.status)"
+        - name: description
+          value: "Tekton PR Pipeline Status"
+        - name: pipeline-debug
+          value: $(params.pipeline-debug)
+        - name: context
+          value: "BOM check"
+        - name: repository
+          value: $(params.target-repository)
+        - name: revision
+          value: $(params.pr-commit-id)
