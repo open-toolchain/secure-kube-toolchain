@@ -171,7 +171,7 @@ spec:
         - name: pr-url
           value: $(params.pr-url)
         - name: commit-id
-          value: $(tasks.git-clone.results.git-commit)
+          value: $(params.pr-commit-id)
         - name: scm-type
           value: $(params.scm-type)
         - name: project-id
@@ -216,7 +216,7 @@ spec:
         - name: pr-url
           value: $(params.pr-url)
         - name: commit-id
-          value: $(tasks.git-clone.results.git-commit)
+          value: $(params.pr-commit-id)
         - name: directory-name
           value: ""
         - name: scm-type
@@ -263,11 +263,11 @@ spec:
         - name: pr-url
           value: $(params.pr-url)
         - name: commit-id
-          value: $(tasks.git-clone.results.git-commit)
+          value: $(params.pr-commit-id)
         - name: target-branch
           value: $(params.target-branch)
         - name: target-commit-id
-          value: $(tasks.git-clone.results.git-commit)      
+          value: $(params.target-commit-id)
         - name: scm-type
           value: $(params.scm-type)
         - name: project-id
