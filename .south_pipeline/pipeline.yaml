@@ -200,8 +200,6 @@ spec:
           value: $(tasks.extract-repository-url.results.extracted-value)
         - name: revision
           value: $(params.branch)
-        - name: source-repository
-          value: $(params.pr-repository)
         - name: pr-url
           value: $(params.pr-url)
         - name: commit-id
@@ -310,7 +308,6 @@ spec:
             if [ ! -z "${GIT_BRANCH}" ]; then IMAGE_TAG=${GIT_BRANCH}-${IMAGE_TAG} ; fi
             IMAGE_TAG=${BUILD_NUMBER}-${IMAGE_TAG}
             echo "$IMAGE_TAG"
-            
         - name: pipeline-debug
           value: $(params.pipeline-debug)
       workspaces:
@@ -400,7 +397,7 @@ spec:
 
             # This script checks the IBM Container Service cluster is ready, has a namespace configured with access to the private
             # image registry (using an IBM Cloud API Key), perform a kubectl deploy of container image and check on outcome.
-            source <(curl -sSL "https://raw.githubusercontent.com/open-toolchain/commons/digest/scripts/check_and_deploy_kubectl.sh")
+            source <(curl -sSL "https://raw.githubusercontent.com/open-toolchain/commons/master/scripts/check_and_deploy_kubectl.sh")
         - name: post-execution-script
           value: |
             # Keep APP_URL in build.properties shuttle file
@@ -456,7 +453,7 @@ spec:
             # ------------------
             # source: https://raw.githubusercontent.com/open-toolchain/commons/master/scripts/check_health.sh
             # Check liveness and readiness probes to confirm application is healthy
-            source <(curl -sSL "https://raw.githubusercontent.com/open-toolchain/commons/digest/scripts/check_health.sh")
+            source <(curl -sSL "https://raw.githubusercontent.com/open-toolchain/commons/master/scripts/check_health.sh")
         - name: pipeline-debug
           value: $(params.pipeline-debug)
       workspaces:
