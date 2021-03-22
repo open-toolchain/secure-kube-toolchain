@@ -175,8 +175,6 @@ spec:
       taskRef:
         name: build-task
       params:
-        - name: repository
-          value: $(tasks.extract-repository-url.results.extracted-value)
         - name: custom-script
           value: |
             # uncomment to debug the script
