@@ -167,8 +167,23 @@ spec:
       workspaces:
         - name: artifacts
           workspace: pipeline-ws
-    - name: containerize
+    - name: build-task
       runAfter: [unit-tests]
+      taskRef:
+        name: build
+      params:
+        - name: repository
+          value: $(params.repository)
+        - name: custom-script
+          value: |
+            echo "No op"
+        - name: pipeline-debug
+          value: $(params.pipeline-debug)
+      workspaces:
+        - name: artifacts
+          workspace: pipeline-ws
+    - name: containerize
+      runAfter: [build-task]
       taskRef:
         name: icr-containerize
       params:
