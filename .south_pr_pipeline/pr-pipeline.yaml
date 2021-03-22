@@ -69,7 +69,7 @@ spec:
         - name: context
           value: "Unit tests"
         - name: description
-          value: "Unit tests successful"
+          value: "Unit tests successfull"
         - name: state
           value: "pending"
         - name: pipeline-debug
@@ -142,7 +142,7 @@ spec:
         - name: state
           value: pending
         - name: description
-          value: "Vulnerability scan successful"
+          value: "Vulnerability scan successfull"
         - name: pipeline-debug
           value: $(params.pipeline-debug)
         - name: context
@@ -234,7 +234,7 @@ spec:
         - name: state
           value: pending
         - name: description
-          value: "BOM check successful"
+          value: "BOM check successfull"
         - name: pipeline-debug
           value: $(params.pipeline-debug)
         - name: context
@@ -306,7 +306,7 @@ spec:
         - name: context
           value: "Unit tests"
         - name: description
-          value: "Unit tests successful"
+          value: "Unit tests successfull"
         - name: state
           value: "$(tasks.unit-tests.status)"
         - name: pipeline-debug
@@ -327,7 +327,7 @@ spec:
         - name: context
           value: "Vulnerability scan"
         - name: description
-          value: "Vulnerability scan successful"
+          value: "Vulnerability scan successfull"
         - name: pipeline-debug
           value: $(params.pipeline-debug)
     - name: code-cis-check-status-finished
@@ -359,7 +359,7 @@ spec:
         - name: state
           value: "$(tasks.cra-bom.status)"
         - name: description
-          value: "BOM check successful"
+          value: "BOM check successfull"
         - name: pipeline-debug
           value: $(params.pipeline-debug)
         - name: context
