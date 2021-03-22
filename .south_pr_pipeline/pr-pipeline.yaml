@@ -337,7 +337,7 @@ spec:
           workspace: pipeline-ws
       params:
         - name: state
-          value: "$(tasks.cra-cis-check.results.status)"
+          value: "$(tasks.cra-cis-check.status)"
         - name: description
           value: "Tekton PR Pipeline Status"
         - name: pipeline-debug
