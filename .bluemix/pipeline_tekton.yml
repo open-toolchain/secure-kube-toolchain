@@ -41,7 +41,7 @@ inputs:
     service: ${TEKTON_CATALOG_REPO}
     path: utils
   - type: git
-    branch: master
+    branch: buildtask
     service: ${TEKTON_CATALOG_REPO}
     path: build
 triggers:
