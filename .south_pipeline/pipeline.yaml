@@ -312,8 +312,6 @@ spec:
           value: $(params.path-to-dockerfile)
         - name: dockerfile
           value: $(params.dockerfile)
-        - name: build-args
-          value: $(params.build-args)
         - name: docker-commands
           value: |
             # Minting image tag using format: BUILD_NUMBER-BRANCH-COMMIT_ID-TIMESTAMP
