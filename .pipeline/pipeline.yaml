@@ -188,7 +188,7 @@ spec:
         - name: output
           workspace: pipeline-ws
     - name: containerize
-      runAfter: [unit-tests]
+      runAfter: [build]
       taskRef:
         name: icr-execute-in-dind
       params:
