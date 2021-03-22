@@ -124,7 +124,7 @@ spec:
         - name: revision
           value: $(params.pr-branch)
         - name: commit-id
-          value: $(params-pr-commit-id)
+          value: $(params.pr-commit-id)
         - name: commit-timestamp
           value: $(params.pr-commit-timestamp)
         - name: pipeline-debug
