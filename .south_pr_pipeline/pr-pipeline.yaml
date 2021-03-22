@@ -81,7 +81,6 @@ spec:
       params:
         - name: tests-script
           value: |
-            cat README.md
             if [ -f ./test/run-tests.sh ]; then
               source ./test/run-tests.sh
             else
