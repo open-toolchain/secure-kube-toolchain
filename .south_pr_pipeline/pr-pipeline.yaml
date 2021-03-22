@@ -90,9 +90,29 @@ spec:
       workspaces:
         - name: artifacts
           workspace: pipeline-ws
+    - name: cra-discovery-scan-pending
+      taskRef:
+        name: git-set-commit-status
+      workspaces:
+        - name: artifacts
+          workspace: pipeline-ws
+      params:
+        - name: repository
+          value: $(params.target-repository)
+        - name: revision
+          value: $(params.pr-commit-id)
+        - name: context
+          value: "Discovery"
+        - name: description
+          value: "Deep discovery passed"
+        - name: state
+          value: "pending"
+        - name: pipeline-debug
+          value: $(params.pipeline-debug)
     - name: cra-discovery-scan
       runAfter:
         - git-clone
+        - cra-discovery-scan-pending
       taskRef:
         name: cra-discovery
       workspaces:
@@ -254,6 +274,25 @@ spec:
           value: $(params.project-id)
 
   finally:
+    - name: cra-discovery-scan-finished
+      taskRef:
+        name: git-set-commit-status
+      workspaces:
+        - name: artifacts
+          workspace: pipeline-ws
+      params:
+        - name: repository
+          value: $(params.target-repository)
+        - name: revision
+          value: $(params.pr-commit-id)
+        - name: context
+          value: "Discovery"
+        - name: description
+          value: "Deep discovery passed"
+        - name: state
+          value: "$(tasks.cra-discovery-scan.status)"
+        - name: pipeline-debug
+          value: $(params.pipeline-debug)
     - name: unit-tests-status-finished
       taskRef:
         name: git-set-commit-status
@@ -274,8 +313,6 @@ spec:
         - name: pipeline-debug
           value: $(params.pipeline-debug)
     - name: code-vulnerability-scan-status-finished    
-      runAfter:
-        - code-vulnerability-scan
       taskRef:
         name: git-set-commit-status
       workspaces:
@@ -293,8 +330,6 @@ spec:
         - name: pipeline-debug
           value: $(params.pipeline-debug)
     - name: code-cis-check-status-finished
-      runAfter:
-        - cra-cis-check
       taskRef:
         name: git-set-commit-status
       workspaces:
@@ -314,8 +349,6 @@ spec:
         - name: revision
           value: $(params.pr-commit-id)
     - name: code-bom-check-status-finished
-      runAfter:
-        - cra-bom
       taskRef:
         name: git-set-commit-status
       workspaces:
