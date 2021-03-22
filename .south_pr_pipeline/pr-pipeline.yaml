@@ -288,7 +288,7 @@ spec:
         - name: context
           value: "Discovery"
         - name: description
-          value: "Tekton PR Pipeline Status"
+          value: "Deep discovery completed"
         - name: state
           value: "$(tasks.cra-discovery-scan.status)"
         - name: pipeline-debug
@@ -307,7 +307,7 @@ spec:
         - name: context
           value: "Unit tests"
         - name: description
-          value: "Tekton PR Pipeline Status"
+          value: "Unit tests successful"
         - name: state
           value: "$(tasks.unit-tests.status)"
         - name: pipeline-debug
@@ -328,7 +328,7 @@ spec:
         - name: context
           value: "Vulnerability scan"
         - name: description
-          value: "Tekton PR Pipeline Status"
+          value: "Vulnerability scan successful"
         - name: pipeline-debug
           value: $(params.pipeline-debug)
     - name: code-cis-check-status-finished
@@ -341,7 +341,7 @@ spec:
         - name: state
           value: "$(tasks.cra-cis-check.status)"
         - name: description
-          value: "Tekton PR Pipeline Status"
+          value: "CIS scan successfull"
         - name: pipeline-debug
           value: $(params.pipeline-debug)
         - name: context
@@ -360,7 +360,7 @@ spec:
         - name: state
           value: "$(tasks.cra-bom.status)"
         - name: description
-          value: "Tekton PR Pipeline Status"
+          value: "BOM check successful"
         - name: pipeline-debug
           value: $(params.pipeline-debug)
         - name: context
