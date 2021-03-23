@@ -237,10 +237,7 @@ spec:
         name: build-task
       params:
         - name: custom-script
-          value: |
-            # uncomment to debug the script
-            # set -x
-            echo "No op"
+          value: ""
         - name: pipeline-debug
           value: $(params.pipeline-debug)
       workspaces:
