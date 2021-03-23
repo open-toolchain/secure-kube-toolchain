@@ -129,6 +129,18 @@ spec:
       workspaces:
         - name: workspace
           workspace: pipeline-ws
+    - name: build
+      runAfter: [git-clone]
+      taskRef:
+        name: build-task
+      params:
+        - name: custom-script
+          value: ""
+        - name: pipeline-debug
+          value: $(params.pipeline-debug)
+      workspaces:
+        - name: output
+          workspace: pipeline-ws
     - name: unit-tests
       runAfter: [docker-lint,build]
       taskRef:
@@ -169,21 +181,6 @@ spec:
           value: $(params.pipeline-debug)
       workspaces:
         - name: artifacts
-          workspace: pipeline-ws
-    - name: build
-      runAfter: [git-clone]
-      taskRef:
-        name: build-task
-      params:
-        - name: custom-script
-          value: |
-            # uncomment to debug the script
-            # set -x
-            echo "No op"
-        - name: pipeline-debug
-          value: $(params.pipeline-debug)
-      workspaces:
-        - name: output
           workspace: pipeline-ws
     - name: containerize
       runAfter: [build]
