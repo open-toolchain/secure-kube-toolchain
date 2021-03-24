@@ -234,7 +234,7 @@ spec:
     - name: build
       runAfter: [git-clone]
       taskRef:
-        name: build-task
+        name: toolchain-build
       params:
         - name: custom-script
           value: ""
