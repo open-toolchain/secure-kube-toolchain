@@ -48,13 +48,9 @@ steps:
             service_label: repo
             repo_name: "hello-containers-{{timestamp}}"
             paramaters:
-              repo_url: >
-                $env.type === 'link' ?
-                  $env.app_repo : 'https://github.com/open-toolchain/hello-containers'
-              source_repo_url: >
-                $env.type === 'fork' || $env.type === 'clone' ?
-                  $env.app_repo : 'https://github.com/open-toolchain/hello-containers'
-              type: $env.type || 'clone'
+              repo_url: 'https://github.com/open-toolchain/hello-containers'
+              source_repo_url: 'https://github.com/open-toolchain/hello-containers'
+              type: 'clone'
               has_issues: true
               enable_traceability: true
               legal: true
