@@ -7,30 +7,6 @@
   "description": "",
   "longDescription": "By default, it provides you with a sample app. You can bring your own app by replacing the sample URL with a URL to your own source code repository.",
   "type": "object",
-  "properties": {
-    "source-provider": {
-        "description": "Source provider description",
-        "type": "string",
-        "enum": [
-            {
-                "value": "hostedgit",
-                "name": "Git Repos and Issue Tracking"
-            },
-            {
-                "value": "githubconsolidated",
-                "name": "GitHub"
-            },
-            {
-                "value": "bitbucketgit",
-                "name": "Bitbucket"
-            },
-            {
-                "value": "github_integrated",
-                "name": "GitHub Enterprise Whitewater"
-            }
-        ]
-    }
-  },
   "form": [{
     "type": "selectfieldset",
     "display": {
@@ -58,6 +34,24 @@
   {
     "type": "select",
     "key": "source-provider",
-    "title": "Source Provider Title"
+    "title": "Source Provider Title",
+    "enum": [
+        {
+            "value": "hostedgit",
+            "name": "Git Repos and Issue Tracking"
+        },
+        {
+            "value": "githubconsolidated",
+            "name": "GitHub"
+        },
+        {
+            "value": "bitbucketgit",
+            "name": "Bitbucket"
+        },
+        {
+            "value": "github_integrated",
+            "name": "GitHub Enterprise Whitewater"
+        }
+    ]
   }]
 }
