@@ -211,7 +211,7 @@ form:
   wizard_app:
     wizard: true
     parameters:
-      source-provider: bitbucketgit
+      source-provider: hostedgit
     schema:
       $ref: wizard_app.json
 
