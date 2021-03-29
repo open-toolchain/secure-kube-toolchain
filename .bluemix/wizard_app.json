@@ -33,7 +33,7 @@
   },
   {
     "type": "select",
-    "key": "source-provider",
+    "key": "source_provider",
     "title": "Source Provider Title",
     "enum": [
         {
