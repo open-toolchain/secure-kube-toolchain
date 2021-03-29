@@ -45,6 +45,10 @@
             "name": "GitHub"
         },
         {
+            "value": "gitlab",
+            "name": "GitLab"
+        },
+        {
             "value": "bitbucketgit",
             "name": "Bitbucket"
         },
