@@ -16,7 +16,7 @@ steps:
     events:
       - condition:
           any:
-            - parameter: source-provider
+            - parameter: source_provider
               value: hostedgit
         actions:
           - type: replace-service
@@ -32,7 +32,7 @@ steps:
               source_provider: hostedgit
       - condition:
           any:
-            - parameter: source-provider
+            - parameter: source_provider
               value: githubconsolidated
         actions:
           - type: replace-service
@@ -40,7 +40,7 @@ steps:
             service_label: repo
       - condition:
           any:
-            - parameter: source-provider
+            - parameter: source_provider
               value: gitlab
         actions:
           - type: replace-service
@@ -48,7 +48,7 @@ steps:
             service_label: repo
       - condition:
           any:
-            - parameter: source-provider
+            - parameter: source_provider
               value: bitbucketgit
         actions:
           - type: replace-service
@@ -65,7 +65,7 @@ steps:
               source_provider: bitbucketgit
       - condition:
           any:
-            - parameter: source-provider
+            - parameter: source_provider
               value: github_integrated
         actions:
           - type: replace-service
