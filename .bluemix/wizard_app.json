@@ -11,8 +11,24 @@
     "source-provider": {
         "description": "Source provider description",
         "type": "string",
-        "disabled": false,
-        "pattern": "\\S"
+        "enum": [
+            {
+                "value": "hostedgit",
+                "name": "Git Repos and Issue Tracking"
+            },
+            {
+                "value": "githubconsolidated",
+                "name": "GitHub"
+            },
+            {
+                "value": "bitbucketgit",
+                "name": "Bitbucket"
+            },
+            {
+                "value": "github_integrated",
+                "name": "GitHub Enterprise Whitewater"
+            }
+        ]
     }
   },
   "form": [{
@@ -38,6 +54,11 @@
         "items": ["repo_url"]
       }
     ]
+  },
+  {
+    "type": "select",
+    "key": "source-provider",
+    "title": "Source Provider Title"
   },
   {
     "type": "table",
