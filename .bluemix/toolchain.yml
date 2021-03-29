@@ -49,6 +49,7 @@ services:
       has_issues: true
       enable_traceability: true
       legal: true
+      source_provider: '{{form.wizard_app.parameters.source-provider}}'
       env:
           SOURCE_PROVIDER: '{{form.wizard_app.parameters.source-provider}}'
   pipeline-repo:

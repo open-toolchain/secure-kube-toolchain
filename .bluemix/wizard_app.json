@@ -57,7 +57,12 @@
           "gitlab": "GitLab",
           "bitbucketgit": "Bitbucket",
           "github_integrated": "GitHub Enterprise Whitewater"
-        }
+        },
+        "items": [{
+            "type": "section",
+            "items": ["source_provider"]
+          }
+        ]
       }]
   }]
 }
