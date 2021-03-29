@@ -49,7 +49,7 @@
         "display": {
           "showLabel": true
         },
-        "key": "source-provider",
+        "key": "type",
         "enum": ["hostedgit", "githubconsolidated", "gitlab", "bitbucketgit", "github_integrated"],
         "titleMap": {
           "hostedgit": "Git Repos and Issue Tracking",
