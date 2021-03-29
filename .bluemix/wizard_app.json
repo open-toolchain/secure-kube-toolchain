@@ -59,31 +59,5 @@
     "type": "select",
     "key": "source-provider",
     "title": "Source Provider Title"
-  },
-  {
-    "type": "table",
-    "columnCount": 1,
-    "widths": ["100%"],
-    "items": [
-      {
-        "type": "selectfieldset",
-        "display": {
-          "showLabel": true
-        },
-        "key": "source_provider",
-        "enum": ["hostedgit", "githubconsolidated", "gitlab", "bitbucketgit", "github_integrated"],
-        "titleMap": {
-          "hostedgit": "Git Repos and Issue Tracking",
-          "githubconsolidated": "GitHub",
-          "gitlab": "GitLab",
-          "bitbucketgit": "Bitbucket",
-          "github_integrated": "GitHub Enterprise Whitewater"
-        },
-        "items": [{
-            "type": "section",
-            "items": ["repo-name"]
-          }
-        ]
-      }]
   }]
 }
