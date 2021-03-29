@@ -1,0 +1,34 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "messages": {
+    "$i18n": "locales.yml"
+  },
+  "title": "Application",
+  "description": "",
+  "longDescription": "By default, it provides you with a sample app. You can bring your own app by replacing the sample URL with a URL to your own source code repository.",
+  "type": "object",
+  "form": [{
+    "type": "selectfieldset",
+    "display": {
+      "component": "tilegroup",
+      "orientation": "horizontal",
+      "showLabel": false,
+      "invalidOptionMsg": "Unsupported configuration option. Try **Expert mode**."
+    },
+    "key": "type",
+    "enum": ["clone", "link"],
+    "titleMap": {
+      "clone": "Use default sample",
+      "link": "Bring your own app"
+    },
+    "items": [{
+        "type": "section",
+        "items": ["repo_name"]
+      },
+      {
+        "type": "section",
+        "items": ["repo_url"]
+      }
+    ]
+  }]
+}

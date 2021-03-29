@@ -1,0 +1,18 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "messages": {
+    "$i18n": "locales.yml"
+  },
+  "title": "Summary",
+  "description": "",
+  "longDescription": "",
+  "type": "object",
+  "form": [{
+    "type": "notification",
+    "display": {
+      "style": "success",
+      "title": "Congratulations",
+      "subtitle": "You have completed the configuration of your toolchain. Click the 'Create' button below to create the toolchain with your chosen tools and settings."
+    }
+  }]
+}
