@@ -36,7 +36,7 @@ toolchain:
 services:
   repo:
     service_id: >
-      $env.source_provider ? $env.source_provider : 'hostedgit'
+      $env.SOURCE_PROVIDER ? $env.SOURCE_PROVIDER : 'hostedgit'
     parameters:
       repo_name: "hello-containers-{{timestamp}}"
       repo_url: >
@@ -49,6 +49,8 @@ services:
       has_issues: true
       enable_traceability: true
       legal: true
+      env:
+          SOURCE_PROVIDER: '{{form.wizard_app.parameters.source-provider}}'
   pipeline-repo:
     service_id: >
       $env.pipeline_type === 'tekton' ? $env.source_provider ? $env.source_provider : 'hostedgit' : ''
@@ -207,6 +209,8 @@ form:
 
   wizard_app:
     wizard: true
+    parameters:
+      source-provider: hostedgit
     schema:
       $ref: wizard_app.json
 

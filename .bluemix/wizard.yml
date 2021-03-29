@@ -13,6 +13,47 @@ steps:
     validator: repo
     expert_mode:
       service_label: repo
+    events:
+      - condition:
+          any:
+            - parameter: source-provider
+              value: hostedgit
+        actions:
+          - type: replace-service
+            service: hostedgit
+            service_label: repo
+      - condition:
+          any:
+            - parameter: source-provider
+              value: githubconsolidated
+        actions:
+          - type: replace-service
+            service: githubconsolidated
+            service_label: repo
+      - condition:
+          any:
+            - parameter: source-provider
+              value: gitlab
+        actions:
+          - type: replace-service
+            service: gitlab
+            service_label: repo
+      - condition:
+          any:
+            - parameter: source-provider
+              value: bitbucketgit
+        actions:
+          - type: replace-service
+            service: bitbucketgit
+            service_label: repo
+      - condition:
+          any:
+            - parameter: source-provider
+              value: github_integrated
+        actions:
+          - type: replace-service
+            service: github_integrated
+            service_label: repo
   - name: vault
     label: Secrets Management
     form: 
