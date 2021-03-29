@@ -49,9 +49,8 @@ services:
       has_issues: true
       enable_traceability: true
       legal: true
-      source_provider: '{{form.wizard_app.parameters.source_provider}}'
       env:
-          SOURCE_PROVIDER: '{{form.wizard_app.parameters.source_provider}}'
+          source_provider: '{{form.wizard_app.parameters.source_provider}}'
   pipeline-repo:
     service_id: >
       $env.pipeline_type === 'tekton' ? $env.source_provider ? $env.source_provider : 'hostedgit' : ''
