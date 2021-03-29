@@ -207,6 +207,8 @@ form:
 
   wizard_app:
     wizard: true
+    parameters:
+      source_provider: hostedgit
     schema:
       $ref: wizard_app.json
 
