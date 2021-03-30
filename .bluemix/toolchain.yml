@@ -207,6 +207,8 @@ form:
 
   wizard_app:
     wizard: true
+    parameters:
+      test: "test1"
     schema:
       $ref: wizard_app.json
 
