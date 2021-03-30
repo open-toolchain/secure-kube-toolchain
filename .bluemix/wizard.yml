@@ -14,7 +14,63 @@ steps:
     expert_mode:
       service_label: repo
     events:
-      $ref: repo_events.yml
+      - condition:
+          any:
+            - parameter: source_provider
+              value: hostedgit
+        actions:
+          - type: replace-service
+            service: hostedgit
+            service_label: repo
+            parameters:
+              repo_url: 'https://github.com/open-toolchain/brian-containers'
+              source_repo_url: 'https://github.com/open-toolchain/brian-containers'
+              type: 'clone'
+              has_issues: true
+              enable_traceability: true
+              legal: true
+              source_provider: hostedgit
+      - condition:
+          any:
+            - parameter: source_provider
+              value: githubconsolidated
+        actions:
+          - type: replace-service
+            service: githubconsolidated
+            service_label: repo
+      - condition:
+          any:
+            - parameter: source_provider
+              value: gitlab
+        actions:
+          - type: replace-service
+            service: gitlab
+            service_label: repo
+      - condition:
+          any:
+            - parameter: source_provider
+              value: bitbucketgit
+        actions:
+          - type: replace-service
+            service: bitbucketgit
+            service_label: repo
+            repo_name: "hello-containers-{{timestamp}}"
+            parameters:
+              repo_url: 'https://github.com/open-toolchain/hello-containers'
+              source_repo_url: 'https://github.com/open-toolchain/hello-containers'
+              type: 'clone'
+              has_issues: true
+              enable_traceability: true
+              legal: true
+              source_provider: bitbucketgit
+      - condition:
+          any:
+            - parameter: source_provider
+              value: github_integrated
+        actions:
+          - type: replace-service
+            service: github_integrated
+            service_label: repo
   - name: vault
     label: Secrets Management
     form: 
