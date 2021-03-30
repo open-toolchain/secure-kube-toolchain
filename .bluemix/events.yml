@@ -85,7 +85,7 @@ repo_events:
           legal: true
           source_provider: github_integrated
 vault_events:
-   - condition:
+  - condition:
       any:
         - parameter: key-protect
           value: true
