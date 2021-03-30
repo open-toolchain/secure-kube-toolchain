@@ -23,6 +23,7 @@ steps:
             service: hostedgit
             service_label: repo
             parameters:
+              repo_name: "hello-containers-{{timestamp}}"
               repo_url: 'https://github.com/open-toolchain/hello-containers'
               source_repo_url: 'https://github.com/open-toolchain/hello-containers'
               type: 'clone'
@@ -39,6 +40,7 @@ steps:
             service: githubconsolidated
             service_label: repo
             parameters:
+              repo_name: "hello-containers-{{timestamp}}"
               repo_url: 'https://github.com/open-toolchain/hello-containers'
               source_repo_url: 'https://github.com/open-toolchain/hello-containers'
               type: 'clone'
@@ -55,6 +57,7 @@ steps:
             service: gitlab
             service_label: repo
             parameters:
+              repo_name: "hello-containers-{{timestamp}}"
               repo_url: 'https://github.com/open-toolchain/hello-containers'
               source_repo_url: 'https://github.com/open-toolchain/hello-containers'
               type: 'clone'
@@ -70,8 +73,8 @@ steps:
           - type: replace-service
             service: bitbucketgit
             service_label: repo
-            repo_name: "hello-containers-{{timestamp}}"
             parameters:
+              repo_name: "hello-containers-{{timestamp}}"
               repo_url: 'https://github.com/open-toolchain/hello-containers'
               source_repo_url: 'https://github.com/open-toolchain/hello-containers'
               type: 'clone'
@@ -88,6 +91,7 @@ steps:
             service: github_integrated
             service_label: repo
             parameters:
+              repo_name: "hello-containers-{{timestamp}}"
               repo_url: 'https://github.com/open-toolchain/hello-containers'
               source_repo_url: 'https://github.com/open-toolchain/hello-containers'
               type: 'clone'

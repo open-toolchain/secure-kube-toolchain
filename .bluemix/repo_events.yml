@@ -8,8 +8,9 @@
       service: hostedgit
       service_label: repo
       parameters:
-        repo_url: 'https://github.com/open-toolchain/brian-containers'
-        source_repo_url: 'https://github.com/open-toolchain/brian-containers'
+        repo_name: "hello-containers-{{timestamp}}"
+        repo_url: 'https://github.com/open-toolchain/hello-containers'
+        source_repo_url: 'https://github.com/open-toolchain/hello-containers'
         type: 'clone'
         has_issues: true
         enable_traceability: true
@@ -23,6 +24,15 @@
     - type: replace-service
       service: githubconsolidated
       service_label: repo
+      parameters:
+        repo_name: "hello-containers-{{timestamp}}"
+        repo_url: 'https://github.com/open-toolchain/hello-containers'
+        source_repo_url: 'https://github.com/open-toolchain/hello-containers'
+        type: 'clone'
+        has_issues: true
+        enable_traceability: true
+        legal: true
+        source_provider: githubconsolidated
 - condition:
     any:
       - parameter: source_provider
@@ -31,6 +41,15 @@
     - type: replace-service
       service: gitlab
       service_label: repo
+      parameters:
+        repo_name: "hello-containers-{{timestamp}}"
+        repo_url: 'https://github.com/open-toolchain/hello-containers'
+        source_repo_url: 'https://github.com/open-toolchain/hello-containers'
+        type: 'clone'
+        has_issues: true
+        enable_traceability: true
+        legal: true
+        source_provider: gitlab
 - condition:
     any:
       - parameter: source_provider
@@ -39,8 +58,8 @@
     - type: replace-service
       service: bitbucketgit
       service_label: repo
-      repo_name: "hello-containers-{{timestamp}}"
       parameters:
+        repo_name: "hello-containers-{{timestamp}}"
         repo_url: 'https://github.com/open-toolchain/hello-containers'
         source_repo_url: 'https://github.com/open-toolchain/hello-containers'
         type: 'clone'
@@ -56,3 +75,12 @@
     - type: replace-service
       service: github_integrated
       service_label: repo
+      parameters:
+        repo_name: "hello-containers-{{timestamp}}"
+        repo_url: 'https://github.com/open-toolchain/hello-containers'
+        source_repo_url: 'https://github.com/open-toolchain/hello-containers'
+        type: 'clone'
+        has_issues: true
+        enable_traceability: true
+        legal: true
+        source_provider: github_integrated
