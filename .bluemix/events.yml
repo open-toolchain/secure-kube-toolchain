@@ -1,5 +1,5 @@
 ---
-events:
+repo_events:
   - condition:
       any:
         - parameter: source_provider
@@ -8,18 +8,14 @@ events:
       - type: replace-service
         service: hostedgit
         service_label: repo
-        parameters:
-          repo_name: "hello-containers-{{timestamp}}"
-          repo_url: 'https://github.com/open-toolchain/hello-containers'
-          source_repo_url: 'https://github.com/open-toolchain/hello-containers'
-          type: 'clone'
-          has_issues: true
-          enable_traceability: true
-          legal: true
-          source_provider: hostedgit
-          test1: $env.source_provider
-          test2: '$env.source_provider'
-          test3: '{{service.label}}'
+        keep_parameters: 
+          - repo_name
+          - repo_url
+          - source_repo_url
+          - type
+          - has_issues
+          - enable_traceability
+          - legal
   - condition:
       any:
         - parameter: source_provider
@@ -37,9 +33,6 @@ events:
           enable_traceability: true
           legal: true
           source_provider: githubconsolidated
-          test1: $env.source_provider
-          test2: '$env.source_provider'
-          test3: '{{service.label}}'
   - condition:
       any:
         - parameter: source_provider
@@ -57,9 +50,6 @@ events:
           enable_traceability: true
           legal: true
           source_provider: gitlab
-          test1: $env.source_provider
-          test2: '$env.source_provider'
-          test3: '{{service.label}}'
   - condition:
       any:
         - parameter: source_provider
@@ -77,9 +67,6 @@ events:
           enable_traceability: true
           legal: true
           source_provider: bitbucketgit
-          test1: $env.source_provider
-          test2: '$env.source_provider'
-          test3: '{{service.label}}'
   - condition:
       any:
         - parameter: source_provider
@@ -97,6 +84,61 @@ events:
           enable_traceability: true
           legal: true
           source_provider: github_integrated
-          test1: $env.source_provider
-          test2: '$env.source_provider'
-          test3: '{{service.label}}'
+vault_events:
+   - condition:
+      any:
+        - parameter: key-protect
+          value: true
+    actions:
+      - type: create-service
+        service: keyprotect
+        service_label: kp-vault
+        parameters:
+          name: kp-compliance-secrets
+  - condition:
+      any:
+        - parameter: key-protect
+          value: false
+    actions:
+      - type: delete-service
+        service: keyprotect
+        service_label: kp-vault
+  - condition:
+      any:
+        - parameter: secrets-manager
+          value: true
+    actions:
+      - type: create-service
+        service: secretsmanager
+        service_label: sm-vault
+        parameters:
+          name: sm-compliance-secrets
+  - condition:
+      any:
+        - parameter: secrets-manager
+          value: false
+    actions:
+      - type: delete-service
+        service: secretsmanager
+        service_label: sm-vault
+  - condition:
+      any:
+        - parameter: hashicorp-vault
+          value: true
+    actions:
+      - type: create-service
+        service: hashicorpvault
+        service_label: hc-vault
+        parameters:
+          name: 'hc-compliance-secrets'
+          server_url: 'https://vserv.sos.ibm.com:8200'
+          dashboard_url: 'https://vserv.sos.ibm.com:8200/ui'
+          authentication_method: 'approle'
+  - condition:
+      any:
+        - parameter: hashicorp-vault
+          value: false
+    actions:
+      - type: delete-service
+        service: hashicorpvault
+        service_label: hc-vault

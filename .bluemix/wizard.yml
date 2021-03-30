@@ -14,70 +14,14 @@ steps:
     expert_mode:
       service_label: repo
     events:
-      $ref: repo_events.yml#/events
+      $ref: events.yml#/repo_events
   - name: vault
     label: Secrets Management
     form: 
       name: wizard_vault
       title: Secrets Management
     events:
-      - condition:
-          any:
-            - parameter: key-protect
-              value: true
-        actions:
-          - type: create-service
-            service: keyprotect
-            service_label: kp-vault
-            parameters:
-              name: kp-compliance-secrets
-      - condition:
-          any:
-            - parameter: key-protect
-              value: false
-        actions:
-          - type: delete-service
-            service: keyprotect
-            service_label: kp-vault
-      - condition:
-          any:
-            - parameter: secrets-manager
-              value: true
-        actions:
-          - type: create-service
-            service: secretsmanager
-            service_label: sm-vault
-            parameters:
-              name: sm-compliance-secrets
-      - condition:
-          any:
-            - parameter: secrets-manager
-              value: false
-        actions:
-          - type: delete-service
-            service: secretsmanager
-            service_label: sm-vault
-      - condition:
-          any:
-            - parameter: hashicorp-vault
-              value: true
-        actions:
-          - type: create-service
-            service: hashicorpvault
-            service_label: hc-vault
-            parameters:
-              name: 'hc-compliance-secrets'
-              server_url: 'https://vserv.sos.ibm.com:8200'
-              dashboard_url: 'https://vserv.sos.ibm.com:8200/ui'
-              authentication_method: 'approle'
-      - condition:
-          any:
-            - parameter: hashicorp-vault
-              value: false
-        actions:
-          - type: delete-service
-            service: hashicorpvault
-            service_label: hc-vault
+      $ref: events.yml#/vault_events
   - name: keyprotect
     indent_level: 1
     label: Key Protect
