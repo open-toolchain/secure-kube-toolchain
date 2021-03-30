@@ -13,6 +13,7 @@ repo_events:
         keep_parameters:
           - repo_name
           - repo_url
+          - private_repo
           - source_repo_url
           - type
           - has_issues
@@ -31,6 +32,7 @@ repo_events:
         keep_parameters:
           - repo_name
           - repo_url
+          - private_repo
           - source_repo_url
           - type
           - has_issues
@@ -49,6 +51,7 @@ repo_events:
         keep_parameters:
           - repo_name
           - repo_url
+          - private_repo
           - source_repo_url
           - type
           - has_issues
@@ -67,6 +70,7 @@ repo_events:
         keep_parameters:
           - repo_name
           - repo_url
+          - private_repo
           - source_repo_url
           - type
           - has_issues
@@ -85,6 +89,7 @@ repo_events:
         keep_parameters:
           - repo_name
           - repo_url
+          - private_repo
           - source_repo_url
           - type
           - has_issues
