@@ -14,7 +14,7 @@ steps:
     expert_mode:
       service_label: repo
     events:
-      $ref: repo_events.yml#/foo
+      $ref: repo_events.yml#/events
   - name: vault
     label: Secrets Management
     form: 
