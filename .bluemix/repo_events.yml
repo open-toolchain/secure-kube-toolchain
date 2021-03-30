@@ -19,7 +19,7 @@ events:
           source_provider: hostedgit
           test1: $env.source_provider
           test2: '$env.source_provider'
-          test3: '{{source_provider}}'
+          test3: '{{env.source_provider}}'
   - condition:
       any:
         - parameter: source_provider
@@ -59,7 +59,7 @@ events:
           source_provider: gitlab
           test1: $env.source_provider
           test2: '$env.source_provider'
-          test3: '{{source_provider}}'
+          test3: '{{env.source_provider}}'
   - condition:
       any:
         - parameter: source_provider
@@ -79,7 +79,7 @@ events:
           source_provider: bitbucketgit
           test1: $env.source_provider
           test2: '$env.source_provider'
-          test3: '{{source_provider}}'
+          test3: '{{env.source_provider}}'
   - condition:
       any:
         - parameter: source_provider
@@ -99,4 +99,4 @@ events:
           source_provider: github_integrated
           test1: $env.source_provider
           test2: '$env.source_provider'
-          test3: '{{source_provider}}'
+          test3: '{{env.source_provider}}'
