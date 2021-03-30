@@ -1,86 +1,87 @@
 ---
-- condition:
-    any:
-      - parameter: source_provider
-        value: hostedgit
-  actions:
-    - type: replace-service
-      service: hostedgit
-      service_label: repo
-      parameters:
-        repo_name: "hello-containers-{{timestamp}}"
-        repo_url: 'https://github.com/open-toolchain/hello-containers'
-        source_repo_url: 'https://github.com/open-toolchain/hello-containers'
-        type: 'clone'
-        has_issues: true
-        enable_traceability: true
-        legal: true
-        source_provider: hostedgit
-- condition:
-    any:
-      - parameter: source_provider
-        value: githubconsolidated
-  actions:
-    - type: replace-service
-      service: githubconsolidated
-      service_label: repo
-      parameters:
-        repo_name: "hello-containers-{{timestamp}}"
-        repo_url: 'https://github.com/open-toolchain/hello-containers'
-        source_repo_url: 'https://github.com/open-toolchain/hello-containers'
-        type: 'clone'
-        has_issues: true
-        enable_traceability: true
-        legal: true
-        source_provider: githubconsolidated
-- condition:
-    any:
-      - parameter: source_provider
-        value: gitlab
-  actions:
-    - type: replace-service
-      service: gitlab
-      service_label: repo
-      parameters:
-        repo_name: "hello-containers-{{timestamp}}"
-        repo_url: 'https://github.com/open-toolchain/hello-containers'
-        source_repo_url: 'https://github.com/open-toolchain/hello-containers'
-        type: 'clone'
-        has_issues: true
-        enable_traceability: true
-        legal: true
-        source_provider: gitlab
-- condition:
-    any:
-      - parameter: source_provider
-        value: bitbucketgit
-  actions:
-    - type: replace-service
-      service: bitbucketgit
-      service_label: repo
-      parameters:
-        repo_name: "hello-containers-{{timestamp}}"
-        repo_url: 'https://github.com/open-toolchain/hello-containers'
-        source_repo_url: 'https://github.com/open-toolchain/hello-containers'
-        type: 'clone'
-        has_issues: true
-        enable_traceability: true
-        legal: true
-        source_provider: bitbucketgit
-- condition:
-    any:
-      - parameter: source_provider
-        value: github_integrated
-  actions:
-    - type: replace-service
-      service: github_integrated
-      service_label: repo
-      parameters:
-        repo_name: "hello-containers-{{timestamp}}"
-        repo_url: 'https://github.com/open-toolchain/hello-containers'
-        source_repo_url: 'https://github.com/open-toolchain/hello-containers'
-        type: 'clone'
-        has_issues: true
-        enable_traceability: true
-        legal: true
-        source_provider: github_integrated
+foo:
+  - condition:
+      any:
+        - parameter: source_provider
+          value: hostedgit
+    actions:
+      - type: replace-service
+        service: hostedgit
+        service_label: repo
+        parameters:
+          repo_name: "hello-containers-{{timestamp}}"
+          repo_url: 'https://github.com/open-toolchain/hello-containers'
+          source_repo_url: 'https://github.com/open-toolchain/hello-containers'
+          type: 'clone'
+          has_issues: true
+          enable_traceability: true
+          legal: true
+          source_provider: hostedgit
+  - condition:
+      any:
+        - parameter: source_provider
+          value: githubconsolidated
+    actions:
+      - type: replace-service
+        service: githubconsolidated
+        service_label: repo
+        parameters:
+          repo_name: "hello-containers-{{timestamp}}"
+          repo_url: 'https://github.com/open-toolchain/hello-containers'
+          source_repo_url: 'https://github.com/open-toolchain/hello-containers'
+          type: 'clone'
+          has_issues: true
+          enable_traceability: true
+          legal: true
+          source_provider: githubconsolidated
+  - condition:
+      any:
+        - parameter: source_provider
+          value: gitlab
+    actions:
+      - type: replace-service
+        service: gitlab
+        service_label: repo
+        parameters:
+          repo_name: "hello-containers-{{timestamp}}"
+          repo_url: 'https://github.com/open-toolchain/hello-containers'
+          source_repo_url: 'https://github.com/open-toolchain/hello-containers'
+          type: 'clone'
+          has_issues: true
+          enable_traceability: true
+          legal: true
+          source_provider: gitlab
+  - condition:
+      any:
+        - parameter: source_provider
+          value: bitbucketgit
+    actions:
+      - type: replace-service
+        service: bitbucketgit
+        service_label: repo
+        parameters:
+          repo_name: "hello-containers-{{timestamp}}"
+          repo_url: 'https://github.com/open-toolchain/hello-containers'
+          source_repo_url: 'https://github.com/open-toolchain/hello-containers'
+          type: 'clone'
+          has_issues: true
+          enable_traceability: true
+          legal: true
+          source_provider: bitbucketgit
+  - condition:
+      any:
+        - parameter: source_provider
+          value: github_integrated
+    actions:
+      - type: replace-service
+        service: github_integrated
+        service_label: repo
+        parameters:
+          repo_name: "hello-containers-{{timestamp}}"
+          repo_url: 'https://github.com/open-toolchain/hello-containers'
+          source_repo_url: 'https://github.com/open-toolchain/hello-containers'
+          type: 'clone'
+          has_issues: true
+          enable_traceability: true
+          legal: true
+          source_provider: github_integrated
