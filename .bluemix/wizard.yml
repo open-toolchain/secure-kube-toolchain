@@ -22,7 +22,7 @@ steps:
           - type: replace-service
             service: hostedgit
             service_label: repo
-            paramaters:
+            parameters:
               repo_url: 'https://github.com/open-toolchain/brian-containers'
               source_repo_url: 'https://github.com/open-toolchain/brian-containers'
               type: 'clone'
@@ -55,7 +55,7 @@ steps:
             service: bitbucketgit
             service_label: repo
             repo_name: "hello-containers-{{timestamp}}"
-            paramaters:
+            parameters:
               repo_url: 'https://github.com/open-toolchain/hello-containers'
               source_repo_url: 'https://github.com/open-toolchain/hello-containers'
               type: 'clone'
