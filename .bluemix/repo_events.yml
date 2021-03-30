@@ -1,5 +1,5 @@
 ---
-- condition:
+condition:
     any:
       - parameter: source_provider
         value: hostedgit
@@ -15,7 +15,7 @@
         enable_traceability: true
         legal: true
         source_provider: hostedgit
-- condition:
+condition:
     any:
       - parameter: source_provider
         value: githubconsolidated
@@ -23,7 +23,7 @@
     - type: replace-service
       service: githubconsolidated
       service_label: repo
-- condition:
+condition:
     any:
       - parameter: source_provider
         value: gitlab
@@ -31,7 +31,7 @@
     - type: replace-service
       service: gitlab
       service_label: repo
-- condition:
+condition:
     any:
       - parameter: source_provider
         value: bitbucketgit
@@ -48,7 +48,7 @@
         enable_traceability: true
         legal: true
         source_provider: bitbucketgit
-- condition:
+condition:
     any:
       - parameter: source_provider
         value: github_integrated
