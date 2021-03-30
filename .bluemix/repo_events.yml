@@ -17,7 +17,9 @@ events:
           enable_traceability: true
           legal: true
           source_provider: hostedgit
-          test: $env.source_provider
+          test1: $env.source_provider
+          test2: '$env.source_provider'
+          test3: '{{source_provider}}'
   - condition:
       any:
         - parameter: source_provider
@@ -35,7 +37,9 @@ events:
           enable_traceability: true
           legal: true
           source_provider: githubconsolidated
-          test: $env.source_provider
+          test1: $env.source_provider
+          test2: '$env.source_provider'
+          test3: '{{source_provider}}'
   - condition:
       any:
         - parameter: source_provider
@@ -53,7 +57,9 @@ events:
           enable_traceability: true
           legal: true
           source_provider: gitlab
-          test: $env.source_provider
+          test1: $env.source_provider
+          test2: '$env.source_provider'
+          test3: '{{source_provider}}'
   - condition:
       any:
         - parameter: source_provider
@@ -71,7 +77,9 @@ events:
           enable_traceability: true
           legal: true
           source_provider: bitbucketgit
-          test: $env.source_provider
+          test1: $env.source_provider
+          test2: '$env.source_provider'
+          test3: '{{source_provider}}'
   - condition:
       any:
         - parameter: source_provider
@@ -89,4 +97,6 @@ events:
           enable_traceability: true
           legal: true
           source_provider: github_integrated
-          test: $env.source_provider
+          test1: $env.source_provider
+          test2: '$env.source_provider'
+          test3: '{{source_provider}}'
