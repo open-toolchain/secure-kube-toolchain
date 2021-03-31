@@ -34,7 +34,9 @@
   {
     "type": "select",
     "key": "source_provider",
-    "title": "Source Provider Title",
+    "title": {
+      "$ref": "#/messages/wizard.sourceHost"
+    },
     "enum": [
         {
             "value": "hostedgit",
