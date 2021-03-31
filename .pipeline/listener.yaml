@@ -39,6 +39,9 @@ spec:
     - name: deployment-file
       description: file containing the kubernetes deployment definition
       default: "deployment.yml"
+    - name: keep-ingress-custom-domain
+      description: force keep of ingress custom domain in deployment-file if any (true|false)
+      default: "false"
     - name: pipeline-debug
       default: "0"
     - name: cluster-name
@@ -95,6 +98,8 @@ spec:
             value: $(params.fail-on-scanned-issues)
           - name: deployment-file
             value: $(params.deployment-file)
+          - name: keep-ingress-custom-domain
+            value: $(params.keep-ingress-custom-domain)
           - name: dev-region
             value: $(params.dev-region)
           - name: dev-resource-group

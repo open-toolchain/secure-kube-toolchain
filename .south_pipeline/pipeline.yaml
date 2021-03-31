@@ -40,6 +40,9 @@ spec:
     - name: deployment-file
       description: file containing the kubernetes deployment definition
       default: "deployment.yml"
+    - name: keep-ingress-custom-domain
+      description: force keep of ingress custom domain in deployment-file if any (true|false)
+      default: "false"
     - name: dev-region
     - name: dev-resource-group
     - name: cluster-name
@@ -54,6 +57,9 @@ spec:
     - name: scm-type
     - name: project-id
       default: ""
+    - name: registry-create-namespace
+      description: create container registry namespace if it doesn't already exists
+      default: "true"
   workspaces:
     - name: pipeline-ws
   tasks:
@@ -225,8 +231,20 @@ spec:
       workspaces:
         - name: workspace
           workspace: pipeline-ws
+    - name: build
+      runAfter: [git-clone]
+      taskRef:
+        name: toolchain-build
+      params:
+        - name: custom-script
+          value: ""
+        - name: pipeline-debug
+          value: $(params.pipeline-debug)
+      workspaces:
+        - name: output
+          workspace: pipeline-ws
     - name: unit-tests
-      runAfter: [docker-lint]
+      runAfter: [docker-lint,build]
       taskRef:
         name: tester-run-tests
       params:
@@ -267,9 +285,9 @@ spec:
         - name: artifacts
           workspace: pipeline-ws
     - name: containerize
-      runAfter: [unit-tests]
+      runAfter: [build]
       taskRef:
-        name: icr-containerize
+        name: icr-execute-in-dind
       params:
         - name: continuous-delivery-context-secret
           value: "secure-properties"
@@ -283,13 +301,13 @@ spec:
           value: $(params.image-name)
         - name: path-to-context
           value: $(params.path-to-context)
+        - name: registry-create-namespace
+          value: $(params.registry-create-namespace)
         - name: path-to-dockerfile
           value: $(params.path-to-dockerfile)
         - name: dockerfile
           value: $(params.dockerfile)
-        - name: build-args
-          value: $(params.build-args)
-        - name: additional-tags-script
+        - name: docker-commands
           value: |
             # Minting image tag using format: BUILD_NUMBER-BRANCH-COMMIT_ID-TIMESTAMP
             # e.g. 3-master-50da6912-20181123114435
@@ -305,6 +323,10 @@ spec:
             if [ ! -z "${GIT_BRANCH}" ]; then IMAGE_TAG=${GIT_BRANCH}-${IMAGE_TAG} ; fi
             IMAGE_TAG=${BUILD_NUMBER}-${IMAGE_TAG}
             echo "$IMAGE_TAG"
+            # Default docker build / inspect / push command
+            docker build --tag "$IMAGE_URL:$IMAGE_TAG" --file $PATH_TO_DOCKERFILE/$DOCKERFILE $PATH_TO_CONTEXT
+            docker inspect ${IMAGE_URL}:${IMAGE_TAG}
+            docker push ${IMAGE_URL}:${IMAGE_TAG}
         - name: pipeline-debug
           value: $(params.pipeline-debug)
       workspaces:
@@ -372,6 +394,7 @@ spec:
           value: |
             export CLUSTER_NAMESPACE="$(params.dev-cluster-namespace)"
             export DEPLOYMENT_FILE="$(params.deployment-file)"
+            export KEEP_INGRESS_CUSTOM_DOMAIN="$(params.keep-ingress-custom-domain)"
             # pipeline build number is the doi build record id (if any)
             export SOURCE_BUILD_NUMBER=$BUILD_NUMBER
             echo "SOURCE_BUILD_NUMBER=$BUILD_NUMBER" >> build.properties

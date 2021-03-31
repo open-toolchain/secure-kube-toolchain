@@ -5,36 +5,48 @@ metadata:
   name: pr-pipeline
 spec:
   params:
-
-    - name: branch
-      description: branch
-    - name: revision
-      description: the git revision/commit for the git repo
+    - name: target-repository
+      description: the git repo
+    - name: target-branch
+      description: the branch for the git repo
+    - name: pr-repository
+      description: The source git repo for the PullRequest
+      default: ""
+    - name: pr-branch
+      description: The source branch for the PullRequest
+      default: ""
+    - name: pr-commit-id
+      description: the commit id/sha for the PullRequest
       default: ""
     - name: pipeline-debug
       description: toggles debug mode for the pipeline
-    - name: pr-url
-      description: pr url
-    - name: repository
-      description: the git repo containing source code. If empty, the repository url will be found from toolchain
-      default: ""
-    - name: commit-timestamp
-    - name: scm-type
-    - name: project-id
-      default: ""
+    - name: context
+      default: "unit tests"
+    - name: description
+      default: "Unit tests passed"
   workspaces:
     - name: pipeline-ws
 
   tasks:
-    - name: extract-repository-url
+    - name: set-git-commit-pending
       taskRef:
-        name: toolchain-extract-value
+        name: git-set-commit-status
+      workspaces:
+        - name: artifacts
+          workspace: pipeline-ws
       params:
-        - name: expression
-          # if a params.repository is given, it takes precedence
-          value: '. as $toolchain | ["$(params.repository)"] | if .[0]=="" then $toolchain | .services[] | select(.toolchain_binding.name=="repo") | .dashboard_url else .[0] end'
+        - name: repository
+          value: $(params.target-repository)
+        - name: revision
+          value: $(params.pr-commit-id)
+        - name: context
+          value: $(params.context)
+        - name: description
+          value: $(params.description)
+        - name: state
+          value: "pending"
         - name: pipeline-debug
-          value: $(params.pipeline-debug)  
+          value: $(params.pipeline-debug)
     - name: git-clone
       taskRef:
         name: git-clone-repo
@@ -44,11 +56,15 @@ spec:
         - name: ibmcloud-apikey-secret-key
           value: "apikey"
         - name: repository
-          value: $(tasks.extract-repository-url.results.extracted-value)
+          value: $(params.target-repository)
         - name: branch
-          value: $(params.branch)
-        - name: revision
-          value: $(params.revision)
+          value: $(params.target-branch)
+        - name: pr-repository
+          value: $(params.pr-repository)
+        - name: pr-branch
+          value: $(params.pr-branch)
+        - name: pr-revision
+          value: $(params.pr-commit-id)
         - name: pipeline-debug
           value: $(params.pipeline-debug)
       workspaces:
@@ -69,3 +85,23 @@ spec:
       workspaces:
         - name: artifacts
           workspace: pipeline-ws
+  finally:
+    - name: set-git-commit-status
+      taskRef:
+        name: git-set-commit-status
+      workspaces:
+        - name: artifacts
+          workspace: pipeline-ws
+      params:
+        - name: repository
+          value: $(params.target-repository)
+        - name: revision
+          value: $(params.pr-commit-id)
+        - name: context
+          value: $(params.context)
+        - name: description
+          value: $(params.description)
+        - name: state
+          value: "$(tasks.unit-tests.status)"
+        - name: pipeline-debug
+          value: $(params.pipeline-debug)
