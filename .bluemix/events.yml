@@ -95,3 +95,61 @@ repo_events:
           - has_issues
           - enable_traceability
           - legal
+vault_events:
+  - condition:
+      any:
+        - parameter: key-protect
+          value: true
+    actions:
+      - type: create-service
+        service: keyprotect
+        service_label: kp-vault
+        parameters:
+          name: kp-compliance-secrets
+  - condition:
+      any:
+        - parameter: key-protect
+          value: false
+    actions:
+      - type: delete-service
+        service: keyprotect
+        service_label: kp-vault
+  - condition:
+      any:
+        - parameter: secrets-manager
+          value: true
+    actions:
+      - type: create-service
+        service: secretsmanager
+        service_label: sm-vault
+        parameters:
+          name: sm-compliance-secrets
+  - condition:
+      any:
+        - parameter: secrets-manager
+          value: false
+    actions:
+      - type: delete-service
+        service: secretsmanager
+        service_label: sm-vault
+  - condition:
+      any:
+        - parameter: hashicorp-vault
+          value: true
+    actions:
+      - type: create-service
+        service: hashicorpvault
+        service_label: hc-vault
+        parameters:
+          name: 'hc-compliance-secrets'
+          server_url: 'https://vserv.sos.ibm.com:8200'
+          dashboard_url: 'https://vserv.sos.ibm.com:8200/ui'
+          authentication_method: 'approle'
+  - condition:
+      any:
+        - parameter: hashicorp-vault
+          value: false
+    actions:
+      - type: delete-service
+        service: hashicorpvault
+        service_label: hc-vault
