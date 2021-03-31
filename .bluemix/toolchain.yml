@@ -35,7 +35,7 @@ toolchain:
       $ref: "#/messages/template.gettingStarted"
 services:
   repo:
-    service_id: 'bitbucketgit'
+    service_id: 'hostedgit'
     parameters:
       repo_name: "hello-containers-{{timestamp}}"
       repo_url: >
@@ -48,10 +48,10 @@ services:
       has_issues: true
       enable_traceability: true
       legal: true
-      source_provider: 'bitbucketgit'
+      source_provider: 'hostedgit'
   pipeline-repo:
     service_id: >
-      $env.pipeline_type === 'tekton' ? $env.source_provider ? $env.source_provider : 'hostedgit' : ''
+      $env.pipeline_type === 'tekton' ? 'hostedgit' : ''
     parameters:
       repo_name: "secure-kube-toolchain-{{timestamp}}"
       repo_url: $env.repository
@@ -107,13 +107,13 @@ services:
           REGISTRY_REGION_ID: "{{form.pipeline.parameters.registry-region}}"
           REGISTRY_NAMESPACE: "{{form.pipeline.parameters.registry-namespace}}"
           GIT_COMMIT_EVENT_LISTENER_NAME: >
-            if ( $env.source_provider === 'githubconsolidated' ) {
+            if ( {{services.repo.parameters.source_provider}} === 'githubconsolidated' ) {
               'github-pr-listener';
-            } else if ( $env.source_provider === 'gitlab' ) {
+            } else if ( {{services.repo.parameters.source_provider}} === 'gitlab' ) {
               'gitlab-pr-listener';
-            } else if ( $env.source_provider === 'bitbucketgit' ) {
+            } else if ( {{services.repo.parameters.source_provider}} === 'bitbucketgit' ) {
               'bitbucket-commit';
-            } else if ( $env.source_provider === 'github_integrated' ) {
+            } else if ( {{services.repo.parameters.source_provider}} === 'github_integrated' ) {
               'github-ent-pr-listener';
             } else {
               'gitlab-pr-listener';
@@ -151,15 +151,15 @@ services:
           PROD_CLUSTER_NAME: "{{form.pipeline.parameters.prod-cluster-name}}"
           PROD_CLUSTER_NAMESPACE: "{{form.pipeline.parameters.prod-cluster-namespace}}"
           APP_REPO_FULL: >
-            if ( $env.source_provider === 'githubconsolidated' ) {
+            if ( {{services.repo.parameters.source_provider}} === 'githubconsolidated' ) {
               "https://github.com/{{services.repo.parameters.owner_id}}/{{services.repo.parameters.repo_name}}";
-            } else if ( $env.source_provider === 'hostedgit' && $env.env_id === 'ibm:yp:au-syd' ) {
+            } else if ( {{services.repo.parameters.source_provider}} === 'hostedgit' && $env.env_id === 'ibm:yp:au-syd' ) {
               "https://au-syd.git.cloud.ibm.com/{{services.repo.parameters.owner_id}}/{{services.repo.parameters.repo_name}}"
-            } else if ( $env.source_provider === 'gitlab' ) {
+            } else if ( {{services.repo.parameters.source_provider}} === 'gitlab' ) {
               "https://gitlab.com/{{services.repo.parameters.owner_id}}/{{services.repo.parameters.repo_name}}";
-            } else if ( $env.source_provider === 'bitbucketgit' ) {
+            } else if ( {{services.repo.parameters.source_provider}} === 'bitbucketgit' ) {
               "https://bitbucket.org/{{services.repo.parameters.owner_id}}/{{services.repo.parameters.repo_name}}";
-            } else if ( $env.source_provider === 'github_integrated' ) {
+            } else if ( {{services.repo.parameters.source_provider}} === 'github_integrated' ) {
               "https://github.ibm.com/{{services.repo.parameters.owner_id}}/{{services.repo.parameters.repo_name}}";
             } else {
               "https://us-south.git.cloud.ibm.com/{{services.repo.parameters.owner_id}}/{{services.repo.parameters.repo_name}}"
@@ -169,13 +169,13 @@ services:
             $env.branch ? $env.branch : "master"
           TEKTON_CATALOG_REPO: tekton-catalog-repo
           GIT_COMMIT_EVENT_LISTENER_NAME: >
-            if ( $env.source_provider === 'githubconsolidated' ) {
+            if ( {{services.repo.parameters.source_provider}} === 'githubconsolidated' ) {
               'github-commit';
-            } else if ( $env.source_provider === 'gitlab' ) {
+            } else if ( {{services.repo.parameters.source_provider}} === 'gitlab' ) {
               'grit-or-gitlab-commit';
-            } else if ( $env.source_provider === 'bitbucketgit' ) {
+            } else if ( {{services.repo.parameters.source_provider}} === 'bitbucketgit' ) {
               'bitbucket-commit';
-            } else if ( $env.source_provider === 'github_integrated' ) {
+            } else if ( {{services.repo.parameters.source_provider}} === 'github_integrated' ) {
               'github-ent-commit';
             } else {
               'grit-or-gitlab-commit';
@@ -207,8 +207,6 @@ form:
 
   wizard_app:
     wizard: true
-    parameters:
-      test: "test1"
     schema:
       $ref: wizard_app.json
 
