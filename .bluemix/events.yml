@@ -84,8 +84,6 @@ repo_events:
       - type: replace-service
         service: github_integrated
         service_label: repo
-        parameters:
-          source_provider: github_integrated
         keep_parameters:
           - repo_name
           - repo_url
