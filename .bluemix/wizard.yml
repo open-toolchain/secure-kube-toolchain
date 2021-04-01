@@ -1,0 +1,95 @@
+---
+version: '1'
+messages:
+  $i18n: locales.yml
+welcome:
+  description: 'With this toolchain, you can develop and deploy an application securely into a Kubernetes cluster managed by the IBM Cloud Kubernetes Service. By default, the toolchain uses a sample Node.js \"Hello World\" app, but you can also bring your own app and link to it instead.'
+steps:
+  - name: app
+    label: Application
+    form: 
+      name: wizard_app
+      title: Application
+    validator: repo
+    expert_mode:
+      service_label: repo
+    events:
+      $ref: events.yml#/repo_events
+  - name: vault
+    label: Secrets Management
+    form: 
+      name: wizard_vault
+      title: Secrets Management
+    events:
+      $ref: events.yml#/vault_events
+  - name: keyprotect
+    indent_level: 1
+    label: Key Protect
+    form: 
+      name: keyprotect
+      title: Key Protect
+    validator: kp-vault
+    visible:
+      condition:
+        any:
+          - form: wizard_vault
+            parameter: key-protect
+            value: true
+  - name: secretsmanager
+    indent_level: 1
+    label: Secrets Manager
+    form: 
+      name: secretsmanager
+      title: Secrets Manager
+    validator: sm-vault
+    visible:
+      condition:
+        any:
+          - form: wizard_vault
+            parameter: secrets-manager
+            value: true
+  - name: hashicorpvault
+    indent_level: 1
+    label: HashiCorp Vault
+    form: 
+      name: hashicorpvault
+      title: HashiCorp Vault
+    validator: hc-vault
+    visible:
+      condition:
+        any:
+          - form: wizard_vault
+            parameter: hashicorp-vault
+            value: true
+  - name: deploy
+    label: Deploy
+    form: 
+      name: pipeline
+      title: Deployment Target
+  - name: othertools
+    label: Other Tools
+    form: 
+      name: wizard_other_tools
+      title: Optional Tools
+    events:
+      - condition:
+          any:
+            - parameter: webide
+              value: true
+        actions:
+          - type: create-service
+            service: orion
+            service_label: webide
+      - condition:
+          any:
+            - parameter: webide
+              value: false
+        actions:
+          - type: delete-service
+            service: orion
+            service_label: webide
+  - name: summary
+    label: Summary
+    form: 
+      name: wizard_summary
+      title: Summary

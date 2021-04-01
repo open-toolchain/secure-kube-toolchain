@@ -217,18 +217,13 @@
             "columnCount": 1,
             "widths": ["100%"],
             "items": [{
-                "type": "label",
-                "title": {
+                "type": "info",
+                "text": {
                     "$ref": "#/messages/deploy.clusterDescription"
                 }
-            }]
-        }, {
-            "type": "table",
-            "columnCount": 1,
-            "widths": ["100%"],
-            "items": [{
-                "type": "label",
-                "title": {
+            },{
+                "type": "info",
+                "text": {
                     "$ref": "#/messages/deploy.clusternsDescription"
                 }
             }]

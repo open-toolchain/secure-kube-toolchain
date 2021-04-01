@@ -1,5 +1,5 @@
 ---
-version: "2"
+version: "3"
 messages:
   $i18n: locales.yml
 template:
@@ -26,6 +26,8 @@ template:
       "[" + $env.branch + "]" +
         "(" + $env.repository +
           "/tree/" + $env.branch + ")"
+  wizard:
+    $ref: wizard.yml
 toolchain:
   name: "kube-toolchain-{{timestamp}}"
   template:
@@ -33,8 +35,7 @@ toolchain:
       $ref: "#/messages/template.gettingStarted"
 services:
   repo:
-    service_id: >
-      $env.source_provider ? $env.source_provider : 'hostedgit'
+    service_id: 'hostedgit'
     parameters:
       repo_name: "hello-containers-{{timestamp}}"
       repo_url: >
@@ -47,9 +48,10 @@ services:
       has_issues: true
       enable_traceability: true
       legal: true
+      source_provider: 'hostedgit'
   pipeline-repo:
     service_id: >
-      $env.pipeline_type === 'tekton' ? $env.source_provider ? $env.source_provider : 'hostedgit' : ''
+      $env.pipeline_type === 'tekton' ? 'hostedgit' : ''
     parameters:
       repo_name: "secure-kube-toolchain-{{timestamp}}"
       repo_url: $env.repository
@@ -84,7 +86,7 @@ services:
         content:
           $text: >
             if ( $env.pipeline_type === 'tekton' ) {
-              if ( $env.env_id === 'ibm:yp:us-south' || $env.env_id === 'ibm:yp:us-east' || $env.env_id === 'ibm:yp:au-syd') {
+              if ( $env.env_id === 'ibm:yp:us-south' ) {
                 "south_pr_pipeline_tekton.yml"
               } else {
                 "pr_pipeline_tekton.yml"
@@ -105,13 +107,13 @@ services:
           REGISTRY_REGION_ID: "{{form.pipeline.parameters.registry-region}}"
           REGISTRY_NAMESPACE: "{{form.pipeline.parameters.registry-namespace}}"
           GIT_COMMIT_EVENT_LISTENER_NAME: >
-            if ( $env.source_provider === 'githubconsolidated' ) {
+            if ( {{services.repo.parameters.source_provider}} === 'githubconsolidated' ) {
               'github-pr-listener';
-            } else if ( $env.source_provider === 'gitlab' ) {
+            } else if ( {{services.repo.parameters.source_provider}} === 'gitlab' ) {
               'gitlab-pr-listener';
-            } else if ( $env.source_provider === 'bitbucketgit' ) {
+            } else if ( {{services.repo.parameters.source_provider}} === 'bitbucketgit' ) {
               'bitbucket-commit';
-            } else if ( $env.source_provider === 'github_integrated' ) {
+            } else if ( {{services.repo.parameters.source_provider}} === 'github_integrated' ) {
               'github-ent-pr-listener';
             } else {
               'gitlab-pr-listener';
@@ -130,7 +132,7 @@ services:
         content:
           $text: >
             if ( $env.pipeline_type === 'tekton' ) {
-              if ( $env.env_id === 'ibm:yp:us-south' || $env.env_id === 'ibm:yp:us-east' || $env.env_id === 'ibm:yp:au-syd') {
+              if ( $env.env_id === 'ibm:yp:us-south' || $env.env_id === 'ibm:yp:au-syd') {
                 "south_pipeline_tekton.yml"
               } else {
                 "pipeline_tekton.yml"
@@ -149,15 +151,15 @@ services:
           PROD_CLUSTER_NAME: "{{form.pipeline.parameters.prod-cluster-name}}"
           PROD_CLUSTER_NAMESPACE: "{{form.pipeline.parameters.prod-cluster-namespace}}"
           APP_REPO_FULL: >
-            if ( $env.source_provider === 'githubconsolidated' ) {
+            if ( {{services.repo.parameters.source_provider}} === 'githubconsolidated' ) {
               "https://github.com/{{services.repo.parameters.owner_id}}/{{services.repo.parameters.repo_name}}";
-            } else if ( $env.source_provider === 'hostedgit' && $env.env_id === 'ibm:yp:au-syd' ) {
+            } else if ( {{services.repo.parameters.source_provider}} === 'hostedgit' && $env.env_id === 'ibm:yp:au-syd' ) {
               "https://au-syd.git.cloud.ibm.com/{{services.repo.parameters.owner_id}}/{{services.repo.parameters.repo_name}}"
-            } else if ( $env.source_provider === 'gitlab' ) {
+            } else if ( {{services.repo.parameters.source_provider}} === 'gitlab' ) {
               "https://gitlab.com/{{services.repo.parameters.owner_id}}/{{services.repo.parameters.repo_name}}";
-            } else if ( $env.source_provider === 'bitbucketgit' ) {
+            } else if ( {{services.repo.parameters.source_provider}} === 'bitbucketgit' ) {
               "https://bitbucket.org/{{services.repo.parameters.owner_id}}/{{services.repo.parameters.repo_name}}";
-            } else if ( $env.source_provider === 'github_integrated' ) {
+            } else if ( {{services.repo.parameters.source_provider}} === 'github_integrated' ) {
               "https://github.ibm.com/{{services.repo.parameters.owner_id}}/{{services.repo.parameters.repo_name}}";
             } else {
               "https://us-south.git.cloud.ibm.com/{{services.repo.parameters.owner_id}}/{{services.repo.parameters.repo_name}}"
@@ -167,13 +169,13 @@ services:
             $env.branch ? $env.branch : "master"
           TEKTON_CATALOG_REPO: tekton-catalog-repo
           GIT_COMMIT_EVENT_LISTENER_NAME: >
-            if ( $env.source_provider === 'githubconsolidated' ) {
+            if ( {{services.repo.parameters.source_provider}} === 'githubconsolidated' ) {
               'github-commit';
-            } else if ( $env.source_provider === 'gitlab' ) {
+            } else if ( {{services.repo.parameters.source_provider}} === 'gitlab' ) {
               'grit-or-gitlab-commit';
-            } else if ( $env.source_provider === 'bitbucketgit' ) {
+            } else if ( {{services.repo.parameters.source_provider}} === 'bitbucketgit' ) {
               'bitbucket-commit';
-            } else if ( $env.source_provider === 'github_integrated' ) {
+            } else if ( {{services.repo.parameters.source_provider}} === 'github_integrated' ) {
               'github-ent-commit';
             } else {
               'grit-or-gitlab-commit';
@@ -202,3 +204,31 @@ form:
       prod-cluster-name: '{{prodClusterName}}'
     schema:
       $ref: deploy.json
+
+  wizard_app:
+    wizard: true
+    schema:
+      $ref: wizard_app.json
+
+  wizard_vault:
+    wizard: true
+    parameters:
+      key-protect: false
+      secrets-manager: false
+      hashicorp-vault: false
+    schema:
+      $ref: wizard_vault.json
+
+  wizard_other_tools:
+    wizard: true
+    parameters:
+      webide: true
+    schema:
+      $ref: wizard_other_tools.json
+
+  wizard_summary:
+    wizard: true
+    parameters:
+      test: true
+    schema:
+      $ref: wizard_summary.json
