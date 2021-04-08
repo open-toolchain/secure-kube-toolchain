@@ -3,9 +3,13 @@
   "messages": {
     "$i18n": "locales.yml"
   },
-  "title": "Application",
+  "title": {
+    "$ref": "#/messages/wizard.app.title"
+  },
   "description": "",
-  "longDescription": "By default, it provides you with a sample app. You can bring your own app by replacing the sample URL with a URL to your own source code repository.",
+  "longDescription": {
+    "$ref": "#/messages/wizard.app.longDescription"
+  },
   "type": "object",
   "form": [{
     "type": "selectfieldset",
@@ -13,13 +17,19 @@
       "component": "tilegroup",
       "orientation": "horizontal",
       "showLabel": false,
-      "invalidOptionMsg": "Unsupported configuration option. Try **Expert mode**."
+      "invalidOptionMsg": {
+        "$ref": "#/messages/wizard.repo.invalidOptionMsg"
+      }
     },
     "key": "type",
     "enum": ["clone", "link"],
     "titleMap": {
-      "clone": "Use default sample",
-      "link": "Bring your own app"
+      "clone": {
+        "$ref": "#/messages/wizard.app.clone"
+      },
+      "link": {
+        "$ref": "#/messages/wizard.app.link"
+      }
     },
     "items": [{
         "type": "section",

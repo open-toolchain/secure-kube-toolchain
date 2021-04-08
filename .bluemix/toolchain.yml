@@ -204,31 +204,3 @@ form:
       prod-cluster-name: '{{prodClusterName}}'
     schema:
       $ref: deploy.json
-
-  wizard_app:
-    wizard: true
-    schema:
-      $ref: wizard_app.json
-
-  wizard_vault:
-    wizard: true
-    parameters:
-      key-protect: false
-      secrets-manager: false
-      hashicorp-vault: false
-    schema:
-      $ref: wizard_vault.json
-
-  wizard_other_tools:
-    wizard: true
-    parameters:
-      webide: true
-    schema:
-      $ref: wizard_other_tools.json
-
-  wizard_summary:
-    wizard: true
-    parameters:
-      test: true
-    schema:
-      $ref: wizard_summary.json
