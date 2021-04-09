@@ -10,8 +10,7 @@ steps:
     title:
       $ref: "#/messages/wizard.step.application.title"
     form: wizard_app
-    expert_mode:
-      service_label: repo
+    advanced_form: repo
     conditions:
       $ref: conditions.yml#/repo_conditions
   - name: vault
