@@ -1,12 +1,12 @@
 ---
-repo_events:
+repo_conditions:
   - condition:
       any:
         - parameter: source_provider
           value: hostedgit
     actions:
       - type: replace-service
-        service: hostedgit
+        service_id: hostedgit
         service_label: repo
         parameters:
           source_provider: hostedgit
@@ -25,7 +25,7 @@ repo_events:
           value: githubconsolidated
     actions:
       - type: replace-service
-        service: githubconsolidated
+        service_id: githubconsolidated
         service_label: repo
         parameters:
           source_provider: githubconsolidated
@@ -44,7 +44,7 @@ repo_events:
           value: gitlab
     actions:
       - type: replace-service
-        service: gitlab
+        service_id: gitlab
         service_label: repo
         parameters:
           source_provider: gitlab
@@ -63,7 +63,7 @@ repo_events:
           value: bitbucketgit
     actions:
       - type: replace-service
-        service: bitbucketgit
+        service_id: bitbucketgit
         service_label: repo
         parameters:
           source_provider: bitbucketgit
@@ -82,7 +82,7 @@ repo_events:
           value: github_integrated
     actions:
       - type: replace-service
-        service: github_integrated
+        service_id: github_integrated
         service_label: repo
         parameters:
           source_provider: github_integrated
@@ -95,14 +95,15 @@ repo_events:
           - has_issues
           - enable_traceability
           - legal
-vault_events:
+
+vault_conditions:
   - condition:
       any:
         - parameter: key-protect
           value: true
     actions:
       - type: create-service
-        service: keyprotect
+        service_id: keyprotect
         service_label: kp-vault
         parameters:
           name: kp-compliance-secrets
@@ -112,7 +113,7 @@ vault_events:
           value: false
     actions:
       - type: delete-service
-        service: keyprotect
+        service_id: keyprotect
         service_label: kp-vault
   - condition:
       any:
@@ -120,7 +121,7 @@ vault_events:
           value: true
     actions:
       - type: create-service
-        service: secretsmanager
+        service_id: secretsmanager
         service_label: sm-vault
         parameters:
           name: sm-compliance-secrets
@@ -130,7 +131,7 @@ vault_events:
           value: false
     actions:
       - type: delete-service
-        service: secretsmanager
+        service_id: secretsmanager
         service_label: sm-vault
   - condition:
       any:
@@ -138,7 +139,7 @@ vault_events:
           value: true
     actions:
       - type: create-service
-        service: hashicorpvault
+        service_id: hashicorpvault
         service_label: hc-vault
         parameters:
           name: 'hc-compliance-secrets'
@@ -151,5 +152,23 @@ vault_events:
           value: false
     actions:
       - type: delete-service
-        service: hashicorpvault
+        service_id: hashicorpvault
         service_label: hc-vault
+
+tools_conditions:
+  - condition:
+      any:
+        - parameter: webide
+          value: true
+    actions:
+      - type: create-service
+        service_id: orion
+        service_label: webide
+  - condition:
+      any:
+        - parameter: webide
+          value: false
+    actions:
+      - type: delete-service
+        service_id: orion
+        service_label: webide
