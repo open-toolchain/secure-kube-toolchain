@@ -4,7 +4,7 @@ messages:
   $i18n: locales.yml
 welcome:
   description: 
-      $ref: "#/messages/wizard.wecome.description"
+      $ref: "#/messages/wizard.welcome.description"
 steps:
   - name: app
     title:
@@ -89,5 +89,7 @@ form:
       $ref: wizard_optional_tools.json
 
   wizard_summary:
+    parameters:
+      test: true
     schema:
       $ref: wizard_summary.json
