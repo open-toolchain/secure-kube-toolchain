@@ -25,9 +25,23 @@
       "description": {
         "$ref": "#/messages/wizard.optional.tools.webide.description"
       }
-    }
+    },
+    "doi": {
+      "type": "boolean",
+      "display": {
+        "component": "toggle",
+        "style": "card"
+      },
+      "title": {
+        "$ref": "#/messages/wizard.optional.tools.doi.title"
+      },
+      "description": {
+        "$ref": "#/messages/wizard.optional.tools.doi.description"
+      }
+    },
   },
   "form": [
-    "webide"
+    "webide",
+    "doi"
   ]
 }
