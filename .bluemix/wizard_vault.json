@@ -26,19 +26,6 @@
         "style": "card"
       }
     },
-    "secrets-manager": {
-      "title": {
-        "$ref": "#/messages/wizard.vault.secretsManager.title"
-      },
-      "description": {
-        "$ref": "#/messages/wizard.vault.secretsManager.description"
-      },
-      "type": "boolean",
-      "display": {
-        "component": "toggle",
-        "style": "card"
-      }
-    },
     "hashicorp-vault": {
       "title": {
         "$ref": "#/messages/wizard.vault.hashicorp.title"
@@ -60,7 +47,6 @@
       }
     },
     "key-protect",
-    "secrets-manager",
     "hashicorp-vault"
   ]
 }
