@@ -30,17 +30,6 @@ steps:
           - form: wizard_vault
             parameter: key-protect
             value: true
-  - name: secretsmanager
-    indent_level: 1
-    title:
-      $ref: "#/messages/wizard.step.secretsmanager.title"
-    form: secretsmanager
-    visible:
-      condition:
-        any:
-          - form: wizard_vault
-            parameter: secrets-manager
-            value: true
   - name: hashicorpvault
     indent_level: 1
     title:
@@ -77,7 +66,6 @@ form:
   wizard_vault:
     parameters:
       key-protect: false
-      secrets-manager: false
       hashicorp-vault: false
     schema:
       $ref: wizard_vault.json
@@ -85,6 +73,7 @@ form:
   wizard_optional_tools:
     parameters:
       webide: true
+      doi: true
     schema:
       $ref: wizard_optional_tools.json
 
