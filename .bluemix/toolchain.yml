@@ -34,7 +34,7 @@ toolchain:
     getting_started:
       $ref: "#/messages/template.gettingStarted"
 services:
-  env:
+  prodenv:
     service_id: 'environment'
     parameters:
       name: 'production-env'

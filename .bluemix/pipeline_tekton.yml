@@ -52,9 +52,10 @@ triggers:
     eventListener: manual-run
     properties: []
 properties:
-  - type: secure
+  - type: INTEGRATION
     name: toolchain-apikey
-    value: ${API_KEY}
+    value: prodenv
+    path: 'parameters.properties.api-key'
   - name: apikey
     value: ${API_KEY}
     type: SECURE
