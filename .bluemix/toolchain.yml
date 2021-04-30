@@ -34,6 +34,14 @@ toolchain:
     getting_started:
       $ref: "#/messages/template.gettingStarted"
 services:
+  env:
+    service_id: 'environment'
+    parameters:
+      name: 'production-env'
+      properties:
+        - name: 'api-key'
+          type: 'SECURE'
+          value: '{{form.pipeline.parameters.api-key}}'
   repo:
     service_id: 'hostedgit'
     parameters:
