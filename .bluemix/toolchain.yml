@@ -36,10 +36,10 @@ toolchain:
 services:
   repo:
     service_id: >
-      if ( $env.ENABLE_SETUP_WIZARD === "false") {
-        'githubconsolidated';
+      if ( $env.ENABLE_SETUP_WIZARD === 'true') {
+        'hostedgit';
       } else {
-        'bitbucketgit';
+        $env.source_provider ? $env.source_provider : 'hostedgit';
       }
     parameters:
       repo_name: "hello-containers-{{timestamp}}"
@@ -113,16 +113,30 @@ services:
           REGISTRY_REGION_ID: "{{form.pipeline.parameters.registry-region}}"
           REGISTRY_NAMESPACE: "{{form.pipeline.parameters.registry-namespace}}"
           GIT_COMMIT_EVENT_LISTENER_NAME: >
-            if ( {{services.repo.parameters.source_provider}} === 'githubconsolidated' ) {
-              'github-pr-listener';
-            } else if ( {{services.repo.parameters.source_provider}} === 'gitlab' ) {
-              'gitlab-pr-listener';
-            } else if ( {{services.repo.parameters.source_provider}} === 'bitbucketgit' ) {
-              'bitbucket-commit';
-            } else if ( {{services.repo.parameters.source_provider}} === 'github_integrated' ) {
-              'github-ent-pr-listener';
+            if ( $env.ENABLE_SETUP_WIZARD === 'true') {
+              if ( {{services.repo.parameters.source_provider}} === 'githubconsolidated' ) {
+                'github-pr-listener';
+              } else if ( {{services.repo.parameters.source_provider}} === 'gitlab' ) {
+                'gitlab-pr-listener';
+              } else if ( {{services.repo.parameters.source_provider}} === 'bitbucketgit' ) {
+                'bitbucket-commit';
+              } else if ( {{services.repo.parameters.source_provider}} === 'github_integrated' ) {
+                'github-ent-pr-listener';
+              } else {
+                'gitlab-pr-listener';
+              }
             } else {
-              'gitlab-pr-listener';
+              if ( $env.source_provider === 'githubconsolidated' ) {
+                'github-pr-listener';
+              } else if ( $env.source_provider === 'gitlab' ) {
+                'gitlab-pr-listener';
+              } else if ( $env.source_provider === 'bitbucketgit' ) {
+                'bitbucket-commit';
+              } else if ( $env.source_provider === 'github_integrated' ) {
+                'github-ent-pr-listener';
+              } else {
+                'gitlab-pr-listener';
+              }
             }
         execute: false
   build:
@@ -157,35 +171,65 @@ services:
           PROD_CLUSTER_NAME: "{{form.pipeline.parameters.prod-cluster-name}}"
           PROD_CLUSTER_NAMESPACE: "{{form.pipeline.parameters.prod-cluster-namespace}}"
           APP_REPO_FULL: >
-            if ( $env.source_provider === 'githubconsolidated' ) {
-              "https://github.com/{{services.repo.parameters.owner_id}}/{{services.repo.parameters.repo_name}}";
-            } else if ( $env.source_provider === 'hostedgit' && $env.env_id === 'ibm:yp:au-syd' ) {
-              "https://au-syd.git.cloud.ibm.com/{{services.repo.parameters.owner_id}}/{{services.repo.parameters.repo_name}}"
-            } else if ( $env.source_provider === 'gitlab' ) {
-              "https://gitlab.com/{{services.repo.parameters.owner_id}}/{{services.repo.parameters.repo_name}}";
-            } else if ( $env.source_provider === 'bitbucketgit' ) {
-              "https://bitbucket.org/{{services.repo.parameters.owner_id}}/{{services.repo.parameters.repo_name}}";
-            } else if ( $env.source_provider === 'github_integrated' ) {
-              "https://github.ibm.com/{{services.repo.parameters.owner_id}}/{{services.repo.parameters.repo_name}}";
+            if ( $env.ENABLE_SETUP_WIZARD === 'true') {
+              if ( $env.source_provider === 'githubconsolidated' ) {
+                "https://github.com/{{services.repo.parameters.owner_id}}/{{services.repo.parameters.repo_name}}";
+              } else if ( $env.source_provider === 'hostedgit' && $env.env_id === 'ibm:yp:au-syd' ) {
+                "https://au-syd.git.cloud.ibm.com/{{services.repo.parameters.owner_id}}/{{services.repo.parameters.repo_name}}"
+              } else if ( $env.source_provider === 'gitlab' ) {
+                "https://gitlab.com/{{services.repo.parameters.owner_id}}/{{services.repo.parameters.repo_name}}";
+              } else if ( $env.source_provider === 'bitbucketgit' ) {
+                "https://bitbucket.org/{{services.repo.parameters.owner_id}}/{{services.repo.parameters.repo_name}}";
+              } else if ( $env.source_provider === 'github_integrated' ) {
+                "https://github.ibm.com/{{services.repo.parameters.owner_id}}/{{services.repo.parameters.repo_name}}";
+              } else {
+                "https://us-south.git.cloud.ibm.com/{{services.repo.parameters.owner_id}}/{{services.repo.parameters.repo_name}}"
+              }
             } else {
-              "https://us-south.git.cloud.ibm.com/{{services.repo.parameters.owner_id}}/{{services.repo.parameters.repo_name}}"
+              if ( $env.source_provider === 'githubconsolidated' ) {
+                "https://github.com/{{services.repo.parameters.owner_id}}/{{services.repo.parameters.repo_name}}";
+              } else if ( $env.source_provider === 'hostedgit' && $env.env_id === 'ibm:yp:au-syd' ) {
+                "https://au-syd.git.cloud.ibm.com/{{services.repo.parameters.owner_id}}/{{services.repo.parameters.repo_name}}"
+              } else if ( $env.source_provider === 'gitlab' ) {
+                "https://gitlab.com/{{services.repo.parameters.owner_id}}/{{services.repo.parameters.repo_name}}";
+              } else if ( $env.source_provider === 'bitbucketgit' ) {
+                "https://bitbucket.org/{{services.repo.parameters.owner_id}}/{{services.repo.parameters.repo_name}}";
+              } else if ( $env.source_provider === 'github_integrated' ) {
+                "https://github.ibm.com/{{services.repo.parameters.owner_id}}/{{services.repo.parameters.repo_name}}";
+              } else {
+                "https://us-south.git.cloud.ibm.com/{{services.repo.parameters.owner_id}}/{{services.repo.parameters.repo_name}}"
+              }
             }
           PIPELINE_REPO: pipeline-repo
           PIPELINE_REPO_BRANCH: >
             $env.branch ? $env.branch : "master"
           TEKTON_CATALOG_REPO: tekton-catalog-repo
           GIT_COMMIT_EVENT_LISTENER_NAME: >
-            if ( $env.source_provider === 'githubconsolidated' ) {
-              'github-commit';
-            } else if ( $env.source_provider === 'gitlab' ) {
-              'grit-or-gitlab-commit';
-            } else if ( $env.source_provider === 'bitbucketgit' ) {
-              'bitbucket-commit';
-            } else if ( $env.source_provider === 'github_integrated' ) {
-              'github-ent-commit';
+            if ( $env.ENABLE_SETUP_WIZARD === 'true') {
+              if ( $env.source_provider === 'githubconsolidated' ) {
+                'github-commit';
+              } else if ( $env.source_provider === 'gitlab' ) {
+                'grit-or-gitlab-commit';
+              } else if ( $env.source_provider === 'bitbucketgit' ) {
+                'bitbucket-commit';
+              } else if ( $env.source_provider === 'github_integrated' ) {
+                'github-ent-commit';
+              } else {
+                'grit-or-gitlab-commit';
+              }
             } else {
-              'grit-or-gitlab-commit';
-            }
+              if ( $env.source_provider === 'githubconsolidated' ) {
+                'github-commit';
+              } else if ( $env.source_provider === 'gitlab' ) {
+                'grit-or-gitlab-commit';
+              } else if ( $env.source_provider === 'bitbucketgit' ) {
+                'bitbucket-commit';
+              } else if ( $env.source_provider === 'github_integrated' ) {
+                'github-ent-commit';
+              } else {
+                'grit-or-gitlab-commit';
+              }
+            }            
         execute: >
           $env.pipeline_type === 'tekton' ? 'manual-run' : true
   devops-insights:
