@@ -36,7 +36,7 @@ toolchain:
 services:
   repo:
     service_id: >
-      if ( $env.ENABLE_SETUP_WIZARD ) {
+      if ( $env.ENABLE_SETUP_WIZARD === "false") {
         'hostedgit';
       } else {
         'bitbucketgit';
@@ -113,13 +113,13 @@ services:
           REGISTRY_REGION_ID: "{{form.pipeline.parameters.registry-region}}"
           REGISTRY_NAMESPACE: "{{form.pipeline.parameters.registry-namespace}}"
           GIT_COMMIT_EVENT_LISTENER_NAME: >
-            if ( $env.source_provider === 'githubconsolidated' ) {
+            if ( {{services.repo.parameters.source_provider}} === 'githubconsolidated' ) {
               'github-pr-listener';
-            } else if ( $env.source_provider === 'gitlab' ) {
+            } else if ( {{services.repo.parameters.source_provider}} === 'gitlab' ) {
               'gitlab-pr-listener';
-            } else if ( $env.source_provider === 'bitbucketgit' ) {
+            } else if ( {{services.repo.parameters.source_provider}} === 'bitbucketgit' ) {
               'bitbucket-commit';
-            } else if ( $env.source_provider === 'github_integrated' ) {
+            } else if ( {{services.repo.parameters.source_provider}} === 'github_integrated' ) {
               'github-ent-pr-listener';
             } else {
               'gitlab-pr-listener';
