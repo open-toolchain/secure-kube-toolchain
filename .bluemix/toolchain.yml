@@ -37,7 +37,7 @@ services:
   repo:
     service_id: >
       if ( $env.ENABLE_SETUP_WIZARD === "false") {
-        'hostedgit';
+        'githubconsolidated';
       } else {
         'bitbucketgit';
       }
