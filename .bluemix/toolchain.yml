@@ -57,7 +57,7 @@ services:
   pipeline-repo:
     service_id: >
       if ( $env.ENABLE_SETUP_WIZARD === 'true') {
-        $env.pipeline_type === 'tekton' ? : 'hostedgit' : ''
+        $env.pipeline_type === 'tekton' ? 'hostedgit' : ''
       } else {
         $env.pipeline_type === 'tekton' ? $env.source_provider ? $env.source_provider : 'hostedgit' : ''
       }
