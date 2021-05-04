@@ -5,7 +5,8 @@ messages:
 welcome:
   description: 
       $ref: "#/messages/wizard.welcome.description"
-hide_global_source_provider: true
+  source_provider:
+    show_global: false
 steps:
   - name: app
     title:
