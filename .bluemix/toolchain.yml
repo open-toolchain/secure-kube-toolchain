@@ -229,7 +229,7 @@ services:
               } else {
                 'grit-or-gitlab-commit';
               }
-            }            
+            }
         execute: >
           $env.pipeline_type === 'tekton' ? 'manual-run' : true
   devops-insights:
