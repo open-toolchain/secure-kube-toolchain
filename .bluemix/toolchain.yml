@@ -17,6 +17,7 @@ template:
   $configuration:
      ENABLE_EXTENSIONS: true
      ENABLE_IF_ELSE: true
+     BASIC_WARNINGS: false
   info:
     git url: >
       "[" + $env.repository + "]" +
