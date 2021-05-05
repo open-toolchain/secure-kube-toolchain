@@ -17,7 +17,7 @@ template:
   $configuration:
      ENABLE_EXTENSIONS: true
      ENABLE_IF_ELSE: true
-     EXPRESSION_MAXLENGTH: 1000
+     EXPRESSION_MAXLENGTH: 3000
   info:
     git url: >
       "[" + $env.repository + "]" +
