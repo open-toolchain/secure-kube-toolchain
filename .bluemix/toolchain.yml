@@ -112,7 +112,7 @@ services:
           REGISTRY_REGION_ID: "{{form.pipeline.parameters.registry-region}}"
           REGISTRY_NAMESPACE: "{{form.pipeline.parameters.registry-namespace}}"
           GIT_COMMIT_EVENT_LISTENER_NAME: >
-            if ( $env.ENABLE_SETUP_WIZARD === 'true') {
+            if ( $env.ENABLE_SETUP_WIZARD === 'true' ) {
               if ( {{services.repo.parameters.source_provider}} === 'githubconsolidated' ) {
                 'github-pr-listener';
               } else if ( {{services.repo.parameters.source_provider}} === 'gitlab' ) {
