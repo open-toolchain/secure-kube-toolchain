@@ -38,6 +38,28 @@ repo_conditions:
           - has_issues
           - enable_traceability
           - legal
+      - type: replace-service
+        service_id: pipeline
+        service_label: pr
+        env: 
+          GIT_COMMIT_EVENT_LISTENER_NAME: 'github-pr-listener'
+        keep_parameters:
+          - configuration
+          - name
+          - services
+          - type
+          - ui-pipeline
+      - type: replace-service
+        service_id: pipeline
+        service_label: build
+        env: 
+          GIT_COMMIT_EVENT_LISTENER_NAME: 'github-commit'
+        keep_parameters:
+          - configuration
+          - name
+          - services
+          - type
+          - ui-pipeline
   - condition:
       any:
         - parameter: source_provider
@@ -57,6 +79,28 @@ repo_conditions:
           - has_issues
           - enable_traceability
           - legal
+      - type: replace-service
+        service_id: pipeline
+        service_label: pr
+        env: 
+          GIT_COMMIT_EVENT_LISTENER_NAME: 'gitlab-pr-listener'
+        keep_parameters:
+          - configuration
+          - name
+          - services
+          - type
+          - ui-pipeline
+      - type: replace-service
+        service_id: pipeline
+        service_label: build
+        env: 
+          GIT_COMMIT_EVENT_LISTENER_NAME: 'grit-or-gitlab-commit'
+        keep_parameters:
+          - configuration
+          - name
+          - services
+          - type
+          - ui-pipeline
   - condition:
       any:
         - parameter: source_provider
@@ -76,6 +120,28 @@ repo_conditions:
           - has_issues
           - enable_traceability
           - legal
+      - type: replace-service
+        service_id: pipeline
+        service_label: pr
+        env: 
+          GIT_COMMIT_EVENT_LISTENER_NAME: 'bitbucket-commit'
+        keep_parameters:
+          - configuration
+          - name
+          - services
+          - type
+          - ui-pipeline
+      - type: replace-service
+        service_id: pipeline
+        service_label: build
+        env: 
+          GIT_COMMIT_EVENT_LISTENER_NAME: 'bitbucket-commit'
+        keep_parameters:
+          - configuration
+          - name
+          - services
+          - type
+          - ui-pipeline
   - condition:
       any:
         - parameter: source_provider
@@ -95,6 +161,28 @@ repo_conditions:
           - has_issues
           - enable_traceability
           - legal
+      - type: replace-service
+        service_id: pipeline
+        service_label: pr
+        env: 
+          GIT_COMMIT_EVENT_LISTENER_NAME: 'github-ent-pr-listener'
+        keep_parameters:
+          - configuration
+          - name
+          - services
+          - type
+          - ui-pipeline
+      - type: replace-service
+        service_id: pipeline
+        service_label: build
+        env: 
+          GIT_COMMIT_EVENT_LISTENER_NAME: 'github-ent-commit'
+        keep_parameters:
+          - configuration
+          - name
+          - services
+          - type
+          - ui-pipeline
 
 vault_conditions:
   - condition:
