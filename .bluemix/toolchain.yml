@@ -55,11 +55,7 @@ services:
       source_provider: 'hostedgit'
   pipeline-repo:
     service_id: >
-      if ( $env.ENABLE_SETUP_WIZARD === 'true') {
-        $env.pipeline_type === 'tekton' ? 'hostedgit' : ''
-      } else {
         $env.pipeline_type === 'tekton' ? $env.source_provider ? $env.source_provider : 'hostedgit' : ''
-      }
     parameters:
       repo_name: "secure-kube-toolchain-{{timestamp}}"
       repo_url: $env.repository
@@ -116,18 +112,8 @@ services:
           REGISTRY_REGION_ID: "{{form.pipeline.parameters.registry-region}}"
           REGISTRY_NAMESPACE: "{{form.pipeline.parameters.registry-namespace}}"
           GIT_COMMIT_EVENT_LISTENER_NAME: >
-            if ( $env.ENABLE_SETUP_WIZARD === 'true' ) {
-              if ( $env.services.repo.parameters.source_provider === 'githubconsolidated' ) {
-                'github-pr-listener';
-              } else if ( $env.services.repo.parameters.source_provider === 'gitlab' ) {
-                'gitlab-pr-listener';
-              } else if ( $env.services.repo.parameters.source_provider === 'bitbucketgit' ) {
-                'bitbucket-commit';
-              } else if ( $env.services.repo.parameters.source_provider === 'github_integrated' ) {
-                'github-ent-pr-listener';
-              } else {
-                'gitlab-pr-listener';
-              }
+            if ( $env.ENABLE_SETUP_WIZARD === 'true') {
+              'gitlab-pr-listener';
             } else {
               if ( $env.source_provider === 'githubconsolidated' ) {
                 'github-pr-listener';
@@ -179,17 +165,7 @@ services:
           TEKTON_CATALOG_REPO: tekton-catalog-repo
           GIT_COMMIT_EVENT_LISTENER_NAME: >
             if ( $env.ENABLE_SETUP_WIZARD === 'true') {
-              if ( $env.source_provider === 'githubconsolidated' ) {
-                'github-commit';
-              } else if ( $env.source_provider === 'gitlab' ) {
-                'grit-or-gitlab-commit';
-              } else if ( $env.source_provider === 'bitbucketgit' ) {
-                'bitbucket-commit';
-              } else if ( $env.source_provider === 'github_integrated' ) {
-                'github-ent-commit';
-              } else {
-                'grit-or-gitlab-commit';
-              }
+              'grit-or-gitlab-commit';
             } else {
               if ( $env.source_provider === 'githubconsolidated' ) {
                 'github-commit';
