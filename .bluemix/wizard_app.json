@@ -12,6 +12,34 @@
   },
   "type": "object",
   "form": [{
+    "type": "select",
+    "key": "source_provider",
+    "alwaysShow": true,
+    "title": {
+      "$ref": "#/messages/wizard.sourceHost"
+    },
+    "enum": [{
+        "value": "hostedgit",
+        "name": "Git Repos and Issue Tracking"
+      },
+      {
+        "value": "githubconsolidated",
+        "name": "GitHub"
+      },
+      {
+        "value": "gitlab",
+        "name": "GitLab"
+      },
+      {
+        "value": "bitbucketgit",
+        "name": "Bitbucket"
+      },
+      {
+        "value": "github_integrated",
+        "name": "GitHub Enterprise Whitewater"
+      }
+    ]
+  }, {
     "type": "selectfieldset",
     "display": {
       "component": "tilegroup",
@@ -39,36 +67,6 @@
         "type": "section",
         "items": ["repo_url"]
       }
-    ]
-  },
-  {
-    "type": "select",
-    "key": "source_provider",
-    "alwaysShow": true, 
-    "title": {
-      "$ref": "#/messages/wizard.sourceHost"
-    },
-    "enum": [
-        {
-            "value": "hostedgit",
-            "name": "Git Repos and Issue Tracking"
-        },
-        {
-            "value": "githubconsolidated",
-            "name": "GitHub"
-        },
-        {
-            "value": "gitlab",
-            "name": "GitLab"
-        },
-        {
-            "value": "bitbucketgit",
-            "name": "Bitbucket"
-        },
-        {
-            "value": "github_integrated",
-            "name": "GitHub Enterprise Whitewater"
-        }
     ]
   }]
 }
