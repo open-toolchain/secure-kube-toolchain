@@ -12,62 +12,63 @@
   },
   "type": "object",
   "form": [{
-    "type": "selectfieldset",
-    "display": {
-      "component": "tilegroup",
-      "orientation": "horizontal",
-      "showLabel": false,
-      "invalidOptionMsg": {
-        "$ref": "#/messages/wizard.repo.invalidOptionMsg"
-      }
-    },
-    "key": "type",
-    "enum": ["clone", "link"],
-    "titleMap": {
-      "clone": {
-        "$ref": "#/messages/wizard.app.clone"
+      "type": "select",
+      "key": "source_provider",
+      "alwaysShow": true,
+      "title": {
+        "$ref": "#/messages/wizard.sourceHost"
       },
-      "link": {
-        "$ref": "#/messages/wizard.app.link"
-      }
-    },
-    "items": [{
-        "type": "section",
-        "items": ["repo_name"]
-      },
-      {
-        "type": "section",
-        "items": ["repo_url"]
-      }
-    ]
-  },
-  {
-    "type": "select",
-    "key": "source_provider",
-    "title": {
-      "$ref": "#/messages/wizard.sourceHost"
-    },
-    "enum": [
-        {
-            "value": "hostedgit",
-            "name": "Git Repos and Issue Tracking"
+      "enum": [{
+          "value": "hostedgit",
+          "name": "Git Repos and Issue Tracking"
         },
         {
-            "value": "githubconsolidated",
-            "name": "GitHub"
+          "value": "githubconsolidated",
+          "name": "GitHub"
         },
         {
-            "value": "gitlab",
-            "name": "GitLab"
+          "value": "gitlab",
+          "name": "GitLab"
         },
         {
-            "value": "bitbucketgit",
-            "name": "Bitbucket"
+          "value": "bitbucketgit",
+          "name": "Bitbucket"
         },
         {
-            "value": "github_integrated",
-            "name": "GitHub Enterprise Whitewater"
+          "value": "github_integrated",
+          "name": "GitHub Enterprise Whitewater"
         }
-    ]
-  }]
+      ]
+    },
+    {
+      "type": "selectfieldset",
+      "display": {
+        "component": "tilegroup",
+        "orientation": "horizontal",
+        "showLabel": false,
+        "invalidOptionMsg": {
+          "$ref": "#/messages/wizard.repo.invalidOptionMsg"
+        }
+      },
+      "key": "type",
+      "enum": ["clone", "link"],
+      "titleMap": {
+        "clone": {
+          "$ref": "#/messages/wizard.app.clone"
+        },
+        "link": {
+          "$ref": "#/messages/wizard.app.link"
+        }
+      },
+      "items": [{
+          "type": "section",
+          "items": ["repo_name"]
+        },
+        {
+          "type": "section",
+          "items": ["repo_url"]
+        }
+      ]
+    }
+  ]
 }
