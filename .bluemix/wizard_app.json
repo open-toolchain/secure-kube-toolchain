@@ -14,7 +14,10 @@
   "form": [{
     "type": "select",
     "key": "source_provider",
-    "alwaysShow": true,
+    "display": {
+      "showInAdvancedMode": true,
+      "position": "bottom"
+    },
     "title": {
       "$ref": "#/messages/wizard.sourceHost"
     },
