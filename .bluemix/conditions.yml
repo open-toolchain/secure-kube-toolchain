@@ -39,6 +39,7 @@ repo_conditions:
           - enable_traceability
           - legal
       - type: replace-service
+        service_id: pipeline
         service_label: pr
         env: 
           GIT_COMMIT_EVENT_LISTENER_NAME: 'github-pr-listener'
@@ -50,6 +51,7 @@ repo_conditions:
           - ui-pipeline
           - value
       - type: replace-service
+        service_id: pipeline
         service_label: build
         env: 
           GIT_COMMIT_EVENT_LISTENER_NAME: 'github-commit'
@@ -80,6 +82,7 @@ repo_conditions:
           - enable_traceability
           - legal
       - type: replace-service
+        service_id: pipeline
         service_label: pr
         env: 
           GIT_COMMIT_EVENT_LISTENER_NAME: 'gitlab-pr-listener'
@@ -91,6 +94,7 @@ repo_conditions:
           - ui-pipeline
           - value
       - type: replace-service
+        service_id: pipeline
         service_label: build
         env: 
           GIT_COMMIT_EVENT_LISTENER_NAME: 'grit-or-gitlab-commit'
@@ -121,6 +125,7 @@ repo_conditions:
           - enable_traceability
           - legal
       - type: replace-service
+        service_id: pipeline
         service_label: pr
         env: 
           GIT_COMMIT_EVENT_LISTENER_NAME: 'bitbucket-commit'
@@ -132,6 +137,7 @@ repo_conditions:
           - ui-pipeline
           - value
       - type: replace-service
+        service_id: pipeline
         service_label: build
         env: 
           GIT_COMMIT_EVENT_LISTENER_NAME: 'bitbucket-commit'
@@ -162,6 +168,7 @@ repo_conditions:
           - enable_traceability
           - legal
       - type: replace-service
+        service_id: pipeline
         service_label: pr
         env: 
           GIT_COMMIT_EVENT_LISTENER_NAME: 'github-ent-pr-listener'
@@ -173,6 +180,7 @@ repo_conditions:
           - ui-pipeline
           - value
       - type: replace-service
+        service_id: pipeline
         service_label: build
         env: 
           GIT_COMMIT_EVENT_LISTENER_NAME: 'github-ent-commit'
@@ -203,6 +211,7 @@ repo_conditions:
           - enable_traceability
           - legal
       - type: replace-service
+        service_id: pipeline
         service_label: pr
         env: 
           GIT_COMMIT_EVENT_LISTENER_NAME: 'gitlab-pr-listener'
@@ -214,6 +223,7 @@ repo_conditions:
           - ui-pipeline
           - value
       - type: replace-service
+        service_id: pipeline
         service_label: build
         env: 
           GIT_COMMIT_EVENT_LISTENER_NAME: 'grit-or-gitlab-commit'
