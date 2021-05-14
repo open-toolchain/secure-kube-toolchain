@@ -41,12 +41,12 @@ steps:
           - form: wizard_vault
             parameter: hashicorp-vault
             value: true
-#  - name: deploy
-#    label: 
-#      $ref: "#/messages/wizard.step.deploy.label"
-#    title:
-#      $ref: "#/messages/wizard.step.deploy.title"
-#    form: pipeline
+  - name: deploy
+    label: 
+      $ref: "#/messages/wizard.step.deploy.label"
+    title:
+      $ref: "#/messages/wizard.step.deploy.title"
+    form: pipeline
   - name: optionaltools
     title:
       $ref: "#/messages/wizard.step.optionaltools.title"
