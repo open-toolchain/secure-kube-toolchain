@@ -24,25 +24,25 @@ repo_conditions:
         service_label: pr
         env: 
           GIT_COMMIT_EVENT_LISTENER_NAME: 'gitlab-pr-listener'
+        keep_form: true
         keep_parameters:
           - configuration
           - name
           - services
           - type
           - ui-pipeline
-          - value
       - type: replace-service
         service_id: pipeline
         service_label: build
         env: 
           GIT_COMMIT_EVENT_LISTENER_NAME: 'grit-or-gitlab-commit'
+        keep_form: true
         keep_parameters:
           - configuration
           - name
           - services
           - type
           - ui-pipeline
-          - value
   - condition:
       any:
         - parameter: source_provider
@@ -67,25 +67,25 @@ repo_conditions:
         service_label: pr
         env: 
           GIT_COMMIT_EVENT_LISTENER_NAME: 'github-pr-listener'
+        keep_form: true
         keep_parameters:
           - configuration
           - name
           - services
           - type
           - ui-pipeline
-          - value
       - type: replace-service
         service_id: pipeline
         service_label: build
         env: 
           GIT_COMMIT_EVENT_LISTENER_NAME: 'github-commit'
+        keep_form: true
         keep_parameters:
           - configuration
           - name
           - services
           - type
           - ui-pipeline
-          - value
   - condition:
       any:
         - parameter: source_provider
@@ -110,25 +110,25 @@ repo_conditions:
         service_label: pr
         env: 
           GIT_COMMIT_EVENT_LISTENER_NAME: 'gitlab-pr-listener'
+        keep_form: true
         keep_parameters:
           - configuration
           - name
           - services
           - type
           - ui-pipeline
-          - value
       - type: replace-service
         service_id: pipeline
         service_label: build
         env: 
           GIT_COMMIT_EVENT_LISTENER_NAME: 'grit-or-gitlab-commit'
+        keep_form: true
         keep_parameters:
           - configuration
           - name
           - services
           - type
           - ui-pipeline
-          - value
   - condition:
       any:
         - parameter: source_provider
@@ -153,25 +153,25 @@ repo_conditions:
         service_label: pr
         env: 
           GIT_COMMIT_EVENT_LISTENER_NAME: 'bitbucket-commit'
+        keep_form: true
         keep_parameters:
           - configuration
           - name
           - services
           - type
           - ui-pipeline
-          - value
       - type: replace-service
         service_id: pipeline
         service_label: build
         env: 
           GIT_COMMIT_EVENT_LISTENER_NAME: 'bitbucket-commit'
+        keep_form: true
         keep_parameters:
           - configuration
           - name
           - services
           - type
           - ui-pipeline
-          - value
   - condition:
       any:
         - parameter: source_provider
@@ -196,25 +196,25 @@ repo_conditions:
         service_label: pr
         env: 
           GIT_COMMIT_EVENT_LISTENER_NAME: 'github-ent-pr-listener'
+        keep_form: true
         keep_parameters:
           - configuration
           - name
           - services
           - type
           - ui-pipeline
-          - value
       - type: replace-service
         service_id: pipeline
         service_label: build
         env: 
           GIT_COMMIT_EVENT_LISTENER_NAME: 'github-ent-commit'
+        keep_form: true
         keep_parameters:
           - configuration
           - name
           - services
           - type
           - ui-pipeline
-          - value
   - condition:
       any:
         - parameter: source_provider
@@ -239,25 +239,25 @@ repo_conditions:
         service_label: pr
         env: 
           GIT_COMMIT_EVENT_LISTENER_NAME: 'gitlab-pr-listener'
+        keep_form: true
         keep_parameters:
           - configuration
           - name
           - services
           - type
           - ui-pipeline
-          - value
       - type: replace-service
         service_id: pipeline
         service_label: build
         env: 
           GIT_COMMIT_EVENT_LISTENER_NAME: 'grit-or-gitlab-commit'
+        keep_form: true
         keep_parameters:
           - configuration
           - name
           - services
           - type
           - ui-pipeline
-          - value
 
 vault_conditions:
   - condition:
