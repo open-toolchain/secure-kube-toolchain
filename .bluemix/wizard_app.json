@@ -16,7 +16,7 @@
     "key": "source_provider",
     "display": {
       "showInAdvancedMode": true,
-      "position": "top"
+      "advancedModePosition": "top"
     },
     "title": {
       "$ref": "#/messages/wizard.sourceHost"
