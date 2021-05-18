@@ -317,7 +317,7 @@ spec:
             # Keep APP_URL in build.properties shuttle file
             echo "APP_URL=$APP_URL" >> build.properties
             IMAGE="${REGISTRY_URL}/${REGISTRY_NAMESPACE}/${IMAGE_NAME}@${IMAGE_MANIFEST_SHA}"
-            echo "IMAGE=${IMAGE}" >> $ARCHIVE_DIR/build.properties
+            echo "IMAGE=${IMAGE}" >> build.properties
         - name: pipeline-debug
           value: $(params.pipeline-debug)
       workspaces:
