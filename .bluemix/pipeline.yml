@@ -145,12 +145,14 @@ stages:
       # Also copies information into a build.properties file, so they can be reused later on by other scripts (e.g. image url, chart name, ...)
       source <(curl -sSL "https://raw.githubusercontent.com/open-toolchain/commons/master/scripts/build_image_buildkit.sh")
      
+      # extract the image digest
       ibmcloud cr image-digests --json --restrict ${REGISTRY_NAMESPACE}/${IMAGE_NAME} | jq -c '.[]' > list
       TARGET_IMAGE=$(grep -F "${IMAGE_TAG}" list)
       echo "TARGET_IMAGE $TARGET_IMAGE"
       DIGEST=$(echo $TARGET_IMAGE | jq -r '.id')
       echo "DIGEST $DIGEST"
-      echo "IMAGE_MANIFEST_SHA=${DIGEST}" >> $ARCHIVE_DIR/build.properties
+      IMAGE="${REGISTRY_URL}/${REGISTRY_NAMESPACE}/${IMAGE_NAME}@${DIGEST}"
+      echo "IMAGE=${IMAGE}" >> $ARCHIVE_DIR/build.properties
   - name: Check vulnerabilities
     type: tester
     test_type: vulnerabilityadvisor
