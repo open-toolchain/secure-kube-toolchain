@@ -151,6 +151,7 @@ stages:
       echo "TARGET_IMAGE $TARGET_IMAGE"
       DIGEST=$(echo $TARGET_IMAGE | jq -r '.id')
       echo "DIGEST $DIGEST"
+      echo "IMAGE_MANIFEST_SHA=${DIGEST}" >> $ARCHIVE_DIR/build.properties
       IMAGE="${REGISTRY_URL}/${REGISTRY_NAMESPACE}/${IMAGE_NAME}@${DIGEST}"
       echo "IMAGE=${IMAGE}" >> $ARCHIVE_DIR/build.properties
   - name: Check vulnerabilities
@@ -232,4 +233,4 @@ stages:
       # ------------------
       # source: https://raw.githubusercontent.com/open-toolchain/commons/master/scripts/check_health.sh
       # Check liveness and readiness probes to confirm application is healthy
-      source <(curl -sSL "https://raw.githubusercontent.com/open-toolchain/commons/master/scripts/check_health.sh")
+      source <(curl -sSL "https://raw.githubusercontent.com/huayuenh/commons/checkhealth/scripts/check_health.sh")
