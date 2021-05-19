@@ -71,5 +71,34 @@
         "items": ["repo_url"]
       }
     ]
+  }, {
+    "type": "selectfieldset",
+    "display": {
+      "component": "tilegroup",
+      "orientation": "vertical",
+      "showLabel": false,
+      "invalidOptionMsg": {
+        "$ref": "#/messages/wizard.repo.invalidOptionMsg"
+      }
+    },
+    "key": "type",
+    "enum": ["clone", "link"],
+    "titleMap": {
+      "clone": {
+        "$ref": "#/messages/wizard.app.clone"
+      },
+      "link": {
+        "$ref": "#/messages/wizard.app.link"
+      }
+    },
+    "items": [{
+        "type": "section",
+        "items": ["repo_name"]
+      },
+      {
+        "type": "section",
+        "items": ["repo_url"]
+      }
+    ]
   }]
 }
