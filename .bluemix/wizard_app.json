@@ -11,6 +11,20 @@
     "$ref": "#/messages/wizard.app.longDescription"
   },
   "type": "object",
+  "properties": {
+    "change-management": {
+      "type": "string",
+      "enum": [{
+          "name": "Gitlab repo issues and tracking",
+          "value": "gitlab"
+        },
+        {
+          "name": "Service now change request management",
+          "value": "service-now"
+        }
+      ]
+    }
+  },
   "form": [{
     "type": "select",
     "key": "source_provider",
@@ -96,5 +110,12 @@
         "items": ["repo_url"]
       }
     ]
+  }, {
+    "type": "tilegroup",
+    "key": "change-management",
+    "display": {
+      "showLabel": false,
+      "orientation": "horizontal"
+    }
   }]
 }
