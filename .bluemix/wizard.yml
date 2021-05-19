@@ -15,6 +15,9 @@ steps:
     advanced_form: repo
     conditions:
       $ref: conditions.yml#/repo_conditions
+  - name: app2
+    title: "Tilegroup Test"
+    form: wizard_app2
   - name: vault
     title:
       $ref: "#/messages/wizard.step.vault.title"
@@ -64,6 +67,10 @@ form:
   wizard_app:
     schema:
       $ref: wizard_app.json
+  
+  wizard_app2:
+    schema:
+      $ref: wizard_app2.json
 
   wizard_vault:
     parameters:
