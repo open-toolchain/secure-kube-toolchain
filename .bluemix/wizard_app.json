@@ -84,12 +84,8 @@
     "key": "type",
     "enum": ["clone", "link"],
     "titleMap": {
-      "clone": {
-        "$ref": "#/messages/wizard.app.clone"
-      },
-      "link": {
-        "$ref": "#/messages/wizard.app.link"
-      }
+      "clone": "Insert a long tile description here to see how it renders",
+      "link": "Do they render horizontally or vertically, we shall see!"
     },
     "items": [{
         "type": "section",
