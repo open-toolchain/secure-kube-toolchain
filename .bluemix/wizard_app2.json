@@ -35,5 +35,12 @@
       "showLabel": false,
       "orientation": "horizontal"
     }
+  }, {
+    "type": "tilegroup",
+    "key": "change-management",
+    "display": {
+      "showLabel": true,
+      "orientation": "vertical"
+    }
   }]
 }
