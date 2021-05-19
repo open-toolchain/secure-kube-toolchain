@@ -81,7 +81,7 @@
         "$ref": "#/messages/wizard.repo.invalidOptionMsg"
       }
     },
-    "key": "type2",
+    "key": "type",
     "enum": ["clone", "link"],
     "titleMap": {
       "clone": "Insert a long tile description here to see how it renders",
