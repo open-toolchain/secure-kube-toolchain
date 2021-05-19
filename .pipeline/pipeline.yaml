@@ -298,10 +298,6 @@ spec:
             echo "SOURCE_BUILD_NUMBER=$BUILD_NUMBER" >> build.properties
             # For doi plugin invocation if needed
             export TOOLCHAIN_ID=$PIPELINE_TOOLCHAIN_ID
-            # Single tag for the image built
-            export IMAGE_MANIFEST_SHA="$(tasks.containerize.results.image-digest)"
-            # Keep it in build.properties shuttle file
-            echo "IMAGE_MANIFEST_SHA=$IMAGE_MANIFEST_SHA" >> build.properties
         - name: script
           value: |
             # uncomment to debug the script
@@ -320,6 +316,8 @@ spec:
           value: |
             # Keep APP_URL in build.properties shuttle file
             echo "APP_URL=$APP_URL" >> build.properties
+            IMAGE="${REGISTRY_URL}/${REGISTRY_NAMESPACE}/${IMAGE_NAME}@${IMAGE_MANIFEST_SHA}"
+            echo "IMAGE=${IMAGE}" >> build.properties
         - name: pipeline-debug
           value: $(params.pipeline-debug)
       workspaces:
