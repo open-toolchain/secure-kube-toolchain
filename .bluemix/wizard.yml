@@ -67,10 +67,6 @@ form:
   wizard_app:
     schema:
       $ref: wizard_app.json
-  
-  wizard_app2:
-    schema:
-      $ref: wizard_app2.json
 
   wizard_vault:
     parameters:
