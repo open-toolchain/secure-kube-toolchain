@@ -67,10 +67,6 @@ form:
   wizard_app:
     schema:
       $ref: wizard_app.json
-  
-  wizard_app2:
-    schema:
-      $ref: wizard_app2.json
 
   wizard_vault:
     parameters:
@@ -87,7 +83,5 @@ form:
       $ref: wizard_optional_tools.json
 
   wizard_summary:
-    parameters:
-      test: true
     schema:
       $ref: wizard_summary.json

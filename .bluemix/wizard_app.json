@@ -71,30 +71,5 @@
         "items": ["repo_url"]
       }
     ]
-  }, {
-    "type": "selectfieldset",
-    "display": {
-      "component": "tilegroup",
-      "orientation": "vertical",
-      "showLabel": false,
-      "invalidOptionMsg": {
-        "$ref": "#/messages/wizard.repo.invalidOptionMsg"
-      }
-    },
-    "key": "type",
-    "enum": ["clone", "link"],
-    "titleMap": {
-      "clone": "Insert a long tile description here to see how it renders",
-      "link": "Do they render horizontally or vertically, we shall see!"
-    },
-    "items": [{
-        "type": "section",
-        "items": ["repo_name"]
-      },
-      {
-        "type": "section",
-        "items": ["repo_url"]
-      }
-    ]
   }]
 }
