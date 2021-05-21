@@ -1,0 +1,190 @@
+---
+repo_conditions:
+  - condition:
+      any:
+        - parameter: source_provider
+          value: hostedgit
+    actions:
+      - type: replace-service
+        service_id: hostedgit
+        service_label: repo
+        parameters:
+          source_provider: hostedgit
+        keep_parameters:
+          - repo_name
+          - repo_url
+          - private_repo
+          - source_repo_url
+          - type
+          - has_issues
+          - enable_traceability
+          - legal
+  - condition:
+      any:
+        - parameter: source_provider
+          value: githubconsolidated
+    actions:
+      - type: replace-service
+        service_id: githubconsolidated
+        service_label: repo
+        parameters:
+          source_provider: githubconsolidated
+        keep_parameters:
+          - repo_name
+          - repo_url
+          - private_repo
+          - source_repo_url
+          - type
+          - has_issues
+          - enable_traceability
+          - legal
+  - condition:
+      any:
+        - parameter: source_provider
+          value: gitlab
+    actions:
+      - type: replace-service
+        service_id: gitlab
+        service_label: repo
+        parameters:
+          source_provider: gitlab
+        keep_parameters:
+          - repo_name
+          - repo_url
+          - private_repo
+          - source_repo_url
+          - type
+          - has_issues
+          - enable_traceability
+          - legal
+  - condition:
+      any:
+        - parameter: source_provider
+          value: bitbucketgit
+    actions:
+      - type: replace-service
+        service_id: bitbucketgit
+        service_label: repo
+        parameters:
+          source_provider: bitbucketgit
+        keep_parameters:
+          - repo_name
+          - repo_url
+          - private_repo
+          - source_repo_url
+          - type
+          - has_issues
+          - enable_traceability
+          - legal
+  - condition:
+      any:
+        - parameter: source_provider
+          value: github_integrated
+    actions:
+      - type: replace-service
+        service_id: github_integrated
+        service_label: repo
+        parameters:
+          source_provider: github_integrated
+        keep_parameters:
+          - repo_name
+          - repo_url
+          - private_repo
+          - source_repo_url
+          - type
+          - has_issues
+          - enable_traceability
+          - legal
+
+vault_conditions:
+  - condition:
+      any:
+        - parameter: key-protect
+          value: true
+    actions:
+      - type: create-service
+        service_id: keyprotect
+        service_label: kp-vault
+        parameters:
+          name: kp-compliance-secrets
+  - condition:
+      any:
+        - parameter: key-protect
+          value: false
+    actions:
+      - type: delete-service
+        service_id: keyprotect
+        service_label: kp-vault
+  - condition:
+      any:
+        - parameter: secrets-manager
+          value: true
+    actions:
+      - type: create-service
+        service_id: secretsmanager
+        service_label: sm-vault
+        parameters:
+          name: sm-compliance-secrets
+  - condition:
+      any:
+        - parameter: secrets-manager
+          value: false
+    actions:
+      - type: delete-service
+        service_id: secretsmanager
+        service_label: sm-vault
+  - condition:
+      any:
+        - parameter: hashicorp-vault
+          value: true
+    actions:
+      - type: create-service
+        service_id: hashicorpvault
+        service_label: hc-vault
+        parameters:
+          name: 'hc-compliance-secrets'
+          server_url: 'https://vserv.sos.ibm.com:8200'
+          dashboard_url: 'https://vserv.sos.ibm.com:8200/ui'
+          authentication_method: 'approle'
+  - condition:
+      any:
+        - parameter: hashicorp-vault
+          value: false
+    actions:
+      - type: delete-service
+        service_id: hashicorpvault
+        service_label: hc-vault
+
+tools_conditions:
+  - condition:
+      any:
+        - parameter: webide
+          value: true
+    actions:
+      - type: create-service
+        service_id: orion
+        service_label: webide
+  - condition:
+      any:
+        - parameter: webide
+          value: false
+    actions:
+      - type: delete-service
+        service_id: orion
+        service_label: webide
+  - condition:
+      any:
+        - parameter: doi
+          value: true
+    actions:
+      - type: create-service
+        service_id: draservicebroker
+        service_label: doi
+  - condition:
+      any:
+        - parameter: doi
+          value: false
+    actions:
+      - type: delete-service
+        service_id: draservicebroker
+        service_label: doi

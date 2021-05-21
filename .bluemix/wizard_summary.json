@@ -1,0 +1,24 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "messages": {
+    "$i18n": "locales.yml"
+  },
+  "title": {
+    "$ref": "#/messages/wizard.summary.title"
+  },
+  "description": "",
+  "longDescription": "",
+  "type": "object",
+  "form": [{
+    "type": "notification",
+    "display": {
+      "style": "success",
+      "title": {
+        "$ref": "#/messages/wizard.summary.success.title"
+      },
+      "subtitle": {
+        "$ref": "#/messages/wizard.summary.success.subtitle"
+      }
+    }
+  }]
+}

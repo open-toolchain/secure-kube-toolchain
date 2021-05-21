@@ -1,0 +1,84 @@
+---
+version: '1'
+messages:
+  $i18n: locales.yml
+welcome:
+  description: 
+      $ref: "#/messages/wizard.welcome.description"
+steps:
+  - name: app
+    title:
+      $ref: "#/messages/wizard.step.application.title"
+    form: wizard_app
+    advanced_form: repo
+    conditions:
+      $ref: conditions.yml#/repo_conditions
+  - name: vault
+    title:
+      $ref: "#/messages/wizard.step.vault.title"
+    form: wizard_vault
+    conditions:
+      $ref: conditions.yml#/vault_conditions
+  - name: keyprotect
+    indent_level: 1
+    title:
+      $ref: "#/messages/wizard.step.keyprotect.title"
+    form: keyprotect
+    visible:
+      condition:
+        any:
+          - form: wizard_vault
+            parameter: key-protect
+            value: true
+  - name: hashicorpvault
+    indent_level: 1
+    title:
+      $ref: "#/messages/wizard.step.hashicorpvault.title"
+    form: hashicorpvault
+    visible:
+      condition:
+        any:
+          - form: wizard_vault
+            parameter: hashicorp-vault
+            value: true
+  - name: deploy
+    label: 
+      $ref: "#/messages/wizard.step.deploy.label"
+    title:
+      $ref: "#/messages/wizard.step.deploy.title"
+    form: pipeline
+  - name: optionaltools
+    title:
+      $ref: "#/messages/wizard.step.optionaltools.title"
+    form: wizard_optional_tools
+    conditions:
+      $ref: conditions.yml#/tools_conditions
+  - name: summary
+    title:
+      $ref: "#/messages/wizard.step.summary.title"
+    form: wizard_summary
+
+form:
+  wizard_app:
+    schema:
+      $ref: wizard_app.json
+
+  wizard_vault:
+    parameters:
+      key-protect: false
+      hashicorp-vault: false
+    schema:
+      $ref: wizard_vault.json
+
+  wizard_optional_tools:
+    parameters:
+      webide: true
+      doi: true
+    schema:
+      $ref: wizard_optional_tools.json
+
+  wizard_summary:
+    parameters:
+      test: true
+    schema:
+      $ref: wizard_summary.json

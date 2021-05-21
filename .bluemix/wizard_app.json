@@ -1,0 +1,75 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "messages": {
+    "$i18n": "locales.yml"
+  },
+  "title": {
+    "$ref": "#/messages/wizard.app.title"
+  },
+  "description": "",
+  "longDescription": {
+    "$ref": "#/messages/wizard.app.longDescription"
+  },
+  "type": "object",
+  "form": [{
+    "type": "select",
+    "key": "source_provider",
+    "display": {
+      "showInAdvancedMode": true,
+      "advancedModePosition": "top"
+    },
+    "title": {
+      "$ref": "#/messages/wizard.sourceHost"
+    },
+    "enum": [{
+        "value": "hostedgit",
+        "name": "Git Repos and Issue Tracking"
+      },
+      {
+        "value": "githubconsolidated",
+        "name": "GitHub"
+      },
+      {
+        "value": "gitlab",
+        "name": "GitLab"
+      },
+      {
+        "value": "bitbucketgit",
+        "name": "Bitbucket"
+      },
+      {
+        "value": "github_integrated",
+        "name": "GitHub Enterprise Whitewater"
+      }
+    ]
+  }, {
+    "type": "selectfieldset",
+    "display": {
+      "component": "tilegroup",
+      "orientation": "horizontal",
+      "showLabel": false,
+      "invalidOptionMsg": {
+        "$ref": "#/messages/wizard.repo.invalidOptionMsg"
+      }
+    },
+    "key": "type",
+    "enum": ["clone", "link"],
+    "titleMap": {
+      "clone": {
+        "$ref": "#/messages/wizard.app.clone"
+      },
+      "link": {
+        "$ref": "#/messages/wizard.app.link"
+      }
+    },
+    "items": [{
+        "type": "section",
+        "items": ["repo_name"]
+      },
+      {
+        "type": "section",
+        "items": ["repo_url"]
+      }
+    ]
+  }]
+}
