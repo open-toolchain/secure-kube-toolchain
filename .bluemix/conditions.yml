@@ -5,7 +5,7 @@ repo_conditions:
         - parameter: source_provider
           value: hostedgit
     actions:
-      - type: replace-service
+      - type: update-service
         service_id: hostedgit
         service_label: repo
         parameters:
@@ -13,20 +13,19 @@ repo_conditions:
         keep_parameters:
           - repo_name
           - repo_url
-          - private_repo
           - source_repo_url
           - type
           - has_issues
           - enable_traceability
           - legal
-      - type: update-service
+      - type: update-service-parameters
         service_id: pipeline
         service_label: pr
         parameters:
           configuration:
             env:
               GIT_COMMIT_EVENT_LISTENER_NAME: 'gitlab-pr-listener'
-      - type: update-service
+      - type: update-service-parameters
         service_id: pipeline
         service_label: build
         parameters:
@@ -38,7 +37,7 @@ repo_conditions:
         - parameter: source_provider
           value: githubconsolidated
     actions:
-      - type: replace-service
+      - type: update-service
         service_id: githubconsolidated
         service_label: repo
         parameters:
@@ -46,20 +45,19 @@ repo_conditions:
         keep_parameters:
           - repo_name
           - repo_url
-          - private_repo
           - source_repo_url
           - type
           - has_issues
           - enable_traceability
           - legal
-      - type: update-service
+      - type: update-service-parameters
         service_id: pipeline
         service_label: pr
         parameters:
           configuration:
             env:
               GIT_COMMIT_EVENT_LISTENER_NAME: 'github-pr-listener'
-      - type: update-service
+      - type: update-service-parameters
         service_id: pipeline
         service_label: build
         parameters:
@@ -71,7 +69,7 @@ repo_conditions:
         - parameter: source_provider
           value: gitlab
     actions:
-      - type: replace-service
+      - type: update-service
         service_id: gitlab
         service_label: repo
         parameters:
@@ -79,20 +77,19 @@ repo_conditions:
         keep_parameters:
           - repo_name
           - repo_url
-          - private_repo
           - source_repo_url
           - type
           - has_issues
           - enable_traceability
           - legal
-      - type: update-service
+      - type: update-service-parameters
         service_id: pipeline
         service_label: pr
         parameters:
           configuration:
             env:
               GIT_COMMIT_EVENT_LISTENER_NAME: 'gitlab-pr-listener'
-      - type: update-service
+      - type: update-service-parameters
         service_id: pipeline
         service_label: build
         parameters:
@@ -109,14 +106,22 @@ repo_conditions:
         service_label: repo
         parameters:
           source_provider: bitbucketgit
-      - type: update-service
+        keep_parameters:
+          - repo_name
+          - repo_url
+          - source_repo_url
+          - type
+          - has_issues
+          - enable_traceability
+          - legal
+      - type: update-service-parameters
         service_id: pipeline
         service_label: pr
         parameters:
           configuration:
             env:
               GIT_COMMIT_EVENT_LISTENER_NAME: 'bitbucket-commit'
-      - type: update-service
+      - type: update-service-parameters
         service_id: pipeline
         service_label: build
         parameters:
@@ -128,7 +133,7 @@ repo_conditions:
         - parameter: source_provider
           value: github_integrated
     actions:
-      - type: replace-service
+      - type: update-service
         service_id: github_integrated
         service_label: repo
         parameters:
@@ -136,20 +141,19 @@ repo_conditions:
         keep_parameters:
           - repo_name
           - repo_url
-          - private_repo
           - source_repo_url
           - type
           - has_issues
           - enable_traceability
           - legal
-      - type: update-service
+      - type: update-service-parameters
         service_id: pipeline
         service_label: pr
         parameters:
           configuration:
             env:
               GIT_COMMIT_EVENT_LISTENER_NAME: 'github-ent-pr-listener'
-      - type: update-service
+      - type: update-service-parameters
         service_id: pipeline
         service_label: build
         parameters:
@@ -161,7 +165,7 @@ repo_conditions:
         - parameter: source_provider
           value: hostedgit
     actions:
-      - type: replace-service
+      - type: update-service
         service_id: hostedgit
         service_label: repo
         parameters:
@@ -169,20 +173,19 @@ repo_conditions:
         keep_parameters:
           - repo_name
           - repo_url
-          - private_repo
           - source_repo_url
           - type
           - has_issues
           - enable_traceability
           - legal
-      - type: update-service
+      - type: update-service-parameters
         service_id: pipeline
         service_label: pr
         parameters:
           configuration:
             env:
               GIT_COMMIT_EVENT_LISTENER_NAME: 'gitlab-pr-listener'
-      - type: update-service
+      - type: update-service-parameters
         service_id: pipeline
         service_label: build
         parameters:
