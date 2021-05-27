@@ -55,7 +55,7 @@ services:
       source_provider: 'hostedgit'
   pipeline-repo:
     service_id: >
-        $env.pipeline_type === 'tekton' ? $env.source_provider ? $env.source_provider : 'hostedgit' : ''
+        $env.pipeline_type === 'tekton' ? 'hostedgit' : ''
     parameters:
       repo_name: "secure-kube-toolchain-{{timestamp}}"
       repo_url: $env.repository
