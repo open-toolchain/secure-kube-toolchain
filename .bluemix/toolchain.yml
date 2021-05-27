@@ -55,7 +55,11 @@ services:
       source_provider: 'hostedgit'
   pipeline-repo:
     service_id: >
-        $env.pipeline_type === 'tekton' ? 'hostedgit' : ''
+      if ( $env.ENABLE_SETUP_WIZARD === 'true') {
+        'hostedgit';
+      } else {
+        $env.pipeline_type !== 'tekton' ? '' : $env.source_provider ? $env.source_provider : 'hostedgit'
+      }
     parameters:
       repo_name: "secure-kube-toolchain-{{timestamp}}"
       repo_url: $env.repository
@@ -67,7 +71,11 @@ services:
       kind: ['pipeline']
   tekton-catalog-repo:
     service_id: >
-      $env.pipeline_type !== 'tekton' ? '' : $env.source_provider ? $env.source_provider : 'hostedgit'
+      if ( $env.ENABLE_SETUP_WIZARD === 'true') {
+        'hostedgit';
+      } else {
+        $env.pipeline_type !== 'tekton' ? '' : $env.source_provider ? $env.source_provider : 'hostedgit'
+      }
     parameters:
       repo_name: 'tekton-catalog-{{timestamp}}'  
       repo_url: "https://github.com/open-toolchain/tekton-catalog"
