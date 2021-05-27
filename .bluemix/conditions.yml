@@ -342,7 +342,7 @@ tools_conditions:
     actions:
       - type: create-service
         service_id: draservicebroker
-        service_label: doi
+        service_label: devops-insights
   - condition:
       any:
         - parameter: doi
@@ -350,4 +350,4 @@ tools_conditions:
     actions:
       - type: delete-service
         service_id: draservicebroker
-        service_label: doi
+        service_label: devops-insights
