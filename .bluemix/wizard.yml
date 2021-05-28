@@ -30,6 +30,17 @@ steps:
           - form: wizard_vault
             parameter: key-protect
             value: true
+  - name: secretsmanager
+     indent_level: 1
+     form: secretsmanager
+     title:
+       $ref: "#/messages/wizard.step.secretsmanager.title"
+     visible:
+       condition:
+         any:
+           - form: wizard_vault
+             parameter: secrets-manager
+             value: true
   - name: hashicorpvault
     indent_level: 1
     title:
