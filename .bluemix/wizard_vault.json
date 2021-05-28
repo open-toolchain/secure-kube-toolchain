@@ -38,7 +38,20 @@
         "component": "toggle",
         "style": "card"
       }
-    }
+    },
+    "secrets-manager": {
+       "title": {
+         "$ref": "#/messages/wizard.vault.secretsManager.title"
+       },
+       "description": {
+         "$ref": "#/messages/wizard.vault.secretsManager.description"
+       },
+       "type": "boolean",
+       "display": {
+         "component": "toggle",
+         "style": "card"
+       }
+     }
   },
   "form": [{
       "type": "info",
@@ -47,6 +60,7 @@
       }
     },
     "key-protect",
-    "hashicorp-vault"
+    "hashicorp-vault",
+    "secrets-manager"
   ]
 }
