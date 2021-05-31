@@ -38,7 +38,7 @@ services:
       if ( $env.ENABLE_SETUP_WIZARD === 'true') {
         'hostedgit';
       } else {
-        $env.source_provider ? $env.source_provider : 'gitlab';
+        $env.source_provider ? $env.source_provider : 'hostedgit';
       }
     parameters:
       repo_name: "hello-containers-{{timestamp}}"
@@ -56,7 +56,7 @@ services:
   pipeline-repo:
     service_id: >
       if ( $env.ENABLE_SETUP_WIZARD === 'true') {
-        'bitbucketgit';
+        'hostedgit';
       } else {
         $env.pipeline_type !== 'tekton' ? '' : $env.source_provider ? $env.source_provider : 'hostedgit'
       }
