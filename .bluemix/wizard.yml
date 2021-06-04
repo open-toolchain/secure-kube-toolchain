@@ -78,7 +78,5 @@ form:
       $ref: wizard_optional_tools.json
 
   wizard_summary:
-    parameters:
-      test: true
     schema:
       $ref: wizard_summary.json
