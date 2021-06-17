@@ -307,7 +307,7 @@ spec:
             # copy the script below into your app code repo (e.g. ./scripts/check_and_deploy_kubectl.sh) and 'source' it from your pipeline job
             #    source ./scripts/check_and_deploy_kubectl.sh
             # alternatively, you can source it from online script:
-            #    source <(curl -sSL "https://${REGION}.git.cloud.ibm.com/open-toolchain/commons/-/raw/main/scripts/check_and_deploy_kubectl.sh")
+            #    source <(curl -sSL "$(params.commons-hosted-region)/scripts/check_and_deploy_kubectl.sh")
             # ------------------
 
             # This script checks the IBM Container Service cluster is ready, has a namespace configured with access to the private
@@ -367,7 +367,7 @@ spec:
             # copy the script below into your app code repo (e.g. ./scripts/check_health.sh) and 'source' it from your pipeline job
             #    source ./scripts/check_health.sh
             # alternatively, you can source it from online script:
-            #    source <(curl -sSL "https://${REGION}.git.cloud.ibm.com/open-toolchain/commons/-/raw/main/scripts/check_health.sh"")
+            #    source <(curl -sSL "$(params.commons-hosted-region)/scripts/check_health.sh"")
             # ------------------
             # Check liveness and readiness probes to confirm application is healthy
             source <(curl -sSL "$(params.commons-hosted-region)/scripts/check_health.sh")

@@ -96,7 +96,7 @@ stages:
       # copy the script below into your app code repo (e.g. ./scripts/check_dockerfile.sh) and 'source' it from your pipeline job
       #    source ./scripts/check_prebuild.sh
       # alternatively, you can source it from online script:
-      #    source <(curl -sSL "https://${REGION}.git.cloud.ibm.com/open-toolchain/commons/-/raw/main/scripts/check_dockerfile.sh")
+      #    source <(curl -sSL "${COMMONS_HOSTED_REGION}/scripts/check_dockerfile.sh")
       # ------------------
 
       # This script lints Dockerfile.
@@ -117,7 +117,7 @@ stages:
       # copy the script below into your app code repo (e.g. ./scripts/check_registry.sh) and 'source' it from your pipeline job
       #    source ./scripts/check_registry.sh
       # alternatively, you can source it from online script:
-      #    source <(curl -sSL "https://${REGION}.git.cloud.ibm.com/open-toolchain/commons/-/raw/main/scripts/check_registry.sh")
+      #    source <(curl -sSL "${COMMONS_HOSTED_REGION}/scripts/check_registry.sh")
       # ------------------
 
       # This script checks presence of registry namespace.
@@ -138,7 +138,7 @@ stages:
       # copy the script below into your app code repo (e.g. ./scripts/build_image.sh) and 'source' it from your pipeline job
       #    source ./scripts/build_image.sh
       # alternatively, you can source it from online script:
-      #    source <(curl -sSL "https://${REGION}.git.cloud.ibm.com/open-toolchain/commons/-/raw/main/scripts/build_image_buildkit.sh")
+      #    source <(curl -sSL "${COMMONS_HOSTED_REGION}/scripts/build_image_buildkit.sh")
       # ------------------
 
       # This script does build a Docker image into IBM Container Service private image registry.
@@ -171,7 +171,7 @@ stages:
       # copy the script below into your app code repo (e.g. ./scripts/check_vulnerabilities.sh) and 'source' it from your pipeline job
       #    source ./scripts/check_vulnerabilities.sh
       # alternatively, you can source it from online script:
-      #    source <(curl -sSL "https://${REGION}.git.cloud.ibm.com/open-toolchain/commons/-/raw/main/scripts/check_vulnerabilities.sh")
+      #    source <(curl -sSL "${COMMONS_HOSTED_REGION}/scripts/check_vulnerabilities.sh")
       # ------------------
       # Check for vulnerabilities of built image using Vulnerability Advisor
       
@@ -211,7 +211,7 @@ stages:
       # copy the script below into your app code repo (e.g. ./scripts/check_and_deploy_kubectl.sh) and 'source' it from your pipeline job
       #    source ./scripts/check_and_deploy_kubectl.sh
       # alternatively, you can source it from online script:
-      #    source <(curl -sSL "https://${REGION}.git.cloud.ibm.com/open-toolchain/commons/-/raw/main/scripts/check_and_deploy_kubectl.sh")
+      #    source <(curl -sSL "${COMMONS_HOSTED_REGION}/scripts/check_and_deploy_kubectl.sh")
       # ------------------
 
       # This script checks the IBM Container Service cluster is ready, has a namespace configured with access to the private
@@ -231,7 +231,7 @@ stages:
       # copy the script below into your app code repo (e.g. ./scripts/check_health.sh) and 'source' it from your pipeline job
       #    source ./scripts/check_health.sh
       # alternatively, you can source it from online script:
-      #    source <(curl -sSL "https://${REGION}.git.cloud.ibm.com/open-toolchain/commons/-/raw/main/scripts/check_health.sh")
+      #    source <(curl -sSL "${COMMONS_HOSTED_REGION}/scripts/check_health.sh")
       # ------------------
       # Check liveness and readiness probes to confirm application is healthy
       
