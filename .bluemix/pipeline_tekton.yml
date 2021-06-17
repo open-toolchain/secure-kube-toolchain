@@ -5,39 +5,39 @@ inputs:
     service: ${PIPELINE_REPO}
     path: .pipeline
   - type: git
-    branch: master
+    branch: ${DEFINITIONS_BRANCH}
     service: ${TEKTON_CATALOG_REPO}
     path: git
   - type: git
-    branch: master
+    branch: ${DEFINITIONS_BRANCH}
     service: ${TEKTON_CATALOG_REPO}
     path: container-registry
   - type: git
     service: ${TEKTON_CATALOG_REPO}
-    branch: master
+    branch: ${DEFINITIONS_BRANCH}
     path: kubernetes-service
   - type: git
     service: ${TEKTON_CATALOG_REPO}
-    branch: master
+    branch: ${DEFINITIONS_BRANCH}
     path: toolchain
   - type: git
-    branch: master
+    branch: ${DEFINITIONS_BRANCH}
     service: ${TEKTON_CATALOG_REPO}
     path: cra
   - type: git
     service: ${TEKTON_CATALOG_REPO}
-    branch: master
+    branch: ${DEFINITIONS_BRANCH}
     path: devops-insights
   - type: git
-    branch: master
+    branch: ${DEFINITIONS_BRANCH}
     service: ${TEKTON_CATALOG_REPO}
     path: linter
   - type: git
-    branch: master
+    branch: ${DEFINITIONS_BRANCH}
     service: ${TEKTON_CATALOG_REPO}
     path: tester
   - type: git
-    branch: master
+    branch: ${DEFINITIONS_BRANCH}
     service: ${TEKTON_CATALOG_REPO}
     path: utils
 triggers:
