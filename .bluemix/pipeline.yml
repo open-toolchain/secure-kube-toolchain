@@ -4,6 +4,9 @@ properties:
 - name: IBM_CLOUD_API_KEY
   value: ${API_KEY}
   type: secure
+- name: COMMONS_HOSTED_REGION
+  value: ${COMMONS_HOSTED_REGION}
+  type: text
 stages:
 - name: BUILD
   inputs:
@@ -92,12 +95,17 @@ stages:
       # copy the script below into your app code repo (e.g. ./scripts/check_dockerfile.sh) and 'source' it from your pipeline job
       #    source ./scripts/check_prebuild.sh
       # alternatively, you can source it from online script:
-      #    source <(curl -sSL "https://raw.githubusercontent.com/open-toolchain/commons/master/scripts/check_dockerfile.sh")
+      #    source <(curl -sSL "https://${REGION}.git.cloud.ibm.com/open-toolchain/commons/-/raw/main/scripts/check_dockerfile.sh")
       # ------------------
-      # source: https://raw.githubusercontent.com/open-toolchain/commons/master/scripts/check_dockerfile.sh
 
       # This script lints Dockerfile.
-      source <(curl -sSL "https://raw.githubusercontent.com/open-toolchain/commons/master/scripts/check_dockerfile.sh")
+      if [ "${COMMONS_HOSTED_REGION}" ]; then
+        echo "RUNNING HOSTED"
+        source <(curl -sSL "https://${COMMONS_HOSTED_REGION}.git.cloud.ibm.com/open-toolchain/commons/-/raw/main/scripts/check_dockerfile.sh")
+      else
+        echo "RUNNING DEFAULT"
+        source <(curl -sSL "https://raw.githubusercontent.com/open-toolchain/commons/master/scripts/check_dockerfile.sh")
+      fi
   - name: Check registry
     type: builder
     build_type: cr
@@ -114,12 +122,15 @@ stages:
       # copy the script below into your app code repo (e.g. ./scripts/check_registry.sh) and 'source' it from your pipeline job
       #    source ./scripts/check_registry.sh
       # alternatively, you can source it from online script:
-      #    source <(curl -sSL "https://raw.githubusercontent.com/open-toolchain/commons/master/scripts/check_registry.sh")
+      #    source <(curl -sSL "https://${REGION}.git.cloud.ibm.com/open-toolchain/commons/-/raw/main/scripts/check_registry.sh")
       # ------------------
-      # source: https://raw.githubusercontent.com/open-toolchain/commons/master/scripts/check_registry.sh
 
       # This script checks presence of registry namespace.
-      source <(curl -sSL "https://raw.githubusercontent.com/open-toolchain/commons/master/scripts/check_registry.sh")
+      if [ "${COMMONS_HOSTED_REGION}" ]; then
+        source <(curl -sSL "https://${COMMONS_HOSTED_REGION}.git.cloud.ibm.com/open-toolchain/commons/-/raw/main/scripts/check_registry.sh")
+      else
+        source <(curl -sSL "https://raw.githubusercontent.com/open-toolchain/commons/master/scripts/check_registry.sh")
+      fi
   - name: Build container image
     type: builder
     build_type: cr
@@ -136,14 +147,19 @@ stages:
       # copy the script below into your app code repo (e.g. ./scripts/build_image.sh) and 'source' it from your pipeline job
       #    source ./scripts/build_image.sh
       # alternatively, you can source it from online script:
-      #    source <(curl -sSL "https://raw.githubusercontent.com/open-toolchain/commons/master/scripts/build_image.sh")
+      #    source <(curl -sSL "https://${REGION}.git.cloud.ibm.com/open-toolchain/commons/-/raw/main/scripts/build_image_buildkit.sh")
       # ------------------
-      # source: https://raw.githubusercontent.com/open-toolchain/commons/master/scripts/build_image.sh
 
       # This script does build a Docker image into IBM Container Service private image registry.
       # Minting image tag using format: BUILD_NUMBER-BRANCH-COMMIT_ID-TIMESTAMP
       # Also copies information into a build.properties file, so they can be reused later on by other scripts (e.g. image url, chart name, ...)
-      source <(curl -sSL "https://raw.githubusercontent.com/open-toolchain/commons/master/scripts/build_image_buildkit.sh")
+      if [ "${COMMONS_HOSTED_REGION}" ]; then
+        echo "RUNNING HOSTED"
+        source <(curl -sSL "https://${COMMONS_HOSTED_REGION}.git.cloud.ibm.com/open-toolchain/commons/-/raw/main/scripts/build_image_buildkit.sh")
+      else
+        echo "RUNNING DEFAULT"
+        source <(curl -sSL "https://raw.githubusercontent.com/open-toolchain/commons/master/scripts/build_image_buildkit.sh")
+      fi
      
       # extract the image digest
       ibmcloud cr image-digests --json --restrict ${REGISTRY_NAMESPACE}/${IMAGE_NAME} | jq -c '.[]' > list
@@ -169,11 +185,16 @@ stages:
       # copy the script below into your app code repo (e.g. ./scripts/check_vulnerabilities.sh) and 'source' it from your pipeline job
       #    source ./scripts/check_vulnerabilities.sh
       # alternatively, you can source it from online script:
-      #    source <(curl -sSL "https://raw.githubusercontent.com/open-toolchain/commons/master/scripts/check_vulnerabilities.sh")
+      #    source <(curl -sSL "https://${REGION}.git.cloud.ibm.com/open-toolchain/commons/-/raw/main/scripts/check_vulnerabilities.sh")
       # ------------------
-      # source: https://raw.githubusercontent.com/open-toolchain/commons/master/scripts/check_vulnerabilities.sh
       # Check for vulnerabilities of built image using Vulnerability Advisor
-      source <(curl -sSL "https://raw.githubusercontent.com/open-toolchain/commons/master/scripts/check_vulnerabilities.sh")
+      if [ "${COMMONS_HOSTED_REGION}" ]; then
+        echo "RUNNING HOSTED"
+        source <(curl -sSL "https://${COMMONS_HOSTED_REGION}.git.cloud.ibm.com/open-toolchain/commons/-/raw/main/scripts/check_vulnerabilities.sh")
+      else
+        echo "RUNNING DEFAULT"
+        source <(curl -sSL "https://raw.githubusercontent.com/open-toolchain/commons/master/scripts/check_vulnerabilities.sh")
+      fi
 - name: DEPLOY
   inputs:
   - type: job
@@ -208,13 +229,18 @@ stages:
       # copy the script below into your app code repo (e.g. ./scripts/check_and_deploy_kubectl.sh) and 'source' it from your pipeline job
       #    source ./scripts/check_and_deploy_kubectl.sh
       # alternatively, you can source it from online script:
-      #    source <(curl -sSL "https://raw.githubusercontent.com/open-toolchain/commons/master/scripts/check_and_deploy_kubectl.sh")
+      #    source <(curl -sSL "https://${REGION}.git.cloud.ibm.com/open-toolchain/commons/-/raw/main/scripts/check_and_deploy_kubectl.sh")
       # ------------------
-      # source: https://raw.githubusercontent.com/open-toolchain/commons/master/scripts/check_and_deploy_kubectl.sh
 
       # This script checks the IBM Container Service cluster is ready, has a namespace configured with access to the private
       # image registry (using an IBM Cloud API Key), perform a kubectl deploy of container image and check on outcome.
-      source <(curl -sSL "https://raw.githubusercontent.com/open-toolchain/commons/master/scripts/check_and_deploy_kubectl.sh")
+      if [ "${COMMONS_HOSTED_REGION}" ]; then
+        echo "RUNNING HOSTED"
+        source <(curl -sSL "https://${COMMONS_HOSTED_REGION}.git.cloud.ibm.com/open-toolchain/commons/-/raw/main/scripts/check_and_deploy_kubectl.sh")
+      else
+        echo "RUNNING DEFAULT"
+        source <(curl -sSL "https://raw.githubusercontent.com/open-toolchain/commons/master/scripts/check_and_deploy_kubectl.sh")
+      fi
   - name: Check health
     type: deployer
     target:
@@ -229,8 +255,13 @@ stages:
       # copy the script below into your app code repo (e.g. ./scripts/check_health.sh) and 'source' it from your pipeline job
       #    source ./scripts/check_health.sh
       # alternatively, you can source it from online script:
-      #    source <(curl -sSL "https://raw.githubusercontent.com/open-toolchain/commons/master/scripts/check_health.sh")
+      #    source <(curl -sSL "https://${REGION}.git.cloud.ibm.com/open-toolchain/commons/-/raw/main/scripts/check_health.sh")
       # ------------------
-      # source: https://raw.githubusercontent.com/open-toolchain/commons/master/scripts/check_health.sh
       # Check liveness and readiness probes to confirm application is healthy
-      source <(curl -sSL "https://raw.githubusercontent.com/open-toolchain/commons/master/scripts/check_health.sh")
+      if [ "${COMMONS_HOSTED_REGION}" ]; then
+        echo "RUNNING HOSTED"
+        source <(curl -sSL "https://${COMMONS_HOSTED_REGION}.git.cloud.ibm.com/open-toolchain/commons/-/raw/main/scripts/check_health.sh")
+      else
+        echo "RUNNING DEFAULT"
+        source <(curl -sSL "https://raw.githubusercontent.com/open-toolchain/commons/master/scripts/check_health.sh")
+      fi

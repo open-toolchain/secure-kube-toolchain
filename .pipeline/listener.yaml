@@ -50,6 +50,8 @@ spec:
     - name: dev-resource-group
     - name: dev-cluster-namespace
       description: namespace dev
+    - name: commons-hosted-region
+      default: ""
   resourcetemplates:
     - apiVersion: v1
       kind: PersistentVolumeClaim
@@ -110,6 +112,8 @@ spec:
             value: $(params.dev-cluster-namespace)
           - name: pipeline-debug
             value: $(params.pipeline-debug)
+          - name: commons-hosted-region
+            value: $(params.commons-hosted-region)
         workspaces:
           - name: pipeline-ws
             persistentVolumeClaim:
