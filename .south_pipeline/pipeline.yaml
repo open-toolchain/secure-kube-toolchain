@@ -61,7 +61,7 @@ spec:
       description: create container registry namespace if it doesn't already exists
       default: "true"
     - name: commons-hosted-region
-      default: ""
+      default: "https://raw.githubusercontent.com/open-toolchain/commons/master"
   workspaces:
     - name: pipeline-ws
   tasks:
@@ -414,13 +414,8 @@ spec:
 
             # This script checks the IBM Container Service cluster is ready, has a namespace configured with access to the private
             # image registry (using an IBM Cloud API Key), perform a kubectl deploy of container image and check on outcome.
-            if [ "$(params.commons-hosted-region)" ]; then
-              echo "USING HOSTED SCRIPTS"
-              source <(curl -sSL "https://$(params.commons-hosted-region).git.cloud.ibm.com/open-toolchain/commons/-/raw/main/scripts/check_and_deploy_kubectl.sh")
-            else
-              echo "USING DEFAULT SCRIPT"
-              source <(curl -sSL "https://raw.githubusercontent.com/open-toolchain/commons/master/scripts/check_and_deploy_kubectl.sh")
-            fi
+            
+            source <(curl -sSL "$(params.commons-hosted-region)/scripts/check_and_deploy_kubectl.sh")
         - name: post-execution-script
           value: |
             # Keep APP_URL in build.properties shuttle file
@@ -477,11 +472,7 @@ spec:
             #    source <(curl -sSL "https://${REGION}.git.cloud.ibm.com/open-toolchain/commons/-/raw/main/scripts/check_health.sh")
             # ------------------
             # Check liveness and readiness probes to confirm application is healthy
-            if [ "$(params.commons-hosted-region)" ]; then
-              source <(curl -sSL "https://$(params.commons-hosted-region).git.cloud.ibm.com/open-toolchain/commons/-/raw/main/scripts/check_health.sh")
-            else
-              source <(curl -sSL "https://raw.githubusercontent.com/open-toolchain/commons/master/scripts/check_health.sh")
-            fi
+            source <(curl -sSL "$(params.commons-hosted-region)/scripts/check_health.sh")
         - name: pipeline-debug
           value: $(params.pipeline-debug)
       workspaces:

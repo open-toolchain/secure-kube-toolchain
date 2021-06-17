@@ -141,7 +141,8 @@ services:
               'gitlab-pr-listener';
             }
           COMMONS_HOSTED_REGION: >
-            $env.template.info.hosted_region !== "" ? '{{template.info.hosted_region}}':''
+            $env.template.info.hosted_region !== "" ? 'https://{{template.info.hosted_region}}.git.cloud.ibm.com/open-toolchain/commons/-/raw/main':
+            'https://raw.githubusercontent.com/open-toolchain/commons/master'
         execute: false
   build:
     service_id: pipeline
