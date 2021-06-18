@@ -5,39 +5,39 @@ inputs:
     service: ${PIPELINE_REPO}
     path: .pipeline
   - type: git
-    branch: master
+    branch: ${DEFINITIONS_BRANCH}
     service: ${TEKTON_CATALOG_REPO}
     path: git
   - type: git
-    branch: master
+    branch: ${DEFINITIONS_BRANCH}
     service: ${TEKTON_CATALOG_REPO}
     path: container-registry
   - type: git
     service: ${TEKTON_CATALOG_REPO}
-    branch: master
+    branch: ${DEFINITIONS_BRANCH}
     path: kubernetes-service
   - type: git
     service: ${TEKTON_CATALOG_REPO}
-    branch: master
+    branch: ${DEFINITIONS_BRANCH}
     path: toolchain
   - type: git
-    branch: master
+    branch: ${DEFINITIONS_BRANCH}
     service: ${TEKTON_CATALOG_REPO}
     path: cra
   - type: git
     service: ${TEKTON_CATALOG_REPO}
-    branch: master
+    branch: ${DEFINITIONS_BRANCH}
     path: devops-insights
   - type: git
-    branch: master
+    branch: ${DEFINITIONS_BRANCH}
     service: ${TEKTON_CATALOG_REPO}
     path: linter
   - type: git
-    branch: master
+    branch: ${DEFINITIONS_BRANCH}
     service: ${TEKTON_CATALOG_REPO}
     path: tester
   - type: git
-    branch: master
+    branch: ${DEFINITIONS_BRANCH}
     service: ${TEKTON_CATALOG_REPO}
     path: utils
 triggers:
@@ -45,7 +45,7 @@ triggers:
     name: commit-push
     eventListener: ${GIT_COMMIT_EVENT_LISTENER_NAME}
     service: ${APP_REPO}
-    branch: master
+    branch: ${APP_REPO_BRANCH}
     events: { "push": true }
   - type: manual
     name: manual-run
@@ -81,4 +81,7 @@ properties:
     type: text
   - name: dev-resource-group
     value: ${PROD_RESOURCE_GROUP}
+    type: text
+  - name: commons-hosted-region
+    value: ${COMMONS_HOSTED_REGION}
     type: text

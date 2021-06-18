@@ -54,6 +54,8 @@ spec:
       description: the namespace
     - name: pipeline-debug
       default: "0"
+    - name: commons-hosted-region
+      default: "https://raw.githubusercontent.com/open-toolchain/commons/master"
   workspaces:
     - name: pipeline-ws
   tasks:
@@ -305,13 +307,13 @@ spec:
             # copy the script below into your app code repo (e.g. ./scripts/check_and_deploy_kubectl.sh) and 'source' it from your pipeline job
             #    source ./scripts/check_and_deploy_kubectl.sh
             # alternatively, you can source it from online script:
-            #    source <(curl -sSL "https://raw.githubusercontent.com/open-toolchain/commons/master/scripts/check_and_deploy_kubectl.sh")
+            #    source <(curl -sSL "$(params.commons-hosted-region)/scripts/check_and_deploy_kubectl.sh")
             # ------------------
-            # source: https://raw.githubusercontent.com/open-toolchain/commons/master/scripts/check_and_deploy_kubectl.sh
 
             # This script checks the IBM Container Service cluster is ready, has a namespace configured with access to the private
             # image registry (using an IBM Cloud API Key), perform a kubectl deploy of container image and check on outcome.
-            source <(curl -sSL "https://raw.githubusercontent.com/open-toolchain/commons/master/scripts/check_and_deploy_kubectl.sh")
+            source <(curl -sSL "$(params.commons-hosted-region)/scripts/check_and_deploy_kubectl.sh")
+            
         - name: post-execution-script
           value: |
             # Keep APP_URL in build.properties shuttle file
@@ -365,11 +367,10 @@ spec:
             # copy the script below into your app code repo (e.g. ./scripts/check_health.sh) and 'source' it from your pipeline job
             #    source ./scripts/check_health.sh
             # alternatively, you can source it from online script:
-            #    source <(curl -sSL "https://raw.githubusercontent.com/open-toolchain/commons/master/scripts/check_health.sh")
+            #    source <(curl -sSL "$(params.commons-hosted-region)/scripts/check_health.sh"")
             # ------------------
-            # source: https://raw.githubusercontent.com/open-toolchain/commons/master/scripts/check_health.sh
             # Check liveness and readiness probes to confirm application is healthy
-            source <(curl -sSL "https://raw.githubusercontent.com/open-toolchain/commons/master/scripts/check_health.sh")
+            source <(curl -sSL "$(params.commons-hosted-region)/scripts/check_health.sh")
         - name: pipeline-debug
           value: $(params.pipeline-debug)
       workspaces:
