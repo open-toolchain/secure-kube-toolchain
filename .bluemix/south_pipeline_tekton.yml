@@ -49,7 +49,6 @@ triggers:
     events: { "push": true }
   - type: manual
     name: manual-run
-    branch: ${APP_REPO_BRANCH}
     eventListener: manual-run
     properties:
       - name: branch
