@@ -49,9 +49,11 @@ triggers:
     events: { "push": true }
   - type: manual
     name: manual-run
-    branch: ${APP_REPO_BRANCH}
     eventListener: manual-run
-    properties: []
+    properties:
+      - name: branch
+        type: text
+        value: ${APP_REPO_BRANCH}
 properties:
   - type: secure
     name: toolchain-apikey
