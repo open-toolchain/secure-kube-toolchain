@@ -8,11 +8,15 @@ properties:
   value: ${COMMONS_HOSTED_REGION}
   type: text
   default: "https://raw.githubusercontent.com/open-toolchain/commons/master"
+- name: APP_REPO_BRANCH
+  value: ${APP_REPO_BRANCH}
+  type: text
+  default: master
 stages:
 - name: BUILD
   inputs:
   - type: git
-    branch: master
+    branch: ${APP_REPO_BRANCH}
     service: ${APP_REPO}    
   triggers:
   - type: commit
