@@ -146,6 +146,8 @@ services:
             'https://raw.githubusercontent.com/open-toolchain/commons/master'
           DEFINITIONS_BRANCH: >
             $env.template.info.hosted_region !== "" ? 'main': 'master'
+          APP_REPO_BRANCH: >
+            $env.template.info.hosted_region !== "" ? 'main': 'master'
         execute: false
   build:
     service_id: pipeline
@@ -213,6 +215,8 @@ services:
             $env.template.info.hosted_region !== "" ? 'https://{{template.info.hosted_region}}.git.cloud.ibm.com/open-toolchain/commons/-/raw/main':
             'https://raw.githubusercontent.com/open-toolchain/commons/master'
           DEFINITIONS_BRANCH: >
+            $env.template.info.hosted_region !== "" ? 'main': 'master'
+          APP_REPO_BRANCH: >
             $env.template.info.hosted_region !== "" ? 'main': 'master'
         execute: >
           $env.pipeline_type === 'tekton' ? 'manual-run' : true

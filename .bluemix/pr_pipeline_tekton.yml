@@ -32,7 +32,7 @@ triggers:
   - type: git
     name: Git PR Trigger
     service: ${APP_REPO}
-    branch: master
+    branch: ${APP_REPO_BRANCH}
     events:
       pull_request: true
     eventListener: ${GIT_COMMIT_EVENT_LISTENER_NAME}
