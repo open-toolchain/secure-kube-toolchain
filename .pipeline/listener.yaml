@@ -51,7 +51,7 @@ spec:
     - name: dev-cluster-namespace
       description: namespace dev
     - name: commons-hosted-region
-      default: ""
+      default: "https://raw.githubusercontent.com/open-toolchain/commons/master"
   resourcetemplates:
     - apiVersion: v1
       kind: PersistentVolumeClaim

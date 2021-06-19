@@ -61,7 +61,7 @@ spec:
       description: project id
       default: ""
     - name: commons-hosted-region
-      default: ""
+      default: "https://raw.githubusercontent.com/open-toolchain/commons/master"
   resourcetemplates:
     - apiVersion: v1
       kind: PersistentVolumeClaim
