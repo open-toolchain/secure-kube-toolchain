@@ -108,11 +108,7 @@ services:
         content:
           $text: >
             if ( $env.pipeline_type === 'tekton' ) {
-              if ( $env.env_id === 'ibm:yp:us-south' || $env.env_id === 'ibm:yp:us-east' || $env.env_id === 'ibm:yp:au-syd') {
-                "south_pr_pipeline_tekton.yml"
-              } else {
-                "pr_pipeline_tekton.yml"
-              }
+              "south_pr_pipeline_tekton.yml"
             } else {
               "pipeline.yml"
             }
@@ -162,11 +158,7 @@ services:
         content:
           $text: >
             if ( $env.pipeline_type === 'tekton' ) {
-              if ( $env.env_id === 'ibm:yp:us-south' || $env.env_id === 'ibm:yp:us-east' || $env.env_id === 'ibm:yp:au-syd') {
-                "south_pipeline_tekton.yml"
-              } else {
-                "pipeline_tekton.yml"
-              }
+              "south_pipeline_tekton.yml"
             } else {
               "pipeline.yml"
             }
