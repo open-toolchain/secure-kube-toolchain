@@ -206,9 +206,6 @@ steps:
               configuration:
                 env:
                   GIT_COMMIT_EVENT_LISTENER_NAME: 'grit-or-gitlab-commit'
-  - name: app2
-    title: "Tilegroup Test"
-    form: wizard_app2
   - name: vault
     title:
       $ref: "#/messages/wizard.step.vault.title"
