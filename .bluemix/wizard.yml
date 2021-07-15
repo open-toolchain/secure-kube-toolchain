@@ -14,7 +14,198 @@ steps:
     form: wizard_app
     advanced_form: repo
     conditions:
-      $ref: conditions.yml#/repo_conditions
+      - condition:
+          any:
+            - parameter: source_provider
+              value: hostedgit
+        actions:
+          - type: update-service
+            service_id: hostedgit
+            service_label: repo
+            parameters:
+              source_provider: hostedgit
+            keep_parameters:
+              - repo_name
+              - repo_url
+              - source_repo_url
+              - type
+              - has_issues
+              - enable_traceability
+              - legal
+          - type: update-service-parameters
+            service_id: pipeline
+            service_label: pr
+            parameters:
+              configuration:
+                env:
+                  GIT_COMMIT_EVENT_LISTENER_NAME: 'gitlab-pr-listener'
+          - type: update-service-parameters
+            service_id: pipeline
+            service_label: build
+            parameters:
+              configuration:
+                env:
+                  GIT_COMMIT_EVENT_LISTENER_NAME: 'grit-or-gitlab-commit'
+      - condition:
+          any:
+            - parameter: source_provider
+              value: githubconsolidated
+        actions:
+          - type: update-service
+            service_id: githubconsolidated
+            service_label: repo
+            parameters:
+              source_provider: githubconsolidated
+            keep_parameters:
+              - repo_name
+              - repo_url
+              - source_repo_url
+              - type
+              - has_issues
+              - enable_traceability
+              - legal
+          - type: update-service-parameters
+            service_id: pipeline
+            service_label: pr
+            parameters:
+              configuration:
+                env:
+                  GIT_COMMIT_EVENT_LISTENER_NAME: 'github-pr-listener'
+          - type: update-service-parameters
+            service_id: pipeline
+            service_label: build
+            parameters:
+              configuration:
+                env:
+                  GIT_COMMIT_EVENT_LISTENER_NAME: 'github-commit'
+      - condition:
+          any:
+            - parameter: source_provider
+              value: gitlab
+        actions:
+          - type: update-service
+            service_id: gitlab
+            service_label: repo
+            parameters:
+              source_provider: gitlab
+            keep_parameters:
+              - repo_name
+              - repo_url
+              - source_repo_url
+              - type
+              - has_issues
+              - enable_traceability
+              - legal
+          - type: update-service-parameters
+            service_id: pipeline
+            service_label: pr
+            parameters:
+              configuration:
+                env:
+                  GIT_COMMIT_EVENT_LISTENER_NAME: 'gitlab-pr-listener'
+          - type: update-service-parameters
+            service_id: pipeline
+            service_label: build
+            parameters:
+              configuration:
+                env:
+                  GIT_COMMIT_EVENT_LISTENER_NAME: 'grit-or-gitlab-commit'
+      - condition:
+          any:
+            - parameter: source_provider
+              value: bitbucketgit
+        actions:
+          - type: update-service
+            service_id: bitbucketgit
+            service_label: repo
+            parameters:
+              source_provider: bitbucketgit
+            keep_parameters:
+              - repo_name
+              - repo_url
+              - source_repo_url
+              - type
+              - has_issues
+              - enable_traceability
+              - legal
+          - type: update-service-parameters
+            service_id: pipeline
+            service_label: pr
+            parameters:
+              configuration:
+                env:
+                  GIT_COMMIT_EVENT_LISTENER_NAME: 'bitbucket-commit'
+          - type: update-service-parameters
+            service_id: pipeline
+            service_label: build
+            parameters:
+              configuration:
+                env:
+                  GIT_COMMIT_EVENT_LISTENER_NAME: 'bitbucket-commit'
+      - condition:
+          any:
+            - parameter: source_provider
+              value: github_integrated
+        actions:
+          - type: update-service
+            service_id: github_integrated
+            service_label: repo
+            parameters:
+              source_provider: github_integrated
+            keep_parameters:
+              - repo_name
+              - repo_url
+              - source_repo_url
+              - type
+              - has_issues
+              - enable_traceability
+              - legal
+          - type: update-service-parameters
+            service_id: pipeline
+            service_label: pr
+            parameters:
+              configuration:
+                env:
+                  GIT_COMMIT_EVENT_LISTENER_NAME: 'github-ent-pr-listener'
+          - type: update-service-parameters
+            service_id: pipeline
+            service_label: build
+            parameters:
+              configuration:
+                env:
+                  GIT_COMMIT_EVENT_LISTENER_NAME: 'github-ent-commit'
+      - condition:
+          any:
+            - parameter: source_provider
+              value: hostedgit
+        actions:
+          - type: update-service
+            service_id: hostedgit
+            service_label: repo
+            parameters:
+              source_provider: hostedgit
+            keep_parameters:
+              - repo_name
+              - repo_url
+              - source_repo_url
+              - type
+              - has_issues
+              - enable_traceability
+              - legal
+          - type: update-service-parameters
+            service_id: pipeline
+            service_label: pr
+            parameters:
+              configuration:
+                env:
+                  GIT_COMMIT_EVENT_LISTENER_NAME: 'gitlab-pr-listener'
+          - type: update-service-parameters
+            service_id: pipeline
+            service_label: build
+            parameters:
+              configuration:
+                env:
+                  GIT_COMMIT_EVENT_LISTENER_NAME: 'grit-or-gitlab-commit'
   - name: app2
     title: "Tilegroup Test"
     form: wizard_app2
