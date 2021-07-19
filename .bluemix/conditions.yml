@@ -6,7 +6,6 @@ repo_conditions:
           value: hostedgit
     actions:
       - type: update-service
-        service_id: hostedgit
         service_label: repo
         parameters:
           source_provider: hostedgit
@@ -38,7 +37,6 @@ repo_conditions:
           value: githubconsolidated
     actions:
       - type: update-service
-        service_id: githubconsolidated
         service_label: repo
         parameters:
           source_provider: githubconsolidated
@@ -70,7 +68,6 @@ repo_conditions:
           value: gitlab
     actions:
       - type: update-service
-        service_id: gitlab
         service_label: repo
         parameters:
           source_provider: gitlab
@@ -102,7 +99,6 @@ repo_conditions:
           value: bitbucketgit
     actions:
       - type: update-service
-        service_id: bitbucketgit
         service_label: repo
         parameters:
           source_provider: bitbucketgit
@@ -134,7 +130,6 @@ repo_conditions:
           value: github_integrated
     actions:
       - type: update-service
-        service_id: github_integrated
         service_label: repo
         parameters:
           source_provider: github_integrated
@@ -166,7 +161,6 @@ repo_conditions:
           value: hostedgit
     actions:
       - type: update-service
-        service_id: hostedgit
         service_label: repo
         parameters:
           source_provider: hostedgit
