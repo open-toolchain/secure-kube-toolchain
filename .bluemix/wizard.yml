@@ -71,6 +71,7 @@ form:
       hashicorp-vault: false
     schema:
       $ref: wizard_vault.json
+    secretsStep: true
 
   wizard_optional_tools:
     parameters:
