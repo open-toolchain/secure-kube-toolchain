@@ -28,7 +28,7 @@ template:
   wizard:
     $ref: wizard.yml
 toolchain:
-  name: "kube-toolchain-manual-test"
+  name: "kube-toolchain-{{timestamp}}"
   template:
     getting_started:
       $ref: "#/messages/template.gettingStarted"
