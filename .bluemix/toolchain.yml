@@ -35,7 +35,7 @@ toolchain:
 services:
   repo:
     service_id: >
-      if ( $env.ENABLE_SETUP_WIZARD === 'true') {
+      if ( $env.ENABLE_SETUP_WIZARD === 'true' ) {
         'hostedgit';
       } else {
         $env.source_provider ? $env.source_provider : 'hostedgit';
@@ -55,7 +55,7 @@ services:
       source_provider: 'hostedgit'
   pipeline-repo:
     service_id: >
-      if ( $env.ENABLE_SETUP_WIZARD === 'true') {
+      if ( $env.ENABLE_SETUP_WIZARD === 'true' ) {
         $env.pipeline_type !== 'tekton' ? '' : 'hostedgit';
       } else {
         $env.pipeline_type !== 'tekton' ? '' : $env.source_provider ? $env.source_provider : 'hostedgit'
@@ -71,7 +71,7 @@ services:
       kind: ['pipeline']
   tekton-catalog-repo:
     service_id: >
-      if ( $env.ENABLE_SETUP_WIZARD === 'true') {
+      if ( $env.ENABLE_SETUP_WIZARD === 'true' ) {
         $env.pipeline_type !== 'tekton' ? '' : 'hostedgit';
       } else {
         $env.pipeline_type !== 'tekton' ? '' : $env.source_provider ? $env.source_provider : 'hostedgit'
@@ -120,7 +120,7 @@ services:
           REGISTRY_REGION_ID: "{{form.pipeline.parameters.registry-region}}"
           REGISTRY_NAMESPACE: "{{form.pipeline.parameters.registry-namespace}}"
           GIT_COMMIT_EVENT_LISTENER_NAME: >
-            if ( $env.ENABLE_SETUP_WIZARD === 'true') {
+            if ( $env.ENABLE_SETUP_WIZARD === 'true' ) {
               'gitlab-pr-listener';
             } else {
               if ( $env.source_provider === 'githubconsolidated' ) {

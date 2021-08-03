@@ -17,6 +17,7 @@ steps:
     title:
       $ref: "#/messages/wizard.step.vault.title"
     form: wizard_vault
+    secretsStep: true
     conditions:
       $ref: conditions.yml#/vault_conditions
   - name: keyprotect
