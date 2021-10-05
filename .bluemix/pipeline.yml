@@ -82,6 +82,9 @@ stages:
   - name: PIPELINE_IMAGE_URL
     value: undefined
     type: text
+  - name: SKIP_VA_SCAN
+    value: "false"
+    type: text
   inputs:
   - type: job
     stage: BUILD
@@ -176,9 +179,15 @@ stages:
       #    source <(curl -sSL "${COMMONS_HOSTED_REGION}/scripts/check_vulnerabilities.sh")
       # ------------------
       # Check for vulnerabilities of built image using Vulnerability Advisor
-      
-      source <(curl -sSL "${COMMONS_HOSTED_REGION}/scripts/check_vulnerabilities.sh")
-      
+      if [ "${SKIP_VA_SCAN}" == "true" ]
+      then
+        yellow="\x1b[33m"
+        no_color="\x1b[0m"
+        echo -e "${yellow}WARNING:${no_color} Skipping vulnerability scan; any vulnerabilities in the build image will NOT be detected. Found SKIP_VA_SCAN=${SKIP_VA_SCAN}"
+      else
+        # Check for vulnerabilities of built image using Vulnerability Advisor
+        source <(curl -sSL "${COMMONS_HOSTED_REGION}/scripts/check_vulnerabilities.sh")
+      fi
 - name: DEPLOY
   inputs:
   - type: job
