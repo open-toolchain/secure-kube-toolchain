@@ -2,60 +2,19 @@
 apiVersion: tekton.dev/v1beta1
 kind: TriggerBinding
 metadata:
-  name: github-ent-pr-binding
-spec:
-  params:
-    - name: target-repository
-      value: $(event.repository.html_url)
-    - name: target-commit-id
-      value: $(event.pull_request.base.sha)      
-    - name: target-branch
-      value: $(event.pull_request.base.ref)
-    - name: pr-repository
-      value: $(event.pull_request.head.repo.clone_url)
-    - name: pr-branch
-      value: $(event.pull_request.head.ref)
-    - name: pr-commit-id
-      value: $(event.pull_request.head.sha)
-    - name: pr-commit-timestamp
-      value: $(event.pull_request.head.repo.pushed_at)
-    - name: pr-url
-      value: $(event.pull_request.url)
-    - name: pr-number
-      value: $(event.pull_request.number) 
-    - name: pr-name
-      value: $(event.pull_request.user.login)             
-    - name: scm-type
-      value: "github-ent"
----
-apiVersion: tekton.dev/v1beta1
-kind: TriggerBinding
-metadata:
   name: github-pr-binding
 spec:
   params:
-    - name: target-repository
-      value: $(event.repository.html_url)
-    - name: target-branch
+    - name: branch
       value: $(event.pull_request.base.ref)
-    - name: target-commit-id
-      value: $(event.pull_request.base.sha)      
-    - name: pr-repository
-      value: $(event.pull_request.head.repo.clone_url)
+    - name: commit-id
+      value: $(event.after)
     - name: pr-branch
       value: $(event.pull_request.head.ref)
-    - name: pr-commit-id
-      value: $(event.pull_request.head.sha)
-    - name: pr-commit-timestamp
-      value: $(event.pull_request.head.repo.pushed_at)
-    - name: pr-url
-      value: $(event.pull_request.url)
-    - name: pr-number
-      value: $(event.pull_request.number)  
-    - name: pr-name
-      value: $(event.pull_request.user.login)             
-    - name: scm-type
-      value: "github"          
+    - name: pr-repository
+      value: $(event.pull_request.head.repo.html_url)
+    - name: repository
+      value: $(event.repository.html_url)
 ---
 apiVersion: tekton.dev/v1beta1
 kind: TriggerBinding
@@ -63,27 +22,13 @@ metadata:
   name: gitlab-pr-binding
 spec:
   params:
-    - name: target-repository
-      value: $(event.project.http_url) 
-    - name: target-branch
+    - name: branch
       value: $(event.object_attributes.target_branch)
-    - name: target-commit-id
-      value: $(event.merge_request.base.sha)      
-    - name: pr-repository
-      value: "$(event.object_attributes.source.git_http_url)"
+    - name: commit-id
+      value: $(event.object_attributes.last_commit.id)
     - name: pr-branch
       value: $(event.object_attributes.source_branch)
-    - name: pr-commit-id
-      value: $(event.object_attributes.last_commit.id)
-    - name: pr-commit-timestamp
-      value: $(event.object_attributes.last_commit.timestamp)
-    - name: pr-url
-      value: $(event.object_attributes.url)
-    - name: pr-number
-      value: $(event.object_attributes.iid) 
-    - name: pr-name
-      value: $(event.user.username)             
-    - name: project-id
-      value: $(event.project.id)
-    - name: scm-type
-      value: "gitlab"
+    - name: pr-repository
+      value: $(event.object_attributes.source.http_url)
+    - name: repository
+      value: $(event.project.http_url)

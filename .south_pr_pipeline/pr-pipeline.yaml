@@ -2,78 +2,125 @@
 apiVersion: tekton.dev/v1beta1
 kind: Pipeline
 metadata:
-  name: pr-pipeline
+  name: pipeline-cra
 spec:
   params:
-    - name: target-repository
-      description: the git repo containing source code
-    - name: target-branch
-      description: branch
-    - name: target-commit-id
-      description: commit id in the target 
-    - name: pr-branch
-      description: branch
-    - name: pr-commit-id
-      description: the git revision/commit for the git repo
-      default: ""
-    - name: pr-repository
-      description: pr repo
-    - name: pr-commit-timestamp
-    - name: pr-url
-      description: pr URL
-    - name: scm-type
-    - name: project-id
-      default: ""
+    - name: ibmcloud-api
+      description: The ibmcloud api
+    - name: ibmcloud-region
+      description: (Optional) ibmcloud region to use
     - name: pipeline-debug
-      description: toggles debug mode for the pipeline
+      description: Toggles debug mode for the pipeline
+    - name: registry-region
+      description: (Optional) The ibmcloud container registry region
+    - name: resource-group
+      description: (Optional) Target resource group (name or id) for the ibmcloud login operation
+
+    # Event params
+    - name: branch
+      description: The git branch
+    - name: commit-id
+      description: commit id
+    - name: pr-branch
+      description: The branch in the forked git repo from where the PR is made
+    - name: pr-repository
+      description: The forked git repo from where the PR is made
+    - name: repository
+      description: The git repo
+
+    # Common command related params
+    - name: custom-script
+      description: (Optional) A custom script to be ran prior to CRA scanning
+    - name: env-props
+      description: (Optional) A custom configuration of environment properties to source before execution, ex. 'export ABC=123 export DEF=456'
+    - name: fileignore
+      description: (Optional) Filepath to .fileignore
+    - name: ibmcloud-trace
+      description: (Optional) Enables IBMCLOUD_TRACE for ibmcloud cli logging
+    - name: output
+      description: (Optional) Prints command result to console
+    - name: path
+      description: Repository path to scan
+    - name: strict
+      description: (Optional) Enables strict mode for scanning
+    - name: toolchainid
+      description: (Optional) The target toolchain id to be used. Defaults to the current toolchain id
+    - name: verbose
+      description: (Optional) Enable verbose log messages
+
+    # BOM related params
+    - name: asset-type
+      description: Security checks to run (apps, image, os, all)
+    - name: bom-report
+      description: Filepath to store generated Bill of Materials. Default to `./bom.json`
+    - name: docker-build-flags
+      description: (Optional) Customize docker build command for build stage scanning
+    - name: docker-registry-url
+      description: Registry url to use for docker login
+    - name: docker-registry-username
+      description: Username to authenticate for docker-registry-url
+    - name: gradle-exclude-configs
+      description: (Optional) Exclude gradle configurations, ex. 'runtimeClasspath,testCompileClasspath'
+    - name: maven-exclude-scopes
+      description: (Optional) Exclude maven scopes, ex. 'test,compile'
+    - name: nodejs-create-package-lock
+      description: (Optional) Enable the task to build the package-lock.json for node.js projects
+    - name: prev-report
+      description: Filepath to previous BoM report to skip Dockerfile or application manifest scans
+
+    # Deploy Analytic related params
+    - name: deploy-report
+      description: Filepath to store generated Deploy Analytic report. Default to `./deploy.json`
+
+    # Vulnerability related params
+    - name: cveignore
+      description: (Optional) Filepath to cveignore
+    - name: exclude-dev
+      description: (Optional) Exclude dev dependencies during vulnerability scan
+    - name: vulnerability-report
+      description: Filepath to store Vulnerability report, not stored if empty. Default to `./vulnerability.json`
+
+    # User control params
+    - name: cra-scan-image
+      description: Image to use for `scan` task. Default to `icr.io/continuous-delivery/pipeline/pipeline-base-ubi:3.2`
   workspaces:
-    - name: pipeline-ws
+    - name: artifacts
 
   tasks:
+    - name: extract-repository-url
+      taskRef:
+        name: toolchain-extract-value
+      params:
+        - name: expression
+          # if a params.repository is given, it takes precedence
+          value: '. as $toolchain | ["$(params.repository)"] | if .[0]=="" then $toolchain | .services[] | select(.toolchain_binding.name=="repo") | .dashboard_url else .[0] end'
+        - name: pipeline-debug
+          value: $(params.pipeline-debug)
     - name: git-clone
       taskRef:
         name: git-clone-repo
       params:
+        - name: branch
+          value: $(params.branch)
         - name: continuous-delivery-context-secret
           value: "secure-properties"
+        - name: ibmcloud-api
+          value: $(params.ibmcloud-api)
         - name: ibmcloud-apikey-secret-key
           value: "apikey"
-        - name: repository
-          value: $(params.target-repository)
-        - name: branch
-          value: $(params.target-branch)
-        - name: revision
-          value: $(params.target-commit-id)
-        - name: pr-repository
-          value: $(params.pr-repository)
+        - name: pipeline-debug
+          value: $(params.pipeline-debug)
         - name: pr-branch
           value: $(params.pr-branch)
-        - name: pr-revision
-          value: $(params.pr-commit-id)
-        - name: pipeline-debug
-          value: $(params.pipeline-debug)
+        - name: pr-repository
+          value: $(params.pr-repository)
+        - name: repository
+          value: $(tasks.extract-repository-url.results.extracted-value)
+        - name: revision
+          value: $(params.commit-id)
       workspaces:
         - name: output
-          workspace: pipeline-ws
-    - name: unit-tests-status-pending
-      taskRef:
-        name: git-set-commit-status
-      workspaces:
-        - name: artifacts
-          workspace: pipeline-ws
-      params:
-        - name: repository
-          value: $(params.target-repository)
-        - name: revision
-          value: $(params.pr-commit-id)
-        - name: context
-          value: "Unit tests"
-        - name: description
-          value: "Unit tests successfull"
-        - name: state
-          value: "pending"
-        - name: pipeline-debug
-          value: $(params.pipeline-debug)
+          workspace: artifacts
     - name: unit-tests
       runAfter: [git-clone]
       taskRef:
@@ -88,283 +135,69 @@ spec:
             fi
       workspaces:
         - name: artifacts
-          workspace: pipeline-ws
-    - name: cra-discovery-scan-pending
-      taskRef:
-        name: git-set-commit-status
-      workspaces:
-        - name: artifacts
-          workspace: pipeline-ws
-      params:
-        - name: repository
-          value: $(params.target-repository)
-        - name: revision
-          value: $(params.pr-commit-id)
-        - name: context
-          value: "Discovery"
-        - name: description
-          value: "Deep discovery completed"
-        - name: state
-          value: "pending"
-        - name: pipeline-debug
-          value: $(params.pipeline-debug)
-    - name: cra-discovery-scan
-      runAfter:
-        - git-clone
-        - cra-discovery-scan-pending
-      taskRef:
-        name: cra-discovery
-      workspaces:
-        - name: artifacts
-          workspace: pipeline-ws
-      params:
-        - name: repository
-          value: $(params.pr-repository)
-        - name: revision
-          value: $(params.pr-branch)
-        - name: commit-id
-          value: $(params.pr-commit-id)
-        - name: commit-timestamp
-          value: $(params.pr-commit-timestamp)
-        - name: pipeline-debug
-          value: $(params.pipeline-debug)
-        - name: directory-name
-          value: ""
-    - name: code-vulnerability-scan-status-pending
+          workspace: artifacts
+    - name: code-risk-analyzer
       runAfter:
         - git-clone
       taskRef:
-        name: git-set-commit-status
-      workspaces:
-        - name: artifacts
-          workspace: pipeline-ws
+        name: cra-v2-cra
       params:
-        - name: state
-          value: pending
-        - name: description
-          value: "Vulnerability scan successfull"
+        - name: ibmcloud-api
+          value: $(params.ibmcloud-api)
+        - name: ibmcloud-region
+          value: $(params.ibmcloud-region)
         - name: pipeline-debug
           value: $(params.pipeline-debug)
-        - name: context
-          value: "Vulnerability scan"
-        - name: repository
-          value: $(params.target-repository)
-        - name: revision
-          value: $(params.pr-commit-id)
-    - name: code-vulnerability-scan
-      runAfter:
-        - cra-discovery-scan
-        - code-vulnerability-scan-status-pending
-      taskRef:
-        name: cra-vulnerability-remediation
+        - name: registry-region
+          value: $(params.registry-region)
+        - name: resource-group
+          value: $(params.resource-group)
+        - name: custom-script
+          value: $(params.custom-script)
+        - name: env-props
+          value: $(params.env-props)
+        - name: fileignore
+          value: $(params.fileignore)
+        - name: ibmcloud-trace
+          value: $(params.ibmcloud-trace)
+        - name: output
+          value: $(params.output)
+        - name: path
+          value: $(params.path)
+        - name: strict
+          value: $(params.strict)
+        - name: toolchainid
+          value: $(params.toolchainid)
+        - name: verbose
+          value: $(params.verbose)
+        - name: asset-type
+          value: $(params.asset-type)
+        - name: bom-report
+          value: $(params.bom-report)
+        - name: docker-build-flags
+          value: $(params.docker-build-flags)
+        - name: docker-registry-url
+          value: $(params.docker-registry-url)
+        - name: docker-registry-username
+          value: $(params.docker-registry-username)
+        - name: gradle-exclude-configs
+          value: $(params.gradle-exclude-configs)
+        - name: maven-exclude-scopes
+          value: $(params.maven-exclude-scopes)
+        - name: nodejs-create-package-lock
+          value: $(params.nodejs-create-package-lock)
+        - name: prev-report
+          value: $(params.prev-report)
+        - name: deploy-report
+          value: $(params.deploy-report)
+        - name: cveignore
+          value: $(params.cveignore)
+        - name: exclude-dev
+          value: $(params.exclude-dev)
+        - name: vulnerability-report
+          value: $(params.vulnerability-report)
+        - name: cra-scan-image
+          value: $(params.cra-scan-image)
       workspaces:
         - name: artifacts
-          workspace: pipeline-ws
-        - name: secrets
-          workspace: pipeline-ws
-      params:
-        - name: repository
-          value: $(params.target-repository)
-        - name: revision
-          value: $(params.pr-branch)
-        - name: pr-url
-          value: $(params.pr-url)
-        - name: commit-id
-          value: $(params.pr-commit-id)
-        - name: scm-type
-          value: $(params.scm-type)
-        - name: project-id
-          value: $(params.project-id) 
-    - name: code-cis-check-status-pending
-      runAfter:
-        - git-clone
-      taskRef:
-        name: git-set-commit-status
-      workspaces:
-        - name: artifacts
-          workspace: pipeline-ws
-      params:
-        - name: state
-          value: pending
-        - name: description
-          value: "CIS scan successfull"
-        - name: pipeline-debug
-          value: $(params.pipeline-debug)
-        - name: context
-          value: "CIS scan"
-        - name: repository
-          value: $(params.target-repository)
-        - name: revision
-          value: $(params.pr-commit-id)
-    - name: cra-cis-check
-      taskRef:
-        name: cra-cis-check
-      runAfter:
-        - cra-discovery-scan
-        - code-cis-check-status-pending
-      workspaces:
-        - name: secrets
-          workspace: pipeline-ws
-        - name: artifacts
-          workspace: pipeline-ws
-      params:
-        - name: repository
-          value: $(params.target-repository)
-        - name: revision
-          value: $(params.pr-branch)
-        - name: pr-url
-          value: $(params.pr-url)
-        - name: commit-id
-          value: $(params.pr-commit-id)
-        - name: directory-name
-          value: ""
-        - name: scm-type
-          value: $(params.scm-type)
-        - name: project-id
-          value: $(params.project-id)
-    - name: code-bom-check-status-pending
-      runAfter:
-        - git-clone
-      taskRef:
-        name: git-set-commit-status
-      workspaces:
-        - name: artifacts
-          workspace: pipeline-ws
-      params:
-        - name: state
-          value: pending
-        - name: description
-          value: "BOM check successfull"
-        - name: pipeline-debug
-          value: $(params.pipeline-debug)
-        - name: context
-          value: "BOM check"
-        - name: repository
-          value: $(params.target-repository)
-        - name: revision
-          value: $(params.pr-commit-id)
-    - name: cra-bom
-      taskRef:
-        name: cra-bom
-      runAfter:
-        - cra-discovery-scan
-        - code-bom-check-status-pending
-      workspaces:
-        - name: artifacts
-          workspace: pipeline-ws
-        - name: secrets
-          workspace: pipeline-ws          
-      params:
-        - name: repository
-          value: $(params.target-repository)
-        - name: revision
-          value: $(params.pr-branch)
-        - name: pr-url
-          value: $(params.pr-url)
-        - name: commit-id
-          value: $(params.pr-commit-id)
-        - name: target-branch
-          value: $(params.target-branch)
-        - name: target-commit-id
-          value: $(params.target-commit-id)
-        - name: scm-type
-          value: $(params.scm-type)
-        - name: project-id
-          value: $(params.project-id)
-
-  finally:
-    - name: cra-discovery-scan-finished
-      taskRef:
-        name: git-set-commit-status
-      workspaces:
-        - name: artifacts
-          workspace: pipeline-ws
-      params:
-        - name: repository
-          value: $(params.target-repository)
-        - name: revision
-          value: $(params.pr-commit-id)
-        - name: context
-          value: "Discovery"
-        - name: description
-          value: "Deep discovery completed"
-        - name: state
-          value: "$(tasks.cra-discovery-scan.status)"
-        - name: pipeline-debug
-          value: $(params.pipeline-debug)
-    - name: unit-tests-status-finished
-      taskRef:
-        name: git-set-commit-status
-      workspaces:
-        - name: artifacts
-          workspace: pipeline-ws
-      params:
-        - name: repository
-          value: $(params.target-repository)
-        - name: revision
-          value: $(params.pr-commit-id)
-        - name: context
-          value: "Unit tests"
-        - name: description
-          value: "Unit tests successfull"
-        - name: state
-          value: "$(tasks.unit-tests.status)"
-        - name: pipeline-debug
-          value: $(params.pipeline-debug)
-    - name: code-vulnerability-scan-status-finished    
-      taskRef:
-        name: git-set-commit-status
-      workspaces:
-        - name: artifacts
-          workspace: pipeline-ws
-      params:
-        - name: repository
-          value: $(params.target-repository)
-        - name: revision
-          value: $(params.pr-commit-id)
-        - name: state
-          value: "$(tasks.code-vulnerability-scan.status)"
-        - name: context
-          value: "Vulnerability scan"
-        - name: description
-          value: "Vulnerability scan successfull"
-        - name: pipeline-debug
-          value: $(params.pipeline-debug)
-    - name: code-cis-check-status-finished
-      taskRef:
-        name: git-set-commit-status
-      workspaces:
-        - name: artifacts
-          workspace: pipeline-ws
-      params:
-        - name: state
-          value: "$(tasks.cra-cis-check.status)"
-        - name: description
-          value: "CIS scan successfull"
-        - name: pipeline-debug
-          value: $(params.pipeline-debug)
-        - name: context
-          value: "CIS scan"
-        - name: repository
-          value: $(params.target-repository)
-        - name: revision
-          value: $(params.pr-commit-id)
-    - name: code-bom-check-status-finished
-      taskRef:
-        name: git-set-commit-status
-      workspaces:
-        - name: artifacts
-          workspace: pipeline-ws
-      params:
-        - name: state
-          value: "$(tasks.cra-bom.status)"
-        - name: description
-          value: "BOM check successfull"
-        - name: pipeline-debug
-          value: $(params.pipeline-debug)
-        - name: context
-          value: "BOM check"
-        - name: repository
-          value: $(params.target-repository)
-        - name: revision
-          value: $(params.pr-commit-id)
+          workspace: artifacts
