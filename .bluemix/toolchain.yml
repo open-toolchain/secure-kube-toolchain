@@ -133,7 +133,7 @@ services:
             } else if ( $env.source_provider === 'bitbucketgit' ) {
               'bitbucket-commit';
             } else if ( $env.source_provider === 'github_integrated' ) {
-              'github-ent-pr-listener';
+              'github-pr-listener';
             } else {
               'gitlab-pr-listener';
             }
