@@ -55,6 +55,9 @@ triggers:
         type: text
         value: ${APP_REPO_BRANCH}
 properties:
+  - type: text
+    name: ibmcloud-api
+    value: ${IBMCLOUD_API}
   - type: secure
     name: toolchain-apikey
     value: ${API_KEY}

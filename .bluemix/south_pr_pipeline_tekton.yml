@@ -37,6 +37,9 @@ triggers:
       pull_request: true
     eventListener: ${GIT_COMMIT_EVENT_LISTENER_NAME}
 properties:
+  - name: ibmcloud-api
+    value: ${IBMCLOUD_API}
+    type: text
   - name: apikey
     value: ${API_KEY}
     type: SECURE

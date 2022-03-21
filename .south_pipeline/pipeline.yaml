@@ -5,6 +5,9 @@ metadata:
   name: secure-kube-pipeline
 spec:
   params:
+    - name: ibmcloud-api
+      description: the ibmcloud api
+      default: https://cloud.ibm.com
     - name: repository
       description: the git repo containing source code. If empty, the repository url will be found from toolchain
       default: ""
@@ -78,6 +81,8 @@ spec:
       taskRef:
         name: git-clone-repo
       params:
+        - name: ibmcloud-api
+          value: $(params.ibmcloud-api)
         - name: continuous-delivery-context-secret
           value: "secure-properties"
         - name: ibmcloud-apikey-secret-key
@@ -111,6 +116,8 @@ spec:
       taskRef:
         name: doi-publish-buildrecord
       params:
+        - name: ibmcloud-api
+          value: $(params.ibmcloud-api)
         - name: toolchain-apikey-secret-key
           value: "toolchain-apikey"
         - name: app-name
@@ -129,6 +136,8 @@ spec:
       params:
         - name: pipeline-debug
           value: $(params.pipeline-debug)
+        - name: ibmcloud-api
+          value: $(params.ibmcloud-api)
       workspaces:
         - name: artifacts
           workspace: pipeline-ws
@@ -186,6 +195,8 @@ spec:
       taskRef:
         name: doi-publish-testrecord
       params:
+        - name: ibmcloud-api
+          value: $(params.ibmcloud-api)
         - name: toolchain-apikey-secret-key
           value: "toolchain-apikey"
         - name: build-number
@@ -206,6 +217,8 @@ spec:
       taskRef:
         name: icr-execute-in-dind
       params:
+        - name: ibmcloud-api
+          value: $(params.ibmcloud-api)
         - name: continuous-delivery-context-secret
           value: "secure-properties"
         - name: container-registry-apikey-secret-key
@@ -253,6 +266,8 @@ spec:
       taskRef:
         name: icr-check-va-scan
       params:
+        - name: ibmcloud-api
+          value: $(params.ibmcloud-api)
         - name: continuous-delivery-context-secret
           value: "secure-properties"
         - name: container-registry-apikey-secret-key
@@ -279,6 +294,8 @@ spec:
       taskRef:
         name: doi-publish-testrecord
       params:
+        - name: ibmcloud-api
+          value: $(params.ibmcloud-api)
         - name: toolchain-apikey-secret-key
           value: "toolchain-apikey"
         - name: build-number
@@ -299,6 +316,8 @@ spec:
         name: iks-deploy-to-kubernetes
       runAfter: [vulnerability-advisor]
       params:
+        - name: ibmcloud-api
+          value: $(params.ibmcloud-api)
         - name: shuttle-properties-file
           value: "build.properties"
         - name: cluster-region
@@ -347,6 +366,8 @@ spec:
       taskRef:
         name: toolchain-publish-deployable-mapping
       params:
+        - name: ibmcloud-api
+          value: $(params.ibmcloud-api)
         - name: deployable-type
           value: "kubernetes_cluster"
         - name: deployable-region-id
@@ -366,6 +387,8 @@ spec:
         name: iks-deploy-to-kubernetes
       runAfter: [deploy-to-kubernetes]
       params:
+        - name: ibmcloud-api
+          value: $(params.ibmcloud-api)
         - name: shuttle-properties-file
           value: "build.properties"
         - name: cluster-region
