@@ -43,6 +43,8 @@ properties:
   - name: apikey
     value: ${API_KEY}
     type: SECURE
+  - name: git-token
+    type: secure
   - name: pipeline-debug
     value: "0"
     type: text

@@ -61,6 +61,8 @@ properties:
   - type: secure
     name: toolchain-apikey
     value: ${API_KEY}
+  - name: git-token
+    type: secure
   - name: apikey
     value: ${API_KEY}
     type: SECURE

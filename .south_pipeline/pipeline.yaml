@@ -17,6 +17,8 @@ spec:
     - name: revision
       description: the git revision/commit for the git repo
       default: ""
+    - name: git-token
+      description: access token for the git repo
     - name: fail-on-lint-errors
       description: force failure of task when docker lint errors are found
       default: "true"
@@ -83,6 +85,8 @@ spec:
       params:
         - name: ibmcloud-api
           value: $(params.ibmcloud-api)
+        - name: git-access-token
+          value: $(params.git-token)
         - name: continuous-delivery-context-secret
           value: "secure-properties"
         - name: ibmcloud-apikey-secret-key

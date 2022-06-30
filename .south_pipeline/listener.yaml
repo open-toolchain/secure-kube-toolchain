@@ -16,6 +16,9 @@ spec:
     - name: revision
       description: the git revision/commit for the git repo
       default: ""
+    - name: git-token
+      description: access token for the git repo
+      default: ""
     - name: app-name
       description: application name
     - name: fail-on-lint-errors
@@ -93,6 +96,8 @@ spec:
             value: $(params.branch)
           - name: revision
             value: $(params.revision)
+          - name: git-token
+            value: $(params.git-token)
           - name: app-name
             value: $(params.app-name)
           - name: fail-on-lint-errors
