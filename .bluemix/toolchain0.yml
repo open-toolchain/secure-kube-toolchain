@@ -49,8 +49,6 @@ services:
           PROD_CLUSTER_NAME: '{{form.pipeline.parameters.prod-cluster-name}}'
           API_KEY: '{{form.pipeline.parameters.api-key}}'
         execute: true
-  webide:
-    service_id: orion
 form:
   pipeline:
     parameters:

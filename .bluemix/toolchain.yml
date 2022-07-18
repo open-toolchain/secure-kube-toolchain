@@ -213,8 +213,6 @@ services:
   devops-insights:
       service_id: >
         $env.env_id !== 'ibm:ys1:us-south' ? 'draservicebroker' : ''
-  webide:
-    service_id: orion
 form:
   pipeline:
     parameters:
