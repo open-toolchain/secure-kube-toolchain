@@ -37,7 +37,7 @@ services:
     service_id: >
       $env.source_provider ? $env.source_provider : 'hostedgit'
     parameters:
-      repo_name: '{{toolchain.name}}'
+      repo_name: "hello-containers-{{timestamp}}"
       repo_url: >
         $env.type === 'link' ? 
           $env.app_repo : $env.template.info.hosted_region !== "" ? 'https://{{template.info.hosted_region}}.git.cloud.ibm.com/open-toolchain/hello-containers':
