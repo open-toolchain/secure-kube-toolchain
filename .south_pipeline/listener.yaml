@@ -239,8 +239,6 @@ spec:
             value: $(params.dev-cluster-namespace)
           - name: pipeline-debug
             value: $(params.pipeline-debug)
-          - name: apikey
-            value: $(params.apikey)
           - name: pr-url
             value: $(params.pr-url)
           - name: commit-timestamp
