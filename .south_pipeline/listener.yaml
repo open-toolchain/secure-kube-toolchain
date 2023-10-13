@@ -68,6 +68,11 @@ spec:
       default: ""
     - name: commons-hosted-region
       default: "https://raw.githubusercontent.com/open-toolchain/commons/master"
+    - name: custom-image-registry-dockerconfigjson
+      description: |
+        dockerconfigjson for custom images used in pipeline tasks.
+        See https://cloud.ibm.com/docs/devsecops?topic=devsecops-troubleshoot-devsecops#troubleshoot-pipe-abort-early
+      default: "eyJhdXRocyI6e319" # ie. {"auths":{}} base64 encoded
     #Cra specific params
     - name: ibmcloud-region
       description: (Optional) ibmcloud region to use
@@ -175,6 +180,13 @@ spec:
       stringData:
         API_KEY: $(params.apikey)
         DOCKER_SECRET: $(params.docker-registry-secret)
+    - apiVersion: v1
+      kind: Secret
+      data:
+        .dockerconfigjson: $(params.custom-image-registry-dockerconfigjson)
+      metadata:
+        name: custom-image-registry-pull-secret
+      type: kubernetes.io/dockerconfigjson
     - apiVersion: tekton.dev/v1beta1
       kind: PipelineRun
       metadata:
@@ -294,6 +306,9 @@ spec:
           - name: pipeline-ws
             persistentVolumeClaim:
               claimName: secure-kube-$(uid)-pvc
+        podTemplate:
+          imagePullSecrets:
+            - name: custom-image-registry-pull-secret
 ---
 apiVersion: tekton.dev/v1beta1
 kind: TriggerBinding

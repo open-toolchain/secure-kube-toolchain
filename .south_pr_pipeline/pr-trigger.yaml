@@ -25,6 +25,11 @@ spec:
     - name: resource-group
       description: (Optional) Target resource group (name or id) for the ibmcloud login operation
       default: ""
+    - name: custom-image-registry-dockerconfigjson
+      description: |
+        dockerconfigjson for custom images used in pipeline tasks.
+        See https://cloud.ibm.com/docs/devsecops?topic=devsecops-troubleshoot-devsecops#troubleshoot-pipe-abort-early
+      default: "eyJhdXRocyI6e319" # ie. {"auths":{}} base64 encoded
 
     # Event params
     - name: branch
@@ -142,6 +147,13 @@ spec:
       stringData:
         API_KEY: $(params.apikey)
         DOCKER_SECRET: $(params.docker-registry-secret)
+    - apiVersion: v1
+      kind: Secret
+      data:
+        .dockerconfigjson: $(params.custom-image-registry-dockerconfigjson)
+      metadata:
+        name: custom-image-registry-pull-secret
+      type: kubernetes.io/dockerconfigjson
     - apiVersion: tekton.dev/v1beta1
       kind: PipelineRun
       metadata:
@@ -222,3 +234,6 @@ spec:
             value: $(params.vulnerability-report)
           - name: cra-scan-image
             value: $(params.cra-scan-image)
+        podTemplate:
+          imagePullSecrets:
+            - name: custom-image-registry-pull-secret
