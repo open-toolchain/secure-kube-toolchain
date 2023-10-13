@@ -88,6 +88,9 @@ spec:
     - name: verbose
       description: (Optional) Enable verbose log messages
       default: "false"
+    - name: build-script
+      description: The command(s) to run the build in run-build step. It will override the default commands
+      default: ""
 
     # BOM related params
     - name: asset-type
@@ -141,6 +144,13 @@ spec:
     # User control params
     - name: cra-scan-image
       description: Image to use for `scan` task
+      default: "icr.io/continuous-delivery/pipeline/pipeline-base-ubi:3.29"
+    - name: toolchain-build-image
+      description: Image to use for `build` task
+      default: "icr.io/continuous-delivery/pipeline/pipeline-base-ubi:3.29"
+    - name: tester-tests-image
+      description: Image to use for `unit-test` task
+      default: "icr.io/continuous-delivery/pipeline/pipeline-base-ubi:3.29"
 
   workspaces:
     - name: pipeline-ws
@@ -292,8 +302,10 @@ spec:
       taskRef:
         name: toolchain-build
       params:
+        - name: run-build-image
+          value: $(params.toolchain-build-image)
         - name: custom-script
-          value: ""
+          value: $(params.build-script)
         - name: pipeline-debug
           value: $(params.pipeline-debug)
       workspaces:
@@ -304,6 +316,8 @@ spec:
       taskRef:
         name: tester-run-tests
       params:
+        - name: tests-image
+          value: $(params.tester-tests-image)
         - name: tests-script
           value: |
             if [ -f ./test/run-tests.sh ]; then

@@ -31,6 +31,10 @@ spec:
         See https://cloud.ibm.com/docs/devsecops?topic=devsecops-troubleshoot-devsecops#troubleshoot-pipe-abort-early
       default: "eyJhdXRocyI6e319" # ie. {"auths":{}} base64 encoded
 
+    - name: build-script
+      description: The command(s) to run the build in run-build step. It will override the default commands
+      default: ""
+
     # Event params
     - name: branch
       description: The git branch
@@ -126,7 +130,14 @@ spec:
     # User control params
     - name: cra-scan-image
       description: Image to use for `scan` task
-      default: "icr.io/continuous-delivery/pipeline/pipeline-base-ubi:3.11"
+      default: "icr.io/continuous-delivery/pipeline/pipeline-base-ubi:3.29"
+    - name: toolchain-build-image
+      description: Image to use for `build` task
+      default: "icr.io/continuous-delivery/pipeline/pipeline-base-ubi:3.29"
+    - name: tester-tests-image
+      description: Image to use for `unit-test` task
+      default: "icr.io/continuous-delivery/pipeline/pipeline-base-ubi:3.29"
+
   resourcetemplates:
     - apiVersion: v1
       kind: PersistentVolumeClaim
@@ -234,6 +245,12 @@ spec:
             value: $(params.vulnerability-report)
           - name: cra-scan-image
             value: $(params.cra-scan-image)
+          - name: toolchain-build-image
+            value: $(params.toolchain-build-image)
+          - name: build-script
+            value: $(params.build-script)
+          - name: tester-tests-image
+            value: $(params.tester-tests-image)
         podTemplate:
           imagePullSecrets:
             - name: custom-image-registry-pull-secret
