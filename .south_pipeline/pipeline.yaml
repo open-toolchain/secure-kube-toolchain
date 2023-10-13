@@ -31,9 +31,6 @@ spec:
       default: "."
     - name: dockerfile
       default: "Dockerfile"
-    - name: build-args
-      description: ibmcloud cr build argument list in the format 'KEY=VALUE' with a key-value pair per line.
-      default: ""
     - name: registry-region
       description: The IBM Cloud region for image registry
     - name: registry-namespace
@@ -56,12 +53,6 @@ spec:
       description: the namespace
     - name: pipeline-debug
       default: "0"
-    - name: pr-url
-      description: pr url
-    - name: commit-timestamp
-    - name: scm-type
-    - name: project-id
-      default: ""
     - name: registry-create-namespace
       description: create container registry namespace if it doesn't already exists
       default: "true"
