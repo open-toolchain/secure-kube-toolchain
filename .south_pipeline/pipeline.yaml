@@ -8,6 +8,9 @@ spec:
     - name: ibmcloud-api
       description: the ibmcloud api
       default: https://cloud.ibm.com
+    - name: ibmcloud-api-deployment-env
+      description: the ibmcloud api for tasks that are deployment specific
+      default: https://cloud.ibm.com
     - name: repository
       description: the git repo containing source code. If empty, the repository url will be found from toolchain
       default: ""
@@ -227,6 +230,8 @@ spec:
           value: $(params.pipeline-debug)
         - name: ibmcloud-api
           value: $(params.ibmcloud-api)
+        - name: ibmcloud-apikey-secret-key
+          value: "toolchain-apikey"
         - name: ibmcloud-region
           value: $(params.ibmcloud-region)
         - name: env-props
@@ -362,7 +367,7 @@ spec:
         name: icr-execute-in-dind
       params:
         - name: ibmcloud-api
-          value: $(params.ibmcloud-api)
+          value: $(params.ibmcloud-api-deployment-env)
         - name: continuous-delivery-context-secret
           value: "secure-properties"
         - name: container-registry-apikey-secret-key
@@ -411,7 +416,7 @@ spec:
         name: icr-check-va-scan
       params:
         - name: ibmcloud-api
-          value: $(params.ibmcloud-api)
+          value: $(params.ibmcloud-api-deployment-env)
         - name: continuous-delivery-context-secret
           value: "secure-properties"
         - name: container-registry-apikey-secret-key
@@ -461,7 +466,7 @@ spec:
       runAfter: [vulnerability-advisor]
       params:
         - name: ibmcloud-api
-          value: $(params.ibmcloud-api)
+          value: $(params.ibmcloud-api-deployment-env)
         - name: shuttle-properties-file
           value: "build.properties"
         - name: cluster-region
@@ -532,7 +537,7 @@ spec:
       runAfter: [deploy-to-kubernetes]
       params:
         - name: ibmcloud-api
-          value: $(params.ibmcloud-api)
+          value: $(params.ibmcloud-api-deployment-env)
         - name: shuttle-properties-file
           value: "build.properties"
         - name: cluster-region
