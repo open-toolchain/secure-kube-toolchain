@@ -3,12 +3,8 @@ root:
   $ref: ./nls/messages.yml
 de:
   $ref: ./nls/messages_de.yml
-en-AA:
-  $ref: ./nls/messages_en_AA.yml
-en-RR:
-  $ref: ./nls/messages_en_RR.yml
-en-ZZ:
-  $ref: ./nls/messages_en_ZZ.yml
+en-XA:
+  $ref: ./nls/messages_en_XA.yml
 es:
   $ref: ./nls/messages_es.yml
 fr:
@@ -22,11 +18,10 @@ ko:
 pt-BR:
   $ref: ./nls/messages_pt_BR.yml
 zh:
-  $ref: ./nls/messages_zh.yml
+  $ref: ./nls/messages_zh_CN.yml
 zh-HK:
-  $ref: ./nls/messages_zh_HK.yml
+  $ref: ./nls/messages_zh_TW.yml
 zh-TW:
   $ref: ./nls/messages_zh_TW.yml
 zh-CN:
-  $ref: ./nls/messages_zh.yml
-  
+  $ref: ./nls/messages_zh_CN.yml
