@@ -147,13 +147,13 @@ spec:
     # User control params
     - name: cra-scan-image
       description: Image to use for `scan` task
-      default: "icr.io/continuous-delivery/pipeline/pipeline-base-ubi:3.46"
+      default: "icr.io/continuous-delivery/pipeline/pipeline-base-ubi:3.72"
     - name: toolchain-build-image
       description: Image to use for `build` task
-      default: "icr.io/continuous-delivery/pipeline/pipeline-base-ubi:3.46"
+      default: "icr.io/continuous-delivery/pipeline/pipeline-base-ubi:3.72"
     - name: tester-tests-image
       description: Image to use for `unit-test` task
-      default: "icr.io/continuous-delivery/pipeline/pipeline-base-ubi:3.46"
+      default: "icr.io/continuous-delivery/pipeline/pipeline-base-ubi:3.72"
 
   workspaces:
     - name: pipeline-ws
