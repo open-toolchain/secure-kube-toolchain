@@ -1,5 +1,5 @@
 ---
-apiVersion: tekton.dev/v1beta1
+apiVersion: tekton.dev/v1
 kind: TriggerTemplate
 metadata:
   name: pr-template
@@ -76,7 +76,7 @@ spec:
       metadata:
         name: custom-image-registry-pull-secret
       type: kubernetes.io/dockerconfigjson
-    - apiVersion: tekton.dev/v1beta1
+    - apiVersion: tekton.dev/v1
       kind: PipelineRun
       metadata:
         name: pipelinerun-$(uid)

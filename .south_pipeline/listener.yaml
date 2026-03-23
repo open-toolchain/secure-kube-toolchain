@@ -1,5 +1,5 @@
 ---
-apiVersion: tekton.dev/v1beta1
+apiVersion: tekton.dev/v1
 kind: TriggerTemplate
 metadata:
   name: trigger-template-secure-kube
@@ -102,7 +102,7 @@ spec:
       metadata:
         name: custom-image-registry-pull-secret
       type: kubernetes.io/dockerconfigjson
-    - apiVersion: tekton.dev/v1beta1
+    - apiVersion: tekton.dev/v1
       kind: PipelineRun
       metadata:
         name: secure-kube-$(uid)
@@ -170,14 +170,14 @@ spec:
           imagePullSecrets:
             - name: custom-image-registry-pull-secret
 ---
-apiVersion: tekton.dev/v1beta1
+apiVersion: tekton.dev/v1
 kind: TriggerBinding
 metadata:
   name: trigger-binding-manual
 spec:
   params:
 ---
-apiVersion: tekton.dev/v1beta1
+apiVersion: tekton.dev/v1
 kind: EventListener
 metadata:
   name: manual-run
@@ -188,7 +188,7 @@ spec:
       template:
         name: trigger-template-secure-kube
 ---
-apiVersion: tekton.dev/v1beta1
+apiVersion: tekton.dev/v1
 kind: TriggerBinding
 metadata:
   name: github-ent-commit
@@ -201,7 +201,7 @@ spec:
     - name: repository
       value: $(event.repository.html_url)
 ---        
-apiVersion: tekton.dev/v1beta1
+apiVersion: tekton.dev/v1
 kind: EventListener
 metadata:
   name: github-ent-commit
@@ -212,7 +212,7 @@ spec:
       template:
         name: trigger-template-secure-kube
 ---
-apiVersion: tekton.dev/v1beta1
+apiVersion: tekton.dev/v1
 kind: TriggerBinding
 metadata:
   name: github-commit
@@ -225,7 +225,7 @@ spec:
     - name: repository
       value: $(event.repository.html_url)
 ---
-apiVersion: tekton.dev/v1beta1
+apiVersion: tekton.dev/v1
 kind: EventListener
 metadata:
   name: github-commit
@@ -236,7 +236,7 @@ spec:
       template:
         name: trigger-template-secure-kube
 ---
-apiVersion: tekton.dev/v1beta1
+apiVersion: tekton.dev/v1
 kind: TriggerBinding
 metadata:
   name: grit-or-gitlab-commit
@@ -249,7 +249,7 @@ spec:
     - name: repository
       value: $(event.project.http_url)
 ---
-apiVersion: tekton.dev/v1beta1
+apiVersion: tekton.dev/v1
 kind: EventListener
 metadata:
   name: grit-or-gitlab-commit
@@ -260,7 +260,7 @@ spec:
       template:
         name: trigger-template-secure-kube
 ---
-apiVersion: tekton.dev/v1beta1
+apiVersion: tekton.dev/v1
 kind: TriggerBinding
 metadata:
   name: bitbucket-commit
@@ -275,7 +275,7 @@ spec:
     - name: commit-id
       value: "$(event.pull_request.head.sha)"
 ---
-apiVersion: tekton.dev/v1beta1
+apiVersion: tekton.dev/v1
 kind: EventListener
 metadata:
   name: bitbucket-commit
