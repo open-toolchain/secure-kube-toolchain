@@ -78,5 +78,3 @@ wizard.vault.hashicorp.description: "HashiCorp Vault est une solution de gestion
 wizard.vault.info: "Identifiez les fournisseurs de secrets contenant vos secrets :"
 wizard.optional.tools.title: "Autres outils"
 wizard.optional.tools.longDescription: "Il s'agit d'outils facultatifs pouvant être inclus dans votre chaîne d'outils."
-wizard.optional.tools.doi.title: "DevOps Insights (aucune configuration requise)"
-wizard.optional.tools.doi.description: "DevOps Insights fournit des informations complètes tirées d'outils populaires d'intégration continue et de distribution continue pour augmenter la vitesse et le contrôle de la livraison de vos applications."

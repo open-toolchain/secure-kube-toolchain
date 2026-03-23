@@ -15,10 +15,6 @@ inputs:
   - type: git
     branch: ${DEFINITIONS_BRANCH}
     service: ${TEKTON_CATALOG_REPO}
-    path: cra
-  - type: git
-    branch: ${DEFINITIONS_BRANCH}
-    service: ${TEKTON_CATALOG_REPO}
     path: linter
   - type: git
     branch: ${DEFINITIONS_BRANCH}

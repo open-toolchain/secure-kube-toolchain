@@ -61,99 +61,17 @@ spec:
       default: "true"
     - name: commons-hosted-region
       default: "https://raw.githubusercontent.com/open-toolchain/commons/master"
-      #Cra specific params
-    - name: ibmcloud-region
-      description: (Optional) ibmcloud region to use
-      default: ""
-
-    # Common command related params
-    - name: env-props
-      description: (Optional) A custom configuration of environment properties to source before execution, ex. 'export ABC=123 export DEF=456'
-      default: ""
-    - name: fileignore
-      description: (Optional) Filepath to .fileignore
-      default: ""
-    - name: ibmcloud-trace
-      description: (Optional) Enables IBMCLOUD_TRACE for ibmcloud cli logging
-      default: "false"
-    - name: output
-      description: (Optional) Prints command result to console
-      default: "false"
-    - name: path
-      description: Repository path to scan
-      default: "/artifacts"
-    - name: strict
-      description: (Optional) Enables strict mode for scanning
-      default: "false"
-    - name: toolchainid
-      description: (Optional) The target toolchain id to be used. Defaults to the current toolchain id
-      default: ""
-    - name: verbose
-      description: (Optional) Enable verbose log messages
-      default: "false"
     - name: build-script
       description: The command(s) to run the build in run-build step. It will override the default commands
       default: ""
 
-    # BOM related params
-    - name: asset-type
-      description: Security checks to run (apps, image, os, all)
-      default: "all"
-    - name: bom-report
-      description: Filepath to store generated Bill of Materials
-      default: "bom.json"
-    - name: docker-build-flags
-      description: (Optional) Customize docker build command for build stage scanning
-      default: ""
-    - name: docker-build-context
-      description: (Optional) If specified, CRA will use the directory in the path parameter as docker build context
-    - name: dockerfile-pattern
-      description: (Optional) Pattern to identify Dockerfile in the repository
-    - name: docker-registry-url
-      description: Registry url to use for docker login
-      default: ""
-    - name: docker-registry-username
-      description: Username to authenticate for docker-registry-url
-      default: ""
-    - name: gradle-exclude-configs
-      description: (Optional) Exclude gradle configurations, ex. 'runtimeClasspath,testCompileClasspath'
-      default: ""
-    - name: maven-exclude-scopes
-      description: (Optional) Exclude maven scopes, ex. 'test,compile'
-      default: ""
-    - name: nodejs-create-package-lock
-      description: (Optional) Enable the task to build the package-lock.json for node.js projects
-      default: "false"
-    - name: prev-report
-      description: Filepath to previous BoM report to skip Dockerfile or application manifest scans
-      default: ""
-
-    # Deploy Analytic related params
-    - name: deploy-report
-      description: Filepath to store generated Deploy Analytic report
-      default: "deploy.json"
-
-    # Vulnerability related params
-    - name: cveignore
-      description: (Optional) Filepath to cveignore
-      default: ""
-    - name: exclude-dev
-      description: (Optional) Exclude dev dependencies during vulnerability scan
-      default: "false"
-    - name: vulnerability-report
-      description: Filepath to store Vulnerability report, not stored if empty
-      default: "vulnerability.json"
-
     # User control params
-    - name: cra-scan-image
-      description: Image to use for `scan` task
-      default: "icr.io/continuous-delivery/pipeline/pipeline-base-ubi:3.72"
     - name: toolchain-build-image
       description: Image to use for `build` task
-      default: "icr.io/continuous-delivery/pipeline/pipeline-base-ubi:3.72"
+      default: "icr.io/continuous-delivery/pipeline/pipeline-base-ubi:3.79"
     - name: tester-tests-image
       description: Image to use for `unit-test` task
-      default: "icr.io/continuous-delivery/pipeline/pipeline-base-ubi:3.72"
+      default: "icr.io/continuous-delivery/pipeline/pipeline-base-ubi:3.79"
 
   workspaces:
     - name: pipeline-ws
@@ -189,102 +107,6 @@ spec:
           value: $(params.pipeline-debug)
       workspaces:
         - name: output
-          workspace: pipeline-ws
-    - name: extract-doi-enablement
-      taskRef:
-        name: toolchain-extract-value
-      params:
-        # count the number of service in the toolchain that are DevopsInsights
-        - name: expression
-          value: 'reduce .services[] as $service (0; if $service.service_id=="draservicebroker" then .+1 else . end)'
-        - name: pipeline-debug
-          value: $(params.pipeline-debug)
-    - name: publish-doi-buildrecord
-      runAfter: [extract-doi-enablement]
-      when:
-        - input: $(tasks.extract-doi-enablement.results.extracted-value)
-          operator: in
-          values: ["1"]
-      taskRef:
-        name: doi-publish-buildrecord
-      params:
-        - name: ibmcloud-api
-          value: $(params.ibmcloud-api)
-        - name: toolchain-apikey-secret-key
-          value: "toolchain-apikey"
-        - name: app-name
-          value: $(params.app-name)
-        - name: git-repository
-          value: $(tasks.git-clone.results.git-repository)
-        - name: git-branch
-          value: $(tasks.git-clone.results.git-branch)
-        - name: git-commit
-          value: $(tasks.git-clone.results.git-commit)
-    - name: code-risk-analyzer
-      runAfter:
-        - git-clone
-      taskRef:
-        name: cra-v2-cra
-      params:
-        - name: pipeline-debug
-          value: $(params.pipeline-debug)
-        - name: ibmcloud-api
-          value: $(params.ibmcloud-api)
-        - name: ibmcloud-apikey-secret-key
-          value: "toolchain-apikey"
-        - name: ibmcloud-region
-          value: $(params.ibmcloud-region)
-        - name: env-props
-          value: $(params.env-props)
-        - name: fileignore
-          value: $(params.fileignore)
-        - name: ibmcloud-trace
-          value: $(params.ibmcloud-trace)
-        - name: output
-          value: $(params.output)
-        - name: path
-          value: $(params.path)
-        - name: strict
-          value: $(params.strict)
-        - name: toolchainid
-          value: $(params.toolchainid)
-        - name: verbose
-          value: $(params.verbose)
-        - name: asset-type
-          value: $(params.asset-type)
-        - name: bom-report
-          value: $(params.bom-report)
-        - name: docker-build-flags
-          value: $(params.docker-build-flags)
-        - name: docker-build-context
-          value: $(params.docker-build-context)
-        - name: dockerfile-pattern
-          value: $(params.dockerfile-pattern)
-        - name: docker-registry-url
-          value: $(params.docker-registry-url)
-        - name: docker-registry-username
-          value: $(params.docker-registry-username)
-        - name: gradle-exclude-configs
-          value: $(params.gradle-exclude-configs)
-        - name: maven-exclude-scopes
-          value: $(params.maven-exclude-scopes)
-        - name: nodejs-create-package-lock
-          value: $(params.nodejs-create-package-lock)
-        - name: prev-report
-          value: $(params.prev-report)
-        - name: deploy-report
-          value: $(params.deploy-report)
-        - name: cveignore
-          value: $(params.cveignore)
-        - name: exclude-dev
-          value: $(params.exclude-dev)
-        - name: vulnerability-report
-          value: $(params.vulnerability-report)
-        - name: cra-scan-image
-          value: $(params.cra-scan-image)
-
-      workspaces:
-        - name: artifacts
           workspace: pipeline-ws
     - name: docker-lint
       runAfter: [git-clone]
@@ -332,32 +154,6 @@ spec:
             else
               echo "Test runner script not found: ./test/run-tests.sh"
             fi
-      workspaces:
-        - name: artifacts
-          workspace: pipeline-ws
-    - name: publish-doi-code-tests
-      runAfter: [unit-tests]
-      when:
-        - input: $(tasks.extract-doi-enablement.results.extracted-value)
-          operator: in
-          values: ["1"]
-      taskRef:
-        name: doi-publish-testrecord
-      params:
-        - name: ibmcloud-api
-          value: $(params.ibmcloud-api)
-        - name: toolchain-apikey-secret-key
-          value: "toolchain-apikey"
-        - name: build-number
-          value: "$(tasks.publish-doi-buildrecord.results.build-number)"
-        - name: app-name
-          value: $(params.app-name)
-        - name: file-locations
-          value: "$(tasks.unit-tests.results.test-result-file-paths)"
-        - name: test-types
-          value: "$(tasks.unit-tests.results.test-types)"
-        - name: pipeline-debug
-          value: $(params.pipeline-debug)
       workspaces:
         - name: artifacts
           workspace: pipeline-ws
@@ -434,32 +230,6 @@ spec:
       workspaces:
         - name: artifacts
           workspace: pipeline-ws
-    - name: publish-doi-va-scan-record
-      runAfter: [vulnerability-advisor]
-      when:
-        - input: $(tasks.extract-doi-enablement.results.extracted-value)
-          operator: in
-          values: ["1"]
-      taskRef:
-        name: doi-publish-testrecord
-      params:
-        - name: ibmcloud-api
-          value: $(params.ibmcloud-api)
-        - name: toolchain-apikey-secret-key
-          value: "toolchain-apikey"
-        - name: build-number
-          value: "$(tasks.publish-doi-buildrecord.results.build-number)"
-        - name: app-name
-          value: $(params.app-name)
-        - name: file-locations
-          value: $(tasks.vulnerability-advisor.results.scan-report-file)
-        - name: test-types
-          value: vulnerabilityadvisor
-        - name: pipeline-debug
-          value: $(params.pipeline-debug)
-      workspaces:
-        - name: artifacts
-          workspace: pipeline-ws
     - name: deploy-to-kubernetes
       taskRef:
         name: iks-deploy-to-kubernetes
@@ -480,11 +250,6 @@ spec:
             export CLUSTER_NAMESPACE="$(params.dev-cluster-namespace)"
             export DEPLOYMENT_FILE="$(params.deployment-file)"
             export KEEP_INGRESS_CUSTOM_DOMAIN="$(params.keep-ingress-custom-domain)"
-            # pipeline build number is the doi build record id (if any)
-            export SOURCE_BUILD_NUMBER=$BUILD_NUMBER
-            echo "SOURCE_BUILD_NUMBER=$BUILD_NUMBER" >> build.properties
-            # For doi plugin invocation if needed
-            export TOOLCHAIN_ID=$PIPELINE_TOOLCHAIN_ID
         - name: script
           value: |
             # uncomment to debug the script

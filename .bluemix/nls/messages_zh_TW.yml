@@ -78,5 +78,3 @@ wizard.vault.hashicorp.description: "HashiCorp Vault 是一個密鑰管理解決
 wizard.vault.info: "請識別包含您密鑰的密鑰提供者："
 wizard.optional.tools.title: "其他工具"
 wizard.optional.tools.longDescription: "這些是可包括在您的工具鏈中的選用工具。"
-wizard.optional.tools.doi.title: "DevOps Insights（不需要配置）"
-wizard.optional.tools.doi.description: "DevOps Insights 可以從廣受歡迎的連續整合及 Continuous Delivery 工具中，提供全方位的洞察以提升應用程式交付的速度及控制。"

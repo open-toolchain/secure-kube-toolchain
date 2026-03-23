@@ -78,5 +78,3 @@ wizard.vault.hashicorp.description: "HashiCorp Vault는 프로그래밍 방식�
 wizard.vault.info: "사용자의 시크릿을 포함하는 시크릿 제공자를 식별하십시오."
 wizard.optional.tools.title: "기타 도구"
 wizard.optional.tools.longDescription: "도구 체인에 포함될 수 있는 선택적 도구입니다."
-wizard.optional.tools.doi.title: "DevOps Insights(필요한 구성 없음)"
-wizard.optional.tools.doi.description: "DevOps Insights는 많이 사용되는 지속적 통합 및 지속적 딜리버리 도구에서 포괄적인 인사이트를 제공하여 애플리케이션 딜리버리의 속도 및 제어 기능을 개선합니다."

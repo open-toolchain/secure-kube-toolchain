@@ -78,5 +78,3 @@ wizard.vault.hashicorp.description: "HashiCorp Vault は、プログラマチッ
 wizard.vault.info: "シークレットが入っているシークレット・プロバイダーを識別してください。"
 wizard.optional.tools.title: "その他のツール"
 wizard.optional.tools.longDescription: "これらは、ツールチェーンに組み込むことができるオプション・ツールです。"
-wizard.optional.tools.doi.title: "DevOps Insights (構成の必要なし)"
-wizard.optional.tools.doi.description: "DevOps Insights は、一般的な継続的統合および継続的デリバリー・ツールからの包括的な洞察を提供し、アプリケーション・デリバリーの速度と制御を向上させます。"

@@ -78,5 +78,3 @@ wizard.vault.hashicorp.description: "[('ฏูİı｜)HashiCorp Ｖａｕｌｔ 
 wizard.vault.info: "[('ฏูİı｜)Ｐｌｅａｓｅ ｉｄｅｎｔｉfy the secrets providers containing your secrets:]"
 wizard.optional.tools.title: "[('ฏูİı｜)Ｏther Tools]"
 wizard.optional.tools.longDescription: "[('ฏูİı｜)Ｔｈｅｓｅ ａｒｅ ｏｐｔｉonal tools that can be included in your toolchain.]"
-wizard.optional.tools.doi.title: "[('ฏูİı｜)DevOps Insights (no configuration required)]"
-wizard.optional.tools.doi.description: "[('ฏูİı｜)DevOps Insights ｐｒｏｖｉｄｅｓ ｃｏｍｐｒｅｈｅｎｓｉｖｅ ｉｎｓｉｇｈｔｓ from popular continuous integration and continuous delivery tools to increase the speed and control of your application delivery.]"
