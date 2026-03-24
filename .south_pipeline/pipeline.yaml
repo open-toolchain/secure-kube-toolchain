@@ -29,8 +29,10 @@ spec:
       description: force failure of task when vulnerability advisor scan issues are found
       default: "true"
     - name: path-to-context
+      description: the path to the context that is used for the build (`.` meaning current directory)
       default: "."
     - name: path-to-dockerfile
+      description: the path to the Dockerfile that is used for the build (`.` meaning current directory)
       default: "."
     - name: dockerfile
       default: "Dockerfile"
@@ -49,17 +51,21 @@ spec:
       description: force keep of ingress custom domain in deployment-file if any (true|false)
       default: "false"
     - name: dev-region
+      description: The region that hosts the cluster.
     - name: dev-resource-group
+      description: The resource group that the cluster is attached to.
     - name: cluster-name
       description: the name of the cluster to target
     - name: dev-cluster-namespace
-      description: the namespace
+      description: namespace to perform the deployment on the cluster
     - name: pipeline-debug
+      description: Pipeline debug mode. Value can be 0 or 1.
       default: "0"
     - name: registry-create-namespace
       description: create container registry namespace if it doesn't already exists
       default: "true"
     - name: commons-hosted-region
+      description: the url to retrieve the commons script repository content
       default: "https://raw.githubusercontent.com/open-toolchain/commons/master"
     - name: build-script
       description: The command(s) to run the build in run-build step. It will override the default commands

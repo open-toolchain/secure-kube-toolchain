@@ -34,10 +34,13 @@ spec:
     - name: image-name
       description: image name
     - name: path-to-context
+      description: the path to the context that is used for the build (`.` meaning current directory)
       default: "."
     - name: path-to-dockerfile
+      description: the path to the Dockerfile that is used for the build (`.` meaning current directory)
       default: "."
     - name: dockerfile
+      description: The name of the Dockerfile to use for building the image
       default: "Dockerfile"
     - name: fail-on-scanned-issues
       description: force failure of task when vulnerability advisor scan issues are found
@@ -49,18 +52,22 @@ spec:
       description: force keep of ingress custom domain in deployment-file if any (true|false)
       default: "false"
     - name: pipeline-debug
+      description: Pipeline debug mode. Value can be 0 or 1.
       default: "0"
     - name: cluster-name
       description: the name of the cluster to target
     - name: dev-region
+      description: The region that hosts the cluster.
+      default: "us-south"
     - name: dev-resource-group
+      description: The resource group that the cluster is attached to.
     - name: dev-cluster-namespace
-      description: namespace dev
-    - name: apikey
+      description: namespace to perform the deployment on the cluster
     - name: commons-hosted-region
+      description: the url to retrieve the commons script repository content
       default: "https://raw.githubusercontent.com/open-toolchain/commons/master"
     - name: custom-image-registry-dockerconfigjson
-      description: |
+      description: >-
         dockerconfigjson for custom images used in pipeline tasks.
         See https://cloud.ibm.com/docs/devsecops?topic=devsecops-troubleshoot-devsecops#troubleshoot-pipe-abort-early
       default: "eyJhdXRocyI6e319" # ie. {"auths":{}} base64 encoded
@@ -88,13 +95,6 @@ spec:
         volumeMode: Filesystem
         accessModes:
           - ReadWriteOnce
-    - apiVersion: v1
-      kind: Secret
-      metadata:
-        name: cd-secret
-      type: Opaque
-      stringData:
-        API_KEY: $(params.apikey)
     - apiVersion: v1
       kind: Secret
       data:
@@ -181,6 +181,8 @@ apiVersion: tekton.dev/v1
 kind: EventListener
 metadata:
   name: manual-run
+  annotations:
+    tekton.dev/displayName: "manual run listener"
 spec:
   triggers:
     - binding:
@@ -205,6 +207,8 @@ apiVersion: tekton.dev/v1
 kind: EventListener
 metadata:
   name: github-ent-commit
+  annotations:
+    tekton.dev/displayName: "github enterprise commit push event listener"
 spec:
   triggers:
     - bindings: 
@@ -229,6 +233,8 @@ apiVersion: tekton.dev/v1
 kind: EventListener
 metadata:
   name: github-commit
+  annotations:
+    tekton.dev/displayName: "github commit push event listener"
 spec:
   triggers:
     - bindings:  
@@ -253,6 +259,8 @@ apiVersion: tekton.dev/v1
 kind: EventListener
 metadata:
   name: grit-or-gitlab-commit
+  annotations:
+    tekton.dev/displayName: "GRIT/gitlab commit push event listener"
 spec:
   triggers:
     - bindings:   
@@ -279,6 +287,8 @@ apiVersion: tekton.dev/v1
 kind: EventListener
 metadata:
   name: bitbucket-commit
+  annotations:
+    tekton.dev/displayName: "bitbucket commit push event listener"
 spec:
   triggers:
     - binding:
