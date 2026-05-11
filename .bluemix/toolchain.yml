@@ -14,10 +14,6 @@ template:
     - repo
     - tekton-catalog-repo
     - tekton-gitsecure
-  $configuration:
-     ENABLE_EXTENSIONS: true
-     ENABLE_IF_ELSE: true
-     EXPRESSION_MAXLENGTH: 1000
   info:
     git url: >
       "[" + $env.repository + "]" +
